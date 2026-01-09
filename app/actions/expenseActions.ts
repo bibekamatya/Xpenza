@@ -12,11 +12,16 @@ const TRANSACTIONS_COLLECTION = "transactions";
 
 // Get transactions with filters and pagination
 export async function getTransactions(
-  type?: "income" | "expense" | "all",
-  month?: number,
-  year?: number,
   page: number = 1,
-  limit: number = 20
+  limit: number = 20,
+  filters?: {
+    type?: "income" | "expense" | "all";
+    category?: string;
+    search?: string;
+    dateRange?: string;
+    startDate?: string;
+    endDate?: string;
+  }
 ) {
   const session = await auth();
   if (!session?.user?.email)
@@ -25,6 +30,7 @@ export async function getTransactions(
       total: 0,
       page: 1,
       totalPages: 0,
+      hasMore: false,
     };
 
   const client = await clientPromise;
@@ -32,14 +38,59 @@ export async function getTransactions(
 
   const query: any = { userId: session.user.email };
 
-  if (type && type !== "all") {
-    query.type = type;
+  // Type filter
+  if (filters?.type && filters.type !== "all") {
+    query.type = filters.type;
   }
 
-  if (month && year) {
-    const startDate = new Date(year, month - 1, 1);
-    const endDate = new Date(year, month, 0, 23, 59, 59);
-    query.date = { $gte: startDate, $lte: endDate };
+  // Category filter
+  if (filters?.category && filters.category !== "all") {
+    query.category = filters.category;
+  }
+
+  // Search filter
+  if (filters?.search) {
+    query.description = { $regex: filters.search, $options: "i" };
+  }
+
+  // Date range filter
+  if (filters?.dateRange && filters.dateRange !== "all") {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let startDate: Date;
+
+    switch (filters.dateRange) {
+      case "today":
+        startDate = today;
+        query.date = { $gte: startDate };
+        break;
+      case "week":
+        startDate = new Date(today);
+        startDate.setDate(startDate.getDate() - 7);
+        query.date = { $gte: startDate };
+        break;
+      case "month":
+        startDate = new Date(today);
+        startDate.setMonth(startDate.getMonth() - 1);
+        query.date = { $gte: startDate };
+        break;
+      case "year":
+        startDate = new Date(today);
+        startDate.setFullYear(startDate.getFullYear() - 1);
+        query.date = { $gte: startDate };
+        break;
+    }
+  }
+
+  // Custom date range
+  if (filters?.startDate || filters?.endDate) {
+    query.date = {};
+    if (filters.startDate) {
+      query.date.$gte = new Date(filters.startDate);
+    }
+    if (filters.endDate) {
+      query.date.$lte = new Date(filters.endDate);
+    }
   }
 
   const skip = (page - 1) * limit;
@@ -74,34 +125,49 @@ export async function createTransaction(data: {
   description: string;
   date: Date;
 }) {
-  const session = await auth();
-  if (!session?.user?.email) throw new Error("Unauthorized");
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      return { success: false, message: "Unauthorized" };
+    }
 
-  const client = await clientPromise;
-  const db = client.db(DB_NAME);
+    if (!data.amount || data.amount <= 0) {
+      return { success: false, message: "Invalid amount" };
+    }
 
-  const newTransaction = {
-    userId: session.user.email,
-    type: data.type,
-    amount: data.amount,
-    category: data.category,
-    description: data.description,
-    date: new Date(data.date),
-    createdAt: new Date(),
-  };
+    if (!data.category || !data.description) {
+      return { success: false, message: "Missing required fields" };
+    }
 
-  const result = await db
-    .collection<Transaction>(TRANSACTIONS_COLLECTION)
-    .insertOne(newTransaction);
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
 
-  revalidatePath("/expense");
-  return {
-    success: true,
-    transaction: {
-      ...newTransaction,
-      _id: result.insertedId.toString(),
-    },
-  };
+    const newTransaction = {
+      userId: session.user.email,
+      type: data.type,
+      amount: data.amount,
+      category: data.category,
+      description: data.description,
+      date: new Date(data.date),
+      createdAt: new Date(),
+    };
+
+    const result = await db
+      .collection<Transaction>(TRANSACTIONS_COLLECTION)
+      .insertOne(newTransaction);
+
+    revalidatePath("/expense");
+    return {
+      success: true,
+      transaction: {
+        ...newTransaction,
+        _id: result.insertedId.toString(),
+      },
+    };
+  } catch (error) {
+    console.error("Create transaction error:", error);
+    return { success: false, message: "Failed to create transaction" };
+  }
 }
 
 // Update transaction
@@ -115,52 +181,70 @@ export async function updateTransaction(
     date: Date;
   }
 ) {
-  const session = await auth();
-  if (!session?.user?.email) throw new Error("Unauthorized");
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      return { success: false, message: "Unauthorized" };
+    }
 
-  const client = await clientPromise;
-  const db = client.db(DB_NAME);
+    if (!data.amount || data.amount <= 0) {
+      return { success: false, message: "Invalid amount" };
+    }
 
-  const updatedData = {
-    type: data.type,
-    amount: data.amount,
-    category: data.category,
-    description: data.description,
-    date: new Date(data.date),
-  };
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
 
-  await db.collection<Transaction>(TRANSACTIONS_COLLECTION).updateOne(
-    { _id: new ObjectId(id) as any, userId: session.user.email },
-    { $set: updatedData }
-  );
+    const updatedData = {
+      type: data.type,
+      amount: data.amount,
+      category: data.category,
+      description: data.description,
+      date: new Date(data.date),
+    };
 
-  revalidatePath("/expense");
-  return {
-    success: true,
-    transaction: {
-      _id: id,
-      userId: session.user.email,
-      ...updatedData,
-      createdAt: new Date(),
-    },
-  };
+    await db.collection<Transaction>(TRANSACTIONS_COLLECTION).updateOne(
+      { _id: new ObjectId(id) as any, userId: session.user.email },
+      { $set: updatedData }
+    );
+
+    revalidatePath("/expense");
+    return {
+      success: true,
+      transaction: {
+        _id: id,
+        userId: session.user.email,
+        ...updatedData,
+        createdAt: new Date(),
+      },
+    };
+  } catch (error) {
+    console.error("Update transaction error:", error);
+    return { success: false, message: "Failed to update transaction" };
+  }
 }
 
 // Delete transaction
 export async function deleteTransaction(id: string) {
-  const session = await auth();
-  if (!session?.user?.email) throw new Error("Unauthorized");
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      return { success: false, message: "Unauthorized" };
+    }
 
-  const client = await clientPromise;
-  const db = client.db(DB_NAME);
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
 
-  await db.collection<Transaction>(TRANSACTIONS_COLLECTION).deleteOne({
-    _id: new ObjectId(id) as any,
-    userId: session.user.email,
-  });
+    await db.collection<Transaction>(TRANSACTIONS_COLLECTION).deleteOne({
+      _id: new ObjectId(id) as any,
+      userId: session.user.email,
+    });
 
-  revalidatePath("/expense");
-  return { success: true, deletedId: id };
+    revalidatePath("/expense");
+    return { success: true, deletedId: id };
+  } catch (error) {
+    console.error("Delete transaction error:", error);
+    return { success: false, message: "Failed to delete transaction" };
+  }
 }
 
 // Get statistics with period filter

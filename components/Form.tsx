@@ -43,39 +43,65 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    startTransition(async () => {
-      const { type, amount, category, description, date } = formData;
+    
+    // Validation
+    const { amount, category, description } = formData;
+    if (!amount || parseFloat(amount) <= 0) {
+      toast.error("Please enter a valid amount");
+      return;
+    }
+    if (!category) {
+      toast.error("Please select a category");
+      return;
+    }
+    if (!description.trim()) {
+      toast.error("Please enter a description");
+      return;
+    }
 
-      let result;
-      if (editTransaction?._id) {
-        result = await updateTransaction(editTransaction._id, {
-          type,
-          amount: parseFloat(amount),
-          category,
-          description,
-          date: new Date(date),
-        });
-      } else {
-        result = await createTransaction({
-          type,
-          amount: parseFloat(amount),
-          category,
-          description,
-          date: new Date(date),
-        });
+    startTransition(async () => {
+      try {
+        const { type, amount, category, description, date } = formData;
+
+        let result;
+        if (editTransaction?._id) {
+          result = await updateTransaction(editTransaction._id, {
+            type,
+            amount: parseFloat(amount),
+            category,
+            description,
+            date: new Date(date),
+          });
+        } else {
+          result = await createTransaction({
+            type,
+            amount: parseFloat(amount),
+            category,
+            description,
+            date: new Date(date),
+          });
+        }
+        
+        if (!result.success) {
+          toast.error(result.message || "Failed to save transaction");
+          return;
+        }
+        
+        if (result.transaction && onSuccess) {
+          onSuccess(result.transaction as Transaction);
+        }
+        
+        toast.success(
+          editTransaction
+            ? "Transaction updated successfully"
+            : "Transaction added successfully"
+        );
+        onClose();
+        setFormData(INITIAL_STATE);
+      } catch (error) {
+        toast.error("An error occurred. Please try again.");
+        console.error(error);
       }
-      
-      if (result.success && result.transaction && onSuccess) {
-        onSuccess(result.transaction as Transaction);
-      }
-      
-      toast.success(
-        editTransaction
-          ? "Transaction updated successfully"
-          : "Transaction added successfully"
-      );
-      onClose();
-      setFormData(INITIAL_STATE);
     });
   };
 

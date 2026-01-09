@@ -1,8 +1,9 @@
 "use client";
-import Image from "next/image";
+import { useState } from "react";
 import { handleSignOut } from "@/app/actions/authActions";
 import { DollarSign, LogOut } from "lucide-react";
-import { useState } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface HeaderProps {
   user: { image: string; email: string; name: string };
@@ -50,8 +51,20 @@ const Header = ({ user }: HeaderProps) => {
     </header>
 
     {showLogoutDialog && (
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 max-w-sm w-full">
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        >
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="bg-slate-800 rounded-xl border border-slate-700 p-6 max-w-sm w-full"
+          >
           <h3 className="text-lg font-bold text-white mb-2">Sign Out?</h3>
           <p className="text-slate-400 text-sm mb-6">Are you sure you want to sign out?</p>
           <div className="flex gap-3">
@@ -70,8 +83,9 @@ const Header = ({ user }: HeaderProps) => {
               </button>
             </form>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
+      </AnimatePresence>
     )}
     </>
   );

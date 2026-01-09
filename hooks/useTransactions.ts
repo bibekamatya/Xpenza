@@ -12,15 +12,24 @@ export function useTransactions() {
   const [isPending, startTransition] = useTransition();
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [monthlyStatus, setMonthlyStatus] = useState<Status | null>(null);
+  const [filters, setFilters] = useState<any>({
+    type: "all",
+    dateRange: "all",
+    category: "all",
+    search: "",
+    startDate: "",
+    endDate: "",
+  });
 
   useEffect(() => {
     getStats("all").then(setMonthlyStatus);
   }, [isPending]);
 
-  const refetch = (page: number = currentPage) => {
+  const refetch = (page: number = 1, newFilters?: any) => {
     startTransition(async () => {
       try {
-        const result = await getTransactions("all", undefined, undefined, page);
+        const filterParams = newFilters || filters;
+        const result = await getTransactions(page, 20, filterParams);
         setTransactions(result.transactions);
         setCurrentPage(result.page);
         setTotalPages(result.totalPages);
@@ -37,7 +46,7 @@ export function useTransactions() {
     setIsLoadingMore(true);
     try {
       const nextPage = currentPage + 1;
-      const result = await getTransactions("all", undefined, undefined, nextPage);
+      const result = await getTransactions(nextPage, 20, filters);
       setTransactions((prev) => [...prev, ...result.transactions]);
       setCurrentPage(nextPage);
       setHasMore(result.hasMore ?? false);
@@ -55,6 +64,11 @@ export function useTransactions() {
 
   const handlePageChange = (newPage: number) => {
     refetch(newPage);
+  };
+
+  const applyFilters = (newFilters: any) => {
+    setFilters(newFilters);
+    refetch(1, newFilters);
   };
 
   const addTransaction = (transaction: Transaction) => {
@@ -88,5 +102,7 @@ export function useTransactions() {
     addTransaction,
     updateTransaction,
     removeTransaction,
+    filters,
+    applyFilters,
   };
 }
