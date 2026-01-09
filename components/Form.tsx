@@ -34,7 +34,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
           description: editTransaction.description,
           date: new Date(editTransaction.date).toISOString().split("T")[0],
         }
-      : INITIAL_STATE
+      : INITIAL_STATE,
   );
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -43,7 +43,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     // Validation
     const { amount, category, description } = formData;
     if (!amount || parseFloat(amount) <= 0) {
@@ -81,20 +81,20 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
             date: new Date(date),
           });
         }
-        
+
         if (!result.success) {
           toast.error(result.message || "Failed to save transaction");
           return;
         }
-        
+
         if (result.transaction && onSuccess) {
           onSuccess(result.transaction as Transaction);
         }
-        
+
         toast.success(
           editTransaction
             ? "Transaction updated successfully"
-            : "Transaction added successfully"
+            : "Transaction added successfully",
         );
         onClose();
         setFormData(INITIAL_STATE);
@@ -124,8 +124,8 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
       ? "Updating..."
       : "Update"
     : isPending
-    ? "Adding Transaction"
-    : "Add";
+      ? "Adding Transaction"
+      : "Add";
 
   return (
     <form onSubmit={handleSubmit} className="p-6 space-y-4">

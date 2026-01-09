@@ -11,7 +11,16 @@ const CATEGORIES_COLLECTION = "categories";
 
 const DEFAULT_CATEGORIES = {
   income: ["Salary", "Freelance", "Investment", "Gift", "Other"],
-  expense: ["Food", "Transport", "Shopping", "Bills", "Entertainment", "Health", "Education", "Other"],
+  expense: [
+    "Food",
+    "Transport",
+    "Shopping",
+    "Bills",
+    "Entertainment",
+    "Health",
+    "Education",
+    "Other",
+  ],
 };
 
 export async function getCategories() {
@@ -34,7 +43,11 @@ export async function getCategories() {
     };
   } catch (error) {
     console.error("Get categories error:", error);
-    return { success: false, message: "Failed to get categories", categories: DEFAULT_CATEGORIES };
+    return {
+      success: false,
+      message: "Failed to get categories",
+      categories: DEFAULT_CATEGORIES,
+    };
   }
 }
 
@@ -61,11 +74,19 @@ export async function addCategory(type: "income" | "expense", name: string) {
 
     categories[type].push(name);
 
-    await db.collection(CATEGORIES_COLLECTION).updateOne(
-      { userId: session.user.email },
-      { $set: { userId: session.user.email, categories, updatedAt: new Date() } },
-      { upsert: true }
-    );
+    await db
+      .collection(CATEGORIES_COLLECTION)
+      .updateOne(
+        { userId: session.user.email },
+        {
+          $set: {
+            userId: session.user.email,
+            categories,
+            updatedAt: new Date(),
+          },
+        },
+        { upsert: true },
+      );
 
     revalidatePath("/");
     return { success: true };
@@ -90,11 +111,19 @@ export async function deleteCategory(type: "income" | "expense", name: string) {
 
     categories[type] = categories[type].filter((c: string) => c !== name);
 
-    await db.collection(CATEGORIES_COLLECTION).updateOne(
-      { userId: session.user.email },
-      { $set: { userId: session.user.email, categories, updatedAt: new Date() } },
-      { upsert: true }
-    );
+    await db
+      .collection(CATEGORIES_COLLECTION)
+      .updateOne(
+        { userId: session.user.email },
+        {
+          $set: {
+            userId: session.user.email,
+            categories,
+            updatedAt: new Date(),
+          },
+        },
+        { upsert: true },
+      );
 
     revalidatePath("/");
     return { success: true };

@@ -10,7 +10,7 @@ const StatsCards = () => {
   const formatAmount = (amount: number) => {
     if (showFull) return amount.toLocaleString();
     const absAmount = Math.abs(amount);
-    const sign = amount < 0 ? '-' : '';
+    const sign = amount < 0 ? "-" : "";
     if (absAmount >= 10000) return `${sign}${(absAmount / 1000).toFixed(1)}k`;
     return amount.toLocaleString();
   };
@@ -18,7 +18,7 @@ const StatsCards = () => {
   return (
     <div className="overflow-x-auto px-4 md:px-8 pb-4 md:pb-6 scrollbar-hide">
       <div className="flex md:grid md:grid-cols-3 gap-2 md:gap-3">
-        <div 
+        <div
           onClick={() => setShowFull(!showFull)}
           className="bg-gradient-to-br from-blue-600/20 to-blue-600/5 rounded-lg p-3 border border-blue-600/30 flex-1 min-w-[calc(33.333%-0.5rem)] cursor-pointer active:scale-95 transition-transform"
         >
@@ -32,7 +32,7 @@ const StatsCards = () => {
             ₹{formatAmount(monthlyStatus?.balance ?? 0)}
           </p>
         </div>
-        <div 
+        <div
           onClick={() => setShowFull(!showFull)}
           className="bg-gradient-to-br from-green-600/20 to-green-600/5 rounded-lg p-3 border border-green-600/30 flex-1 min-w-[calc(33.333%-0.5rem)] cursor-pointer active:scale-95 transition-transform"
         >
@@ -46,7 +46,7 @@ const StatsCards = () => {
             ₹{formatAmount(monthlyStatus?.totalIncome ?? 0)}
           </p>
         </div>
-        <div 
+        <div
           onClick={() => setShowFull(!showFull)}
           className="bg-gradient-to-br from-red-600/20 to-red-600/5 rounded-lg p-3 border border-red-600/30 flex-1 min-w-[calc(33.333%-0.5rem)] cursor-pointer active:scale-95 transition-transform"
         >

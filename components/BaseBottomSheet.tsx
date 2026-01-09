@@ -10,7 +10,12 @@ interface BaseBottomSheetProps {
   children: ReactNode;
 }
 
-const BaseBottomSheet = ({ isOpen, onClose, title, children }: BaseBottomSheetProps) => {
+const BaseBottomSheet = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+}: BaseBottomSheetProps) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -30,7 +35,10 @@ const BaseBottomSheet = ({ isOpen, onClose, title, children }: BaseBottomSheetPr
             className="fixed bottom-0 left-0 right-0 bg-slate-800 rounded-t-3xl border-t border-slate-700 z-50 md:hidden max-h-[80vh] overflow-y-auto"
           >
             <div className="sticky top-0 bg-slate-800 pt-4 px-6 pb-2 border-b border-slate-700">
-              <div className="w-12 h-1.5 bg-slate-600 rounded-full mx-auto mb-4 cursor-pointer" onClick={onClose} />
+              <div
+                className="w-12 h-1.5 bg-slate-600 rounded-full mx-auto mb-4 cursor-pointer"
+                onClick={onClose}
+              />
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold text-white">{title}</h3>
                 <button
@@ -41,9 +49,7 @@ const BaseBottomSheet = ({ isOpen, onClose, title, children }: BaseBottomSheetPr
                 </button>
               </div>
             </div>
-            <div className="px-6 pb-6 pt-4">
-              {children}
-            </div>
+            <div className="px-6 pb-6 pt-4">{children}</div>
           </motion.div>
         </>
       )}

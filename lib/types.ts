@@ -1,5 +1,15 @@
 export interface Transaction {
-  _id?: string;
+  _id: string;
+  userId: string;
+  type: "income" | "expense";
+  amount: number;
+  category: string;
+  description: string;
+  date: Date;
+  createdAt: Date;
+}
+
+export interface TransactionInput {
   userId: string;
   type: "income" | "expense";
   amount: number;

@@ -4,16 +4,16 @@ import Google from "next-auth/providers/google";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google],
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   cookies: {
     sessionToken: {
-      name: 'shared-auth-session',
+      name: "shared-auth-session",
       options: {
         httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
       },
     },
   },

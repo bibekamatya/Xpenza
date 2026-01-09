@@ -21,7 +21,7 @@ export async function getTransactions(
     dateRange?: string;
     startDate?: string;
     endDate?: string;
-  }
+  },
 ) {
   const session = await auth();
   if (!session?.user?.email)
@@ -153,7 +153,7 @@ export async function createTransaction(data: {
     };
 
     const result = await db
-      .collection<Transaction>(TRANSACTIONS_COLLECTION)
+      .collection(TRANSACTIONS_COLLECTION)
       .insertOne(newTransaction);
 
     revalidatePath("/expense");
@@ -179,7 +179,7 @@ export async function updateTransaction(
     category: string;
     description: string;
     date: Date;
-  }
+  },
 ) {
   try {
     const session = await auth();
@@ -202,10 +202,12 @@ export async function updateTransaction(
       date: new Date(data.date),
     };
 
-    await db.collection<Transaction>(TRANSACTIONS_COLLECTION).updateOne(
-      { _id: new ObjectId(id) as any, userId: session.user.email },
-      { $set: updatedData }
-    );
+    await db
+      .collection<Transaction>(TRANSACTIONS_COLLECTION)
+      .updateOne(
+        { _id: new ObjectId(id) as any, userId: session.user.email },
+        { $set: updatedData },
+      );
 
     revalidatePath("/expense");
     return {
@@ -250,7 +252,7 @@ export async function deleteTransaction(id: string) {
 // Get statistics with period filter
 export async function getStats(
   period?: "daily" | "weekly" | "monthly" | "yearly" | "all",
-  date?: Date
+  date?: Date,
 ): Promise<MonthlyStats> {
   const session = await auth();
   if (!session?.user?.email)
@@ -289,7 +291,7 @@ export async function getStats(
         startDate = new Date(
           targetDate.getFullYear(),
           targetDate.getMonth(),
-          1
+          1,
         );
         endDate = new Date(
           targetDate.getFullYear(),
@@ -297,7 +299,7 @@ export async function getStats(
           0,
           23,
           59,
-          59
+          59,
         );
         break;
       case "yearly":

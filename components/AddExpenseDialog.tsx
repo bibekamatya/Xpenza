@@ -54,7 +54,11 @@ export default function AddExpenseDialog({
               </div>
 
               {/* Form */}
-              <Form onClose={onClose} editTransaction={editTransaction} onSuccess={onSuccess} />
+              <Form
+                onClose={onClose}
+                editTransaction={editTransaction}
+                onSuccess={onSuccess}
+              />
             </motion.div>
           </div>
 
@@ -77,7 +81,11 @@ export default function AddExpenseDialog({
             </div>
 
             {/* Form */}
-            <Form onClose={onClose} editTransaction={editTransaction} onSuccess={onSuccess} />
+            <Form
+              onClose={onClose}
+              editTransaction={editTransaction}
+              onSuccess={onSuccess}
+            />
           </motion.div>
         </div>
       )}

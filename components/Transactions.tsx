@@ -4,7 +4,16 @@ import AddExpenseDialog from "./AddExpenseDialog";
 import { Transaction } from "@/lib/types";
 import DeleteDialog from "./DeleteDialog";
 import TransactionActionsSheet from "./TransactionActionsSheet";
-import { Edit2, Trash2, TrendingDown, TrendingUp, Download, BarChart3, FileText, Check } from "lucide-react";
+import {
+  Edit2,
+  Trash2,
+  TrendingDown,
+  TrendingUp,
+  Download,
+  BarChart3,
+  FileText,
+  Check,
+} from "lucide-react";
 import Pagination from "./Pagination";
 import { useTransactionsContext } from "@/contexts/TransactionsContext";
 import { getIcon, formatDate } from "@/lib/helper";
@@ -38,7 +47,9 @@ const Transactions = () => {
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [showExportSheet, setShowExportSheet] = useState(false);
-  const [exportRange, setExportRange] = useState<"all" | "today" | "week" | "month" | "year">("all");
+  const [exportRange, setExportRange] = useState<
+    "all" | "today" | "week" | "month" | "year"
+  >("all");
   const exportMenuRef = useRef<HTMLDivElement>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkMode, setBulkMode] = useState(false);
@@ -49,7 +60,10 @@ const Transactions = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
+      if (
+        exportMenuRef.current &&
+        !exportMenuRef.current.contains(event.target as Node)
+      ) {
         setShowExportMenu(false);
       }
     };
@@ -63,7 +77,12 @@ const Transactions = () => {
     };
   }, [showExportMenu]);
 
-  const handleExportFromSheet = (type: "csv" | "pdf", range: string, customStart?: string, customEnd?: string) => {
+  const handleExportFromSheet = (
+    type: "csv" | "pdf",
+    range: string,
+    customStart?: string,
+    customEnd?: string,
+  ) => {
     const filtered = getFilteredTransactions(range, customStart, customEnd);
     if (type === "csv") {
       exportToCSV(filtered);
@@ -72,17 +91,21 @@ const Transactions = () => {
     }
   };
 
-  const getFilteredTransactions = (range?: string, customStart?: string, customEnd?: string) => {
+  const getFilteredTransactions = (
+    range?: string,
+    customStart?: string,
+    customEnd?: string,
+  ) => {
     const selectedRange = range || exportRange;
-    
+
     if (selectedRange === "all") return transactions;
-    
+
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    
-    return transactions.filter(t => {
+
+    return transactions.filter((t) => {
       const tDate = new Date(t.date);
-      
+
       if (selectedRange === "custom" && (customStart || customEnd)) {
         const start = customStart ? new Date(customStart) : null;
         const end = customEnd ? new Date(customEnd) : null;
@@ -90,7 +113,7 @@ const Transactions = () => {
         if (end && tDate > end) return false;
         return true;
       }
-      
+
       switch (selectedRange) {
         case "today":
           return tDate >= today;
@@ -113,17 +136,23 @@ const Transactions = () => {
   };
 
   const exportToCSV = (filtered?: Transaction[]) => {
-    const data = filtered || getFilteredTransactions(showCustomDates ? "custom" : exportRange, customStartDate, customEndDate);
+    const data =
+      filtered ||
+      getFilteredTransactions(
+        showCustomDates ? "custom" : exportRange,
+        customStartDate,
+        customEndDate,
+      );
     const headers = ["Date", "Type", "Category", "Description", "Amount"];
-    const rows = data.map(t => [
+    const rows = data.map((t) => [
       new Date(t.date).toLocaleDateString(),
       t.type,
       t.category,
       t.description,
-      t.amount
+      t.amount,
     ]);
-    
-    const csv = [headers, ...rows].map(row => row.join(",")).join("\n");
+
+    const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -136,11 +165,17 @@ const Transactions = () => {
   };
 
   const exportToPDF = async (filtered?: Transaction[]) => {
-    const data = filtered || getFilteredTransactions(showCustomDates ? "custom" : exportRange, customStartDate, customEndDate);
+    const data =
+      filtered ||
+      getFilteredTransactions(
+        showCustomDates ? "custom" : exportRange,
+        customStartDate,
+        customEndDate,
+      );
     const { jsPDF } = await import("jspdf");
     const autoTable = (await import("jspdf-autotable")).default;
     const doc = new jsPDF();
-    
+
     // Header with branding
     doc.setFillColor(30, 41, 59);
     doc.rect(0, 0, 210, 40, "F");
@@ -149,28 +184,36 @@ const Transactions = () => {
     doc.text("Expense Tracker", 20, 20);
     doc.setFontSize(12);
     doc.text(`Generated on ${new Date().toLocaleDateString()}`, 20, 30);
-    
+
     // Summary
-    const totalIncome = data.filter(t => t.type === "income").reduce((sum, t) => sum + t.amount, 0);
-    const totalExpense = data.filter(t => t.type === "expense").reduce((sum, t) => sum + t.amount, 0);
-    
+    const totalIncome = data
+      .filter((t) => t.type === "income")
+      .reduce((sum, t) => sum + t.amount, 0);
+    const totalExpense = data
+      .filter((t) => t.type === "expense")
+      .reduce((sum, t) => sum + t.amount, 0);
+
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(14);
     doc.text("Summary", 20, 55);
     doc.setFontSize(11);
     doc.text(`Total Income: Rs.${totalIncome.toLocaleString()}`, 20, 65);
     doc.text(`Total Expenses: Rs.${totalExpense.toLocaleString()}`, 20, 72);
-    doc.text(`Balance: Rs.${(totalIncome - totalExpense).toLocaleString()}`, 20, 79);
-    
+    doc.text(
+      `Balance: Rs.${(totalIncome - totalExpense).toLocaleString()}`,
+      20,
+      79,
+    );
+
     // Transactions table
-    const tableData = data.map(t => [
+    const tableData = data.map((t) => [
       new Date(t.date).toLocaleDateString(),
       t.type,
       t.category,
       t.description,
-      `Rs.${t.amount}`
+      `Rs.${t.amount}`,
     ]);
-    
+
     autoTable(doc, {
       startY: 90,
       head: [["Date", "Type", "Category", "Description", "Amount"]],
@@ -179,7 +222,7 @@ const Transactions = () => {
       headStyles: { fillColor: [30, 41, 59] },
       styles: { fontSize: 9 },
     });
-    
+
     doc.save(`transactions-${new Date().toISOString().split("T")[0]}.pdf`);
     setShowExportMenu(false);
     toast.success("PDF exported successfully");
@@ -188,14 +231,17 @@ const Transactions = () => {
   // Apply filters
   const filteredTransactions = transactions;
 
-  const groupedTransactions = filteredTransactions.reduce((groups, transaction) => {
-    const date = formatDate(transaction.date);
-    if (!groups[date]) {
-      groups[date] = [];
-    }
-    groups[date].push(transaction);
-    return groups;
-  }, {} as Record<string, Transaction[]>);
+  const groupedTransactions = filteredTransactions.reduce(
+    (groups, transaction) => {
+      const date = formatDate(transaction.date);
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(transaction);
+      return groups;
+    },
+    {} as Record<string, Transaction[]>,
+  );
 
   return (
     <div className="px-4 md:px-8">
@@ -204,7 +250,9 @@ const Transactions = () => {
         <div className="flex items-center gap-2">
           {bulkMode && selectedIds.length > 0 && (
             <>
-              <span className="text-sm text-slate-400">{selectedIds.length} selected</span>
+              <span className="text-sm text-slate-400">
+                {selectedIds.length} selected
+              </span>
               <button
                 onClick={() => setShowBulkDeleteDialog(true)}
                 className="px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 text-sm rounded-lg transition-all active:scale-95 border border-red-600/30"
@@ -252,7 +300,9 @@ const Transactions = () => {
             {showExportMenu && (
               <div className="absolute right-0 mt-2 w-80 bg-slate-800 border border-slate-700 rounded-xl shadow-xl overflow-hidden z-10">
                 <div className="p-4 border-b border-slate-700">
-                  <p className="text-sm font-semibold text-white mb-3">Select Range</p>
+                  <p className="text-sm font-semibold text-white mb-3">
+                    Select Range
+                  </p>
                   <div className="grid grid-cols-3 gap-2">
                     {["all", "today", "week", "month", "year"].map((range) => (
                       <button
@@ -333,8 +383,12 @@ const Transactions = () => {
             <div className="w-16 h-16 rounded-full bg-slate-700/50 flex items-center justify-center mb-4">
               <span className="text-3xl">💸</span>
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">No transactions yet</h3>
-            <p className="text-slate-400 text-sm text-center mb-6">Start tracking your expenses by adding your first transaction</p>
+            <h3 className="text-lg font-semibold text-white mb-2">
+              No transactions yet
+            </h3>
+            <p className="text-slate-400 text-sm text-center mb-6">
+              Start tracking your expenses by adding your first transaction
+            </p>
             <button
               onClick={() => setShowForm(true)}
               className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all active:scale-95"
@@ -353,85 +407,97 @@ const Transactions = () => {
                 </div>
                 <div className="divide-y divide-slate-700">
                   {items.map((item) => {
-              const { description, amount, category } = item;
-              return (
-                <div
-                  key={item._id}
-                  onClick={() => {
-                    if (bulkMode) {
-                      if (selectedIds.includes(item._id)) {
-                        setSelectedIds(selectedIds.filter((id) => id !== item._id));
-                      } else {
-                        setSelectedIds([...selectedIds, item._id]);
-                      }
-                    } else {
-                      setSelectedTransaction(item);
-                    }
-                  }}
-                  className={`p-4 hover:bg-slate-750 transition-colors group cursor-pointer active:bg-slate-750 ${
-                    bulkMode && selectedIds.includes(item._id) ? "bg-blue-600/10 border-l-4 border-blue-600" : ""
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    {bulkMode && (
-                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                        selectedIds.includes(item._id)
-                          ? "bg-blue-600 border-blue-600"
-                          : "border-slate-600"
-                      }`}>
-                        {selectedIds.includes(item._id) && <Check className="w-3 h-3 text-white" />}
-                      </div>
-                    )}
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center shrink-0">
-                        <span className="text-xl">{getIcon(category)}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-white font-medium text-sm truncate">
-                          {description}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="px-2 py-0.5 bg-blue-600/20 text-blue-400 text-xs rounded-full">
-                            {category}
-                          </span>
+                    const { description, amount, category } = item;
+                    return (
+                      <div
+                        key={item._id}
+                        onClick={() => {
+                          if (bulkMode) {
+                            if (selectedIds.includes(item._id)) {
+                              setSelectedIds(
+                                selectedIds.filter((id) => id !== item._id),
+                              );
+                            } else {
+                              setSelectedIds([...selectedIds, item._id]);
+                            }
+                          } else {
+                            setSelectedTransaction(item);
+                          }
+                        }}
+                        className={`p-4 hover:bg-slate-750 transition-colors group cursor-pointer active:bg-slate-750 ${
+                          bulkMode && selectedIds.includes(item._id)
+                            ? "bg-blue-600/10 border-l-4 border-blue-600"
+                            : ""
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          {bulkMode && (
+                            <div
+                              className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                                selectedIds.includes(item._id)
+                                  ? "bg-blue-600 border-blue-600"
+                                  : "border-slate-600"
+                              }`}
+                            >
+                              {selectedIds.includes(item._id) && (
+                                <Check className="w-3 h-3 text-white" />
+                              )}
+                            </div>
+                          )}
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center shrink-0">
+                              <span className="text-xl">
+                                {getIcon(category)}
+                              </span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-white font-medium text-sm truncate">
+                                {description}
+                              </p>
+                              <div className="flex items-center gap-2 mt-1">
+                                <span className="px-2 py-0.5 bg-blue-600/20 text-blue-400 text-xs rounded-full">
+                                  {category}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <div className="flex items-center gap-1">
+                              {item.type === "income" ? (
+                                <TrendingUp className="w-4 h-4 text-green-500" />
+                              ) : (
+                                <TrendingDown className="w-4 h-4 text-red-500" />
+                              )}
+                              <p
+                                className={`text-base font-bold ${item.type === "income" ? "text-green-500" : "text-red-500"}`}
+                              >
+                                ₹{amount}
+                              </p>
+                            </div>
+                            <div className="hidden md:flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditTransaction(item);
+                                }}
+                                className="p-2 hover:bg-blue-600/20 rounded-lg transition-all active:scale-90"
+                              >
+                                <Edit2 className="w-4 h-4 text-blue-400" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setDeleteItemMetaData(item);
+                                }}
+                                className="p-2 hover:bg-red-600/20 rounded-lg transition-all active:scale-90"
+                              >
+                                <Trash2 className="w-4 h-4 text-red-400" />
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <div className="flex items-center gap-1">
-                        {item.type === "income" ? (
-                          <TrendingUp className="w-4 h-4 text-green-500" />
-                        ) : (
-                          <TrendingDown className="w-4 h-4 text-red-500" />
-                        )}
-                        <p className={`text-base font-bold ${item.type === "income" ? "text-green-500" : "text-red-500"}`}>
-                          ₹{amount}
-                        </p>
-                      </div>
-                      <div className="hidden md:flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setEditTransaction(item);
-                          }}
-                          className="p-2 hover:bg-blue-600/20 rounded-lg transition-all active:scale-90"
-                        >
-                          <Edit2 className="w-4 h-4 text-blue-400" />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setDeleteItemMetaData(item);
-                          }}
-                          className="p-2 hover:bg-red-600/20 rounded-lg transition-all active:scale-90"
-                        >
-                          <Trash2 className="w-4 h-4 text-red-400" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
+                    );
                   })}
                 </div>
               </div>
@@ -488,7 +554,7 @@ const Transactions = () => {
             try {
               const result = await deleteTransaction(deleteItemMetaData._id);
               if (result.success) {
-                removeTransaction(result.deletedId);
+                removeTransaction(result.deletedId!);
                 toast.success("Transaction deleted successfully");
               } else {
                 toast.error(result.message || "Failed to delete transaction");

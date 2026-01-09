@@ -28,7 +28,8 @@ function ExpenseContent() {
               type="text"
               placeholder="Search transactions..."
               onChange={(e) => {
-                if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+                if (searchTimeoutRef.current)
+                  clearTimeout(searchTimeoutRef.current);
                 searchTimeoutRef.current = setTimeout(() => {
                   applyFilters({ ...filters, search: e.target.value });
                 }, 500);

@@ -33,7 +33,10 @@ export async function getBudget() {
   }
 }
 
-export async function setBudget(amount: number, categories: Record<string, number>) {
+export async function setBudget(
+  amount: number,
+  categories: Record<string, number>,
+) {
   try {
     const session = await auth();
     if (!session?.user?.email) {
@@ -57,7 +60,7 @@ export async function setBudget(amount: number, categories: Record<string, numbe
           updatedAt: new Date(),
         },
       },
-      { upsert: true }
+      { upsert: true },
     );
 
     revalidatePath("/");

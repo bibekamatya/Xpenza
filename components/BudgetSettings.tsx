@@ -10,16 +10,27 @@ interface BudgetSettingsProps {
   onClose: () => void;
 }
 
-const categories = ["Food", "Transport", "Shopping", "Bills", "Entertainment", "Health", "Education", "Other"];
+const categories = [
+  "Food",
+  "Transport",
+  "Shopping",
+  "Bills",
+  "Entertainment",
+  "Health",
+  "Education",
+  "Other",
+];
 
 const BudgetSettings = ({ isOpen, onClose }: BudgetSettingsProps) => {
   const [totalBudget, setTotalBudget] = useState("");
-  const [categoryBudgets, setCategoryBudgets] = useState<Record<string, string>>({});
+  const [categoryBudgets, setCategoryBudgets] = useState<
+    Record<string, string>
+  >({});
   const [loading, setLoading] = useState(false);
 
   const totalCategoryBudget = Object.values(categoryBudgets).reduce(
     (sum, val) => sum + (parseFloat(val) || 0),
-    0
+    0,
   );
   const remaining = parseFloat(totalBudget) - totalCategoryBudget;
   const isOverBudget = totalCategoryBudget > parseFloat(totalBudget);
@@ -35,9 +46,11 @@ const BudgetSettings = ({ isOpen, onClose }: BudgetSettingsProps) => {
     if (result.success && result.budget) {
       setTotalBudget(result.budget.totalBudget?.toString() || "");
       const cats: Record<string, string> = {};
-      Object.entries(result.budget.categoryBudgets || {}).forEach(([key, value]) => {
-        cats[key] = (value as number).toString();
-      });
+      Object.entries(result.budget.categoryBudgets || {}).forEach(
+        ([key, value]) => {
+          cats[key] = (value as number).toString();
+        },
+      );
       setCategoryBudgets(cats);
     }
   };
@@ -92,9 +105,14 @@ const BudgetSettings = ({ isOpen, onClose }: BudgetSettingsProps) => {
             <div className="sticky top-0 bg-slate-800 border-b border-slate-700 px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <DollarSign className="w-5 h-5 text-blue-400" />
-                <h2 className="text-lg font-bold text-white">Budget Settings</h2>
+                <h2 className="text-lg font-bold text-white">
+                  Budget Settings
+                </h2>
               </div>
-              <button onClick={onClose} className="p-2 hover:bg-slate-700 rounded-lg transition-all">
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-slate-700 rounded-lg transition-all"
+              >
                 <X className="w-5 h-5 text-slate-400" />
               </button>
             </div>
@@ -103,7 +121,8 @@ const BudgetSettings = ({ isOpen, onClose }: BudgetSettingsProps) => {
               <div className="bg-blue-600/10 border border-blue-600/30 rounded-lg p-4 flex gap-3">
                 <AlertTriangle className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
                 <div className="text-sm text-blue-300">
-                  Set your monthly budget to track spending. You'll get alerts when you exceed limits.
+                  Set your monthly budget to track spending. You'll get alerts
+                  when you exceed limits.
                 </div>
               </div>
 
@@ -125,36 +144,57 @@ const BudgetSettings = ({ isOpen, onClose }: BudgetSettingsProps) => {
                   Category Budgets (Optional)
                 </label>
                 {totalBudget && parseFloat(totalBudget) > 0 && (
-                  <div className={`mb-3 p-3 rounded-lg border ${
-                    isOverBudget
-                      ? "bg-red-600/10 border-red-600/30"
-                      : remaining < parseFloat(totalBudget) * 0.2
-                      ? "bg-yellow-600/10 border-yellow-600/30"
-                      : "bg-blue-600/10 border-blue-600/30"
-                  }`}>
+                  <div
+                    className={`mb-3 p-3 rounded-lg border ${
+                      isOverBudget
+                        ? "bg-red-600/10 border-red-600/30"
+                        : remaining < parseFloat(totalBudget) * 0.2
+                          ? "bg-yellow-600/10 border-yellow-600/30"
+                          : "bg-blue-600/10 border-blue-600/30"
+                    }`}
+                  >
                     <div className="flex justify-between items-center text-sm">
-                      <span className={isOverBudget ? "text-red-400" : "text-slate-300"}>
+                      <span
+                        className={
+                          isOverBudget ? "text-red-400" : "text-slate-300"
+                        }
+                      >
                         Allocated: ₹{totalCategoryBudget.toLocaleString()}
                       </span>
-                      <span className={`font-semibold ${
-                        isOverBudget ? "text-red-400" : remaining < parseFloat(totalBudget) * 0.2 ? "text-yellow-400" : "text-blue-400"
-                      }`}>
+                      <span
+                        className={`font-semibold ${
+                          isOverBudget
+                            ? "text-red-400"
+                            : remaining < parseFloat(totalBudget) * 0.2
+                              ? "text-yellow-400"
+                              : "text-blue-400"
+                        }`}
+                      >
                         Remaining: ₹{remaining.toLocaleString()}
                       </span>
                     </div>
                     {isOverBudget && (
-                      <p className="text-xs text-red-400 mt-1">Category budgets exceed total budget!</p>
+                      <p className="text-xs text-red-400 mt-1">
+                        Category budgets exceed total budget!
+                      </p>
                     )}
                   </div>
                 )}
                 <div className="grid grid-cols-2 gap-3">
                   {categories.map((cat) => (
                     <div key={cat}>
-                      <label className="text-xs text-slate-400 mb-1 block">{cat}</label>
+                      <label className="text-xs text-slate-400 mb-1 block">
+                        {cat}
+                      </label>
                       <input
                         type="number"
                         value={categoryBudgets[cat] || ""}
-                        onChange={(e) => setCategoryBudgets({ ...categoryBudgets, [cat]: e.target.value })}
+                        onChange={(e) =>
+                          setCategoryBudgets({
+                            ...categoryBudgets,
+                            [cat]: e.target.value,
+                          })
+                        }
                         placeholder="0"
                         className="w-full h-[42px] px-4 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />

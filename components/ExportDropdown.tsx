@@ -8,9 +8,15 @@ interface ExportDropdownProps {
   defaultRange?: "all" | "today" | "week" | "month" | "year";
 }
 
-export const ExportDropdown = ({ onExportCSV, onExportPDF, defaultRange = "all" }: ExportDropdownProps) => {
+export const ExportDropdown = ({
+  onExportCSV,
+  onExportPDF,
+  defaultRange = "all",
+}: ExportDropdownProps) => {
   const [showMenu, setShowMenu] = useState(false);
-  const [exportRange, setExportRange] = useState<"all" | "today" | "week" | "month" | "year">(defaultRange);
+  const [exportRange, setExportRange] = useState<
+    "all" | "today" | "week" | "month" | "year"
+  >(defaultRange);
   const [showCustomDates, setShowCustomDates] = useState(false);
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
@@ -44,7 +50,9 @@ export const ExportDropdown = ({ onExportCSV, onExportPDF, defaultRange = "all" 
       {showMenu && (
         <div className="absolute right-0 mt-2 w-80 bg-slate-800 border border-slate-700 rounded-xl shadow-xl overflow-hidden z-10">
           <div className="p-4 border-b border-slate-700">
-            <p className="text-sm font-semibold text-white mb-3">Select Range</p>
+            <p className="text-sm font-semibold text-white mb-3">
+              Select Range
+            </p>
             <div className="grid grid-cols-3 gap-2">
               {["all", "today", "week", "month", "year"].map((range) => (
                 <button
@@ -92,7 +100,11 @@ export const ExportDropdown = ({ onExportCSV, onExportPDF, defaultRange = "all" 
           </div>
           <button
             onClick={() => {
-              onExportCSV(showCustomDates ? "custom" : exportRange, customStartDate, customEndDate);
+              onExportCSV(
+                showCustomDates ? "custom" : exportRange,
+                customStartDate,
+                customEndDate,
+              );
               setShowMenu(false);
             }}
             className="w-full px-4 py-3 text-left text-sm text-slate-300 hover:bg-slate-700 transition-colors flex items-center gap-3"
@@ -102,7 +114,11 @@ export const ExportDropdown = ({ onExportCSV, onExportPDF, defaultRange = "all" 
           </button>
           <button
             onClick={() => {
-              onExportPDF(showCustomDates ? "custom" : exportRange, customStartDate, customEndDate);
+              onExportPDF(
+                showCustomDates ? "custom" : exportRange,
+                customStartDate,
+                customEndDate,
+              );
               setShowMenu(false);
             }}
             className="w-full px-4 py-3 text-left text-sm text-slate-300 hover:bg-slate-700 transition-colors flex items-center gap-3"

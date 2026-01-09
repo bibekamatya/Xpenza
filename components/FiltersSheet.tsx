@@ -23,7 +23,12 @@ interface FiltersSheetProps {
   };
 }
 
-const FiltersSheet = ({ isOpen, onClose, onApplyFilters, currentFilters }: FiltersSheetProps) => {
+const FiltersSheet = ({
+  isOpen,
+  onClose,
+  onApplyFilters,
+  currentFilters,
+}: FiltersSheetProps) => {
   const [type, setType] = useState(currentFilters.type);
   const [dateRange, setDateRange] = useState(currentFilters.dateRange);
   const [category, setCategory] = useState(currentFilters.category);
@@ -31,7 +36,14 @@ const FiltersSheet = ({ isOpen, onClose, onApplyFilters, currentFilters }: Filte
   const [endDate, setEndDate] = useState(currentFilters.endDate);
 
   const handleApply = () => {
-    onApplyFilters({ ...currentFilters, type, dateRange, category, startDate, endDate });
+    onApplyFilters({
+      ...currentFilters,
+      type,
+      dateRange,
+      category,
+      startDate,
+      endDate,
+    });
     onClose();
   };
 
@@ -66,7 +78,9 @@ const FiltersSheet = ({ isOpen, onClose, onApplyFilters, currentFilters }: Filte
         </div>
 
         <div>
-          <label className="text-sm text-slate-400 mb-2 block">Date Range</label>
+          <label className="text-sm text-slate-400 mb-2 block">
+            Date Range
+          </label>
           <div className="grid grid-cols-3 gap-2">
             {["all", "today", "week", "month", "year"].map((range) => (
               <button

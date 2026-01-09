@@ -42,7 +42,7 @@ export function useTransactions() {
 
   const loadMore = async () => {
     if (isLoadingMore || !hasMore) return;
-    
+
     setIsLoadingMore(true);
     try {
       const nextPage = currentPage + 1;
@@ -78,7 +78,7 @@ export function useTransactions() {
 
   const updateTransaction = (transaction: Transaction) => {
     setTransactions((prev) =>
-      prev.map((t) => (t._id === transaction._id ? transaction : t))
+      prev.map((t) => (t._id === transaction._id ? transaction : t)),
     );
     getStats("all").then(setMonthlyStatus);
   };
