@@ -5,6 +5,7 @@ import Transactions from "./Transactions";
 import Filters from "./Filters";
 import StatsCards from "./StatsCards";
 import AddExpenseDialog from "./AddExpenseDialog";
+import BudgetAlert from "./BudgetAlert";
 import { Filter } from "lucide-react";
 
 import { TransactionsProvider } from "@/contexts/TransactionsContext";
@@ -20,6 +21,7 @@ function ExpenseContent() {
     <div className="min-h-screen bg-slate-900 pb-20 md:pb-8 pt-6 md:pt-8">
       <div className="max-w-7xl mx-auto">
         <StatsCards />
+        <BudgetAlert />
         <div className="px-4 pb-4 md:hidden">
           <div className="flex gap-2">
             <input

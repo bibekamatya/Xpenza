@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 import { handleSignOut } from "@/app/actions/authActions";
-import { DollarSign, LogOut } from "lucide-react";
+import { DollarSign, LogOut, Settings, FileText } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import BudgetSettings from "./BudgetSettings";
 
 interface HeaderProps {
   user: { image: string; email: string; name: string };
@@ -11,6 +13,7 @@ interface HeaderProps {
 
 const Header = ({ user }: HeaderProps) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [showBudgetSettings, setShowBudgetSettings] = useState(false);
 
   return (
     <>
@@ -39,13 +42,29 @@ const Header = ({ user }: HeaderProps) => {
             </div>
           </div>
 
-          <button
-            onClick={() => setShowLogoutDialog(true)}
-            className="p-2 text-sm bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-all active:scale-95 border border-red-600/30"
-            title="Sign Out"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/reports"
+              className="p-2 text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
+              title="Reports"
+            >
+              <FileText className="w-4 h-4" />
+            </Link>
+            <button
+              onClick={() => setShowBudgetSettings(true)}
+              className="p-2 text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
+              title="Budget Settings"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setShowLogoutDialog(true)}
+              className="p-2 text-sm bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-all active:scale-95 border border-red-600/30"
+              title="Sign Out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -87,6 +106,8 @@ const Header = ({ user }: HeaderProps) => {
       </motion.div>
       </AnimatePresence>
     )}
+
+    <BudgetSettings isOpen={showBudgetSettings} onClose={() => setShowBudgetSettings(false)} />
     </>
   );
 };

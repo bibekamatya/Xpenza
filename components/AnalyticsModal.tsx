@@ -48,21 +48,28 @@ const AnalyticsModal = ({ isOpen, onClose, transactions }: AnalyticsModalProps) 
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
           />
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "100%", opacity: 0 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="fixed inset-x-0 bottom-0 z-50 md:inset-0 md:flex md:items-center md:justify-center md:p-4"
           >
-            <div className="bg-slate-800 rounded-xl border border-slate-700 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white">Analytics</h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-slate-700 rounded-lg transition-all active:scale-90"
-          >
-            <X className="w-5 h-5 text-slate-400" />
-          </button>
+            <motion.div
+              initial={{ scale: 1 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.95 }}
+              className="bg-slate-800 md:rounded-xl border-t md:border border-slate-700 w-full md:max-w-2xl max-h-[85vh] md:max-h-[90vh] overflow-y-auto rounded-t-2xl md:rounded-t-xl">
+        <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-4 md:p-6" onClick={onClose}>
+          <div className="md:hidden w-12 h-1.5 bg-slate-600 rounded-full mx-auto mb-3 cursor-pointer"></div>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold text-white">Analytics</h2>
+            <button
+              onClick={onClose}
+              className="hidden md:block p-2 hover:bg-slate-700 rounded-lg transition-all active:scale-90"
+            >
+              <X className="w-5 h-5 text-slate-400" />
+            </button>
+          </div>
         </div>
 
         <div className="p-6 space-y-6">
@@ -112,7 +119,7 @@ const AnalyticsModal = ({ isOpen, onClose, transactions }: AnalyticsModalProps) 
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   </>
       )}
