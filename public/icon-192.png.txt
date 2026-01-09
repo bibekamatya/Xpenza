@@ -1,0 +1,2 @@
+You need to create icon-192.png and icon-512.png
+Use a tool like https://realfavicongenerator.net/ or create them manually
