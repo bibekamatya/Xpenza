@@ -15,7 +15,7 @@ function ExpenseContent() {
   const [showFilters, setShowFilters] = useState(false);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const { applyFilters, filters } = useTransactionsContext();
-  const searchTimeoutRef = useRef<NodeJS.Timeout>();
+  const searchTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   return (
     <div className="min-h-screen bg-slate-900 pb-20 md:pb-8 pt-6 md:pt-8">
