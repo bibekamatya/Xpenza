@@ -4,10 +4,10 @@ import AddExpenseDialog from "./AddExpenseDialog";
 import { Transaction } from "@/lib/types";
 import DeleteDialog from "./DeleteDialog";
 import TransactionActionsSheet from "./TransactionActionsSheet";
-import { Edit2, Trash2 } from "lucide-react";
+import { Edit2, Trash2, TrendingDown, TrendingUp } from "lucide-react";
 import Pagination from "./Pagination";
 import { useTransactionsContext } from "@/contexts/TransactionsContext";
-import { getIcon } from "@/lib/helper";
+import { getIcon, formatDate } from "@/lib/helper";
 import { deleteTransaction } from "@/app/actions/expenseActions";
 import toast from "react-hot-toast";
 import TransactionsSkeleton from "./TransactionsSkeleton";
@@ -19,6 +19,9 @@ const Transactions = () => {
     totalPages,
     handlePageChange,
     isPending,
+    hasMore,
+    isLoadingMore,
+    loadMore,
     addTransaction,
     updateTransaction: updateTransactionInList,
     removeTransaction,
@@ -30,6 +33,15 @@ const Transactions = () => {
     useState<Transaction | null>();
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
+
+  const groupedTransactions = transactions.reduce((groups, transaction) => {
+    const date = formatDate(transaction.date);
+    if (!groups[date]) {
+      groups[date] = [];
+    }
+    groups[date].push(transaction);
+    return groups;
+  }, {} as Record<string, Transaction[]>);
 
   return (
     <div className="px-4 md:px-8">
@@ -46,8 +58,16 @@ const Transactions = () => {
         {isPending ? (
           <TransactionsSkeleton />
         ) : (
-          <div className="divide-y divide-slate-700">
-            {transactions.map((item) => {
+          <div>
+            {Object.entries(groupedTransactions).map(([date, items]) => (
+              <div key={date}>
+                <div className="flex justify-center py-3">
+                  <span className="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs font-medium rounded-full">
+                    {date}
+                  </span>
+                </div>
+                <div className="divide-y divide-slate-700">
+                  {items.map((item) => {
               const { description, amount, category } = item;
               return (
                 <div
@@ -65,7 +85,6 @@ const Transactions = () => {
                           {description}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-slate-400">Jan 15</span>
                           <span className="px-2 py-0.5 bg-blue-600/20 text-blue-400 text-xs rounded-full">
                             {category}
                           </span>
@@ -73,9 +92,16 @@ const Transactions = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      <p className="text-base font-bold text-red-500">
-                        {amount}
-                      </p>
+                      <div className="flex items-center gap-1">
+                        {item.type === "income" ? (
+                          <TrendingUp className="w-4 h-4 text-green-500" />
+                        ) : (
+                          <TrendingDown className="w-4 h-4 text-red-500" />
+                        )}
+                        <p className={`text-base font-bold ${item.type === "income" ? "text-green-500" : "text-red-500"}`}>
+                          ₹{amount}
+                        </p>
+                      </div>
                       <div className="hidden md:flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
                           onClick={(e) => {
@@ -100,10 +126,21 @@ const Transactions = () => {
                   </div>
                 </div>
               );
-            })}
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
+      <Pagination
+        handlePageChange={handlePageChange}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        hasMore={hasMore}
+        isLoadingMore={isLoadingMore}
+        loadMore={loadMore}
+      />
       <TransactionActionsSheet
         isOpen={!!selectedTransaction}
         onClose={() => setSelectedTransaction(null)}
@@ -145,11 +182,6 @@ const Transactions = () => {
             addTransaction(transaction);
           }
         }}
-      />
-      <Pagination
-        handlePageChange={handlePageChange}
-        totalPages={totalPages}
-        currentPage={currentPage}
       />
     </div>
   );

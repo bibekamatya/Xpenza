@@ -28,3 +28,22 @@ export function getIcon(type: string) {
       return "❓";
   }
 }
+
+export function formatDate(date: Date | string): string {
+  const d = new Date(date);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const transactionDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+  if (transactionDate.getTime() === today.getTime()) {
+    return "Today";
+  } else if (transactionDate.getTime() === yesterday.getTime()) {
+    return "Yesterday";
+  } else {
+    const month = d.toLocaleString("en-US", { month: "short" });
+    const day = d.getDate();
+    return `${month} ${day}`;
+  }
+}

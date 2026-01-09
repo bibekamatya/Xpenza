@@ -17,7 +17,7 @@ const Expense = () => {
     <TransactionsProvider>
       <div className="min-h-screen bg-slate-900 pb-20 md:pb-8 pt-6 md:pt-8">
         <div className="max-w-7xl mx-auto">
-          {/* Stats Cards - Horizontal Scroll on Mobile */}
+          {/* Stats Cards */}
           <StatsCards />
 
           {/* Filter Button - Mobile Only */}

@@ -8,7 +8,9 @@ export function useTransactions() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [isPending, startTransition] = useTransition();
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [monthlyStatus, setMonthlyStatus] = useState<Status | null>(null);
 
   useEffect(() => {
@@ -22,10 +24,28 @@ export function useTransactions() {
         setTransactions(result.transactions);
         setCurrentPage(result.page);
         setTotalPages(result.totalPages);
+        setHasMore(result.hasMore ?? false);
       } catch (error) {
         toast.error("Failed to load transactions");
       }
     });
+  };
+
+  const loadMore = async () => {
+    if (isLoadingMore || !hasMore) return;
+    
+    setIsLoadingMore(true);
+    try {
+      const nextPage = currentPage + 1;
+      const result = await getTransactions("all", undefined, undefined, nextPage);
+      setTransactions((prev) => [...prev, ...result.transactions]);
+      setCurrentPage(nextPage);
+      setHasMore(result.hasMore ?? false);
+    } catch (error) {
+      toast.error("Failed to load more transactions");
+    } finally {
+      setIsLoadingMore(false);
+    }
   };
 
   useEffect(() => {
@@ -59,9 +79,12 @@ export function useTransactions() {
     transactions,
     currentPage,
     totalPages,
+    hasMore,
     isPending,
+    isLoadingMore,
     refetch,
     handlePageChange,
+    loadMore,
     addTransaction,
     updateTransaction,
     removeTransaction,

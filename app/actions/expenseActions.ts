@@ -16,7 +16,7 @@ export async function getTransactions(
   month?: number,
   year?: number,
   page: number = 1,
-  limit: number = 10
+  limit: number = 20
 ) {
   const session = await auth();
   if (!session?.user?.email)

@@ -15,21 +15,24 @@ const BottomSheet = ({ showFilters, setShowFilters }: any) => {
         onClick={() => setShowFilters(false)}
       />
       <div
-        className={`absolute bottom-0 left-0 right-0 bg-slate-800 rounded-t-2xl p-6 space-y-4 max-h-[80vh] overflow-y-auto transition-transform duration-300 ease-out ${
+        className={`absolute bottom-0 left-0 right-0 bg-slate-800 rounded-t-2xl space-y-4 max-h-[80vh] overflow-y-auto transition-transform duration-300 ease-out ${
           showFilters ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-white">Filters</h3>
-          <button
-            onClick={() => setShowFilters(false)}
-            className="text-slate-400 active:scale-90 transition-transform"
-          >
-            <X className="w-6 h-6" />
-          </button>
+        <div className="sticky top-0 bg-slate-800 pt-4 px-6 pb-2 border-b border-slate-700">
+          <div className="w-12 h-1 bg-slate-600 rounded-full mx-auto mb-4 cursor-pointer" onClick={() => setShowFilters(false)} />
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold text-white">Filters</h3>
+            <button
+              onClick={() => setShowFilters(false)}
+              className="text-slate-400 active:scale-90 transition-transform"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 px-6 pb-6">
           <div className="flex flex-wrap gap-2">
             <button className="px-3 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 text-sm rounded-lg active:scale-95 transition-all">
               Today

@@ -37,7 +37,10 @@ const TransactionActionsSheet = ({
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
             className="fixed bottom-0 left-0 right-0 bg-slate-800 rounded-t-3xl border-t border-slate-700 z-50 md:hidden"
           >
-            <div className="w-12 h-1.5 bg-slate-600 rounded-full mx-auto mt-3 mb-4" />
+            <div 
+              className="w-12 h-1.5 bg-slate-600 rounded-full mx-auto mt-3 mb-4 cursor-pointer" 
+              onClick={onClose}
+            />
 
             <div className="px-6 pb-8">
               <div className="mb-6">
