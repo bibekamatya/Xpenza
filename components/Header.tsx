@@ -21,7 +21,7 @@ const Header = ({ user }: HeaderProps) => {
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center overflow-hidden">
                 {user?.image ? (
                   <Image
                     src={user.image}
@@ -31,7 +31,13 @@ const Header = ({ user }: HeaderProps) => {
                     className="rounded-lg"
                   />
                 ) : (
-                  <DollarSign className="w-5 h-5 text-white" />
+                  <Image
+                    src="/logo.png"
+                    alt="Expense Tracker"
+                    height={32}
+                    width={32}
+                    className="rounded-lg object-cover"
+                  />
                 )}
               </div>
               <div>

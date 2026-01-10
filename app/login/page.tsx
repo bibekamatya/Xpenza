@@ -1,6 +1,6 @@
 import { signIn, auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { DollarSign, BarChart3, TrendingUp, Clock } from "lucide-react";
+import { IndianRupee, BarChart3, TrendingUp, Clock } from "lucide-react";
 
 export default async function LoginPage() {
   const session = await auth();
@@ -13,7 +13,7 @@ export default async function LoginPage() {
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
             <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <DollarSign className="w-10 h-10 text-white" />
+              <IndianRupee className="w-10 h-10 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">
               Expense Tracker
