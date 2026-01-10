@@ -28,6 +28,11 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Skip cross-origin requests and redirects
+  if (!event.request.url.startsWith(self.location.origin) || event.request.redirect === 'manual') {
+    return;
+  }
+  
   event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.request);
