@@ -1,36 +1,206 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💰 Expense Tracker
 
-## Getting Started
+A modern, full-stack expense tracking application built with Next.js 15, TypeScript, and MongoDB. Track your income and expenses, visualize spending patterns, and manage your budget effectively.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=flat-square&logo=mongodb)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=flat-square&logo=tailwind-css)
 
+## ✨ Features
+
+### Core Functionality
+- 📊 **Transaction Management** - Add, edit, and delete income/expense transactions
+- 🏷️ **Category System** - Organize transactions by customizable categories
+- 📅 **Date Filtering** - Filter by today, week, month, year, or custom date range
+- 🔍 **Search & Filter** - Search transactions and filter by type/category
+- 📱 **Responsive Design** - Optimized for mobile, tablet, and desktop
+
+### Advanced Features
+- 📈 **Reports & Analytics** - Visual insights with charts and trend analysis
+- 💾 **Export Data** - Export transactions as CSV or PDF
+- 🎯 **Budget Tracking** - Set budgets and get alerts when approaching limits
+- ⚡ **Bulk Operations** - Select and delete multiple transactions at once
+- 🔄 **Real-time Updates** - Instant UI updates with optimistic rendering
+- 🌙 **Dark Mode** - Beautiful dark theme throughout
+
+### User Experience
+- 🔐 **Google OAuth** - Secure authentication with Google Sign-In
+- 💨 **Fast Performance** - Server-side rendering and optimized data fetching
+- 📲 **PWA Ready** - Install as a mobile app
+- ⌨️ **Keyboard Shortcuts** - Quick actions with keyboard navigation
+- 🎨 **Modern UI** - Clean, intuitive interface with smooth animations
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **Framer Motion** - Smooth animations
+- **Recharts** - Data visualization
+- **Lucide Icons** - Beautiful icon set
+
+### Backend
+- **Next.js Server Actions** - Type-safe server functions
+- **MongoDB Atlas** - Cloud database
+- **NextAuth.js** - Authentication
+- **Zod** - Schema validation
+
+### Tools & Libraries
+- **React Hook Form** - Form management
+- **React Hot Toast** - Notifications
+- **jsPDF** - PDF generation
+- **date-fns** - Date utilities
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ installed
+- MongoDB Atlas account
+- Google OAuth credentials
+
+### Installation
+
+1. **Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/bibekamatya/Expense-Tracker.git
+cd Expense-Tracker
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Set up environment variables**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env` file in the root directory:
 
-## Learn More
+```env
+# MongoDB
+MONGODB_URI=your_mongodb_connection_string
 
-To learn more about Next.js, take a look at the following resources:
+# NextAuth
+AUTH_SECRET=your_auth_secret
+AUTH_GOOGLE_ID=your_google_client_id
+AUTH_GOOGLE_SECRET=your_google_client_secret
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# App URL
+NEXTAUTH_URL=http://localhost:3000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Run the development server**
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+5. **Open your browser**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Navigate to [http://localhost:3000](http://localhost:3000)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📁 Project Structure
+
+```
+expence-tracker/
+├── app/                    # Next.js App Router
+│   ├── actions/           # Server Actions
+│   ├── api/               # API routes
+│   ├── login/             # Login page
+│   ├── reports/           # Reports page
+│   └── page.tsx           # Home page
+├── components/            # React components
+│   ├── AddExpenseDialog.tsx
+│   ├── BudgetAlert.tsx
+│   ├── Filters.tsx
+│   ├── Header.tsx
+│   ├── Reports.tsx
+│   ├── StatsCards.tsx
+│   └── Transactions.tsx
+├── contexts/              # React Context providers
+├── hooks/                 # Custom React hooks
+├── lib/                   # Utilities and configs
+│   ├── auth.ts           # NextAuth configuration
+│   ├── mongodb.ts        # Database connection
+│   └── types.ts          # TypeScript types
+└── public/               # Static assets
+```
+
+## 🎯 Key Features Explained
+
+### Smart Filtering
+- Real-time search with debouncing
+- Multiple filter combinations (type, category, date)
+- Stats update dynamically based on active filters
+
+### Bulk Operations
+- Select multiple transactions with checkboxes
+- Delete selected items in one action
+- Clear visual feedback for selected items
+
+### Reports & Analytics
+- Period-based analysis (daily, weekly, monthly, yearly)
+- Interactive charts (trend, category distribution, income vs expenses)
+- Top transactions and spending insights
+- Export filtered data to CSV/PDF
+
+### Budget Management
+- Set monthly budget limits
+- Visual progress indicators
+- Alerts when approaching or exceeding budget
+- Real-time budget tracking
+
+## 🔒 Security
+
+- Secure authentication with NextAuth.js
+- Environment variables for sensitive data
+- Server-side validation with Zod
+- Protected API routes
+- CSRF protection
+
+## 📱 Mobile Experience
+
+- Touch-optimized interface
+- Swipeable bottom sheets
+- Mobile-specific navigation
+- Responsive charts and tables
+- PWA support for offline access
+
+## 🎨 Design Highlights
+
+- Consistent dark theme
+- Smooth animations and transitions
+- Loading states and skeletons
+- Empty states with helpful messages
+- Error boundaries for graceful failures
+
+## 🚢 Deployment
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Import project in Vercel
+3. Add environment variables
+4. Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/bibekamatya/Expense-Tracker)
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 👨‍💻 Author
+
+**Bibek Amatya**
+- GitHub: [@bibekamatya](https://github.com/bibekamatya)
+
+## 🙏 Acknowledgments
+
+- Next.js team for the amazing framework
+- Vercel for hosting
+- MongoDB for the database
+- All open-source contributors
+
+---
+
+Made with ❤️ by Bibek Amatya
