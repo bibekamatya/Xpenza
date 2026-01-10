@@ -1,51 +1,61 @@
 import { signIn, auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { IndianRupee, BarChart3, TrendingUp, Clock } from "lucide-react";
+import { BarChart3, TrendingUp, Clock } from "lucide-react";
+import Image from "next/image";
 
 export default async function LoginPage() {
   const session = await auth();
   if (session?.user) redirect("/");
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="bg-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-700">
+        <div className="bg-gradient-to-b from-slate-800/90 to-slate-900/90 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-blue-500/20 ring-1 ring-blue-400/10">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <IndianRupee className="w-10 h-10 text-white" />
+          <div className="px-8 py-6 md:py-3 text-center relative overflow-hidden">
+            {/* Animated background gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/15 via-purple-600/10 to-transparent"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-500/15 via-transparent to-transparent"></div>
+            
+            <div className="relative">
+              <div className="w-44 h-44 md:w-36 md:h-36 mx-auto mb-2 md:mb-1 relative">
+                <Image
+                  src="/logo.png"
+                  alt="Expense Tracker"
+                  width={176}
+                  height={176}
+                  className="object-contain drop-shadow-2xl"
+                />
+              </div>
+              <p className="text-slate-300 text-xs font-medium">Smart financial management made simple</p>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Expense Tracker
-            </h1>
-            <p className="text-blue-100">Track and manage your finances</p>
           </div>
 
           {/* Content */}
-          <div className="p-8">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-white mb-2">
+          <div className="p-6 md:p-5">
+            <div className="text-center mb-6 md:mb-5">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent mb-2">
                 Welcome Back
               </h2>
-              <p className="text-slate-400">Sign in to continue</p>
+              <p className="text-slate-300 text-sm">Sign in to continue</p>
             </div>
 
             {/* Features */}
-            <div className="space-y-3 mb-8">
-              <div className="flex items-center gap-3 text-slate-300">
-                <div className="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="space-y-2.5 mb-6 md:mb-5">
+              <div className="flex items-center gap-3 text-slate-200">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600/20 to-blue-700/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-blue-500/20">
                   <BarChart3 className="w-5 h-5 text-blue-400" />
                 </div>
                 <span className="text-sm">Track income and expenses</span>
               </div>
-              <div className="flex items-center gap-3 text-slate-300">
-                <div className="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <div className="flex items-center gap-3 text-slate-200">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-600/20 to-green-700/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-green-500/20">
                   <TrendingUp className="w-5 h-5 text-green-400" />
                 </div>
                 <span className="text-sm">Visualize your spending</span>
               </div>
-              <div className="flex items-center gap-3 text-slate-300">
-                <div className="w-10 h-10 bg-purple-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
+              <div className="flex items-center gap-3 text-slate-200">
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-600/20 to-purple-700/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-purple-500/20">
                   <Clock className="w-5 h-5 text-purple-400" />
                 </div>
                 <span className="text-sm">Stay on budget</span>
@@ -61,7 +71,7 @@ export default async function LoginPage() {
             >
               <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-semibold transition-all active:scale-[0.98] shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3.5 md:py-2.5 rounded-xl font-semibold transition-all duration-200 active:scale-[0.98] shadow-lg shadow-blue-900/60 hover:shadow-xl hover:shadow-blue-800/70 flex items-center justify-center gap-3 border border-blue-400/30"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
@@ -92,8 +102,8 @@ export default async function LoginPage() {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-6">
-          <p className="text-xs text-slate-500">
+        <div className="text-center mt-8">
+          <p className="text-xs text-slate-600">
             © 2024 Expense Tracker. All rights reserved.
           </p>
         </div>
