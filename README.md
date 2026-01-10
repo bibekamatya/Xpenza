@@ -11,24 +11,27 @@ A modern, full-stack expense tracking application built with Next.js 15, TypeScr
 
 ### Core Functionality
 - 📊 **Transaction Management** - Add, edit, and delete income/expense transactions
-- 🏷️ **Category System** - Organize transactions by predefined categories
+- 🏷️ **Category System** - Organize transactions by predefined categories (Food, Transport, Shopping, Bills, etc.)
 - 📅 **Date Filtering** - Filter by today, week, month, year, or custom date range
-- 🔍 **Search & Filter** - Search transactions and filter by type/category
+- 🔍 **Search** - Real-time search with debouncing
 - 📱 **Responsive Design** - Optimized for mobile, tablet, and desktop
+- 📄 **Pagination** - Efficient data loading with pagination
 
 ### Advanced Features
-- 📈 **Reports & Analytics** - Visual insights with charts and trend analysis
-- 💾 **Export Data** - Export transactions as CSV or PDF
+- 📈 **Reports & Analytics** - Visual insights with charts (trend analysis, category distribution, income vs expenses)
+- 💾 **Export Data** - Export filtered transactions as CSV or PDF
 - 🎯 **Budget Tracking** - Set budgets and get alerts when approaching limits
-- ⚡ **Bulk Operations** - Select and delete multiple transactions at once
+- ⚡ **Bulk Delete** - Select and delete multiple transactions at once
 - 🔄 **Real-time Updates** - Instant UI updates with optimistic rendering
-- 🌙 **Dark Mode** - Beautiful dark theme throughout
+- 🌙 **Dark Theme** - Beautiful dark theme throughout
 
 ### User Experience
 - 🔐 **Google OAuth** - Secure authentication with Google Sign-In
 - 💨 **Fast Performance** - Server-side rendering and optimized data fetching
-- 📲 **PWA Ready** - Install as a mobile app
-- 🎨 **Modern UI** - Clean, intuitive interface with smooth animations
+- 📲 **PWA Ready** - Install as a mobile app with offline support
+- 🎨 **Modern UI** - Clean interface with smooth animations
+- ⚡ **Loading States** - Skeleton loaders for better UX
+- 🎯 **Empty States** - Helpful messages when no data
 
 ## 🛠️ Tech Stack
 
@@ -169,9 +172,8 @@ expence-tracker/
 
 - Consistent dark theme
 - Smooth animations and transitions
-- Loading states and skeletons
+- Loading states with skeletons
 - Empty states with helpful messages
-- Error boundaries for graceful failures
 
 ## 🚢 Deployment
 
@@ -183,10 +185,6 @@ expence-tracker/
 4. Deploy
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/bibekamatya/Expense-Tracker)
-
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 👨‍💻 Author
 
