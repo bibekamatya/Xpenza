@@ -77,17 +77,11 @@ const Transactions = () => {
     };
   }, [showExportMenu]);
 
-  const handleExportFromSheet = (
-    type: "csv" | "pdf",
-    range: string,
-    customStart?: string,
-    customEnd?: string,
-  ) => {
-    const filtered = getFilteredTransactions(range, customStart, customEnd);
+  const handleExportFromSheet = (type: "csv" | "pdf") => {
     if (type === "csv") {
-      exportToCSV(filtered);
+      exportToCSV();
     } else {
-      exportToPDF(filtered);
+      exportToPDF();
     }
   };
 
@@ -135,14 +129,8 @@ const Transactions = () => {
     });
   };
 
-  const exportToCSV = (filtered?: Transaction[]) => {
-    const data =
-      filtered ||
-      getFilteredTransactions(
-        showCustomDates ? "custom" : exportRange,
-        customStartDate,
-        customEndDate,
-      );
+  const exportToCSV = () => {
+    const data = filteredTransactions;
     const headers = ["Date", "Type", "Category", "Description", "Amount"];
     const rows = data.map((t) => [
       new Date(t.date).toLocaleDateString(),
@@ -164,14 +152,8 @@ const Transactions = () => {
     toast.success("CSV exported successfully");
   };
 
-  const exportToPDF = async (filtered?: Transaction[]) => {
-    const data =
-      filtered ||
-      getFilteredTransactions(
-        showCustomDates ? "custom" : exportRange,
-        customStartDate,
-        customEndDate,
-      );
+  const exportToPDF = async () => {
+    const data = filteredTransactions;
     const { jsPDF } = await import("jspdf");
     const autoTable = (await import("jspdf-autotable")).default;
     const doc = new jsPDF();
@@ -231,65 +213,55 @@ const Transactions = () => {
   // Apply filters
   const filteredTransactions = transactions;
 
-  const groupedTransactions = filteredTransactions.reduce(
-    (groups, transaction) => {
-      const date = formatDate(transaction.date);
-      if (!groups[date]) {
-        groups[date] = [];
-      }
-      groups[date].push(transaction);
-      return groups;
-    },
-    {} as Record<string, Transaction[]>,
-  );
-
   return (
     <div className="px-4 md:px-8">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">Transactions</h2>
-        <div className="flex items-center gap-2">
-          {bulkMode && selectedIds.length > 0 && (
-            <>
-              <span className="text-sm text-slate-400">
-                {selectedIds.length} selected
-              </span>
-              <button
-                onClick={() => setShowBulkDeleteDialog(true)}
-                className="px-3 py-1.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 text-sm rounded-lg transition-all active:scale-95 border border-red-600/30"
-              >
-                Delete Selected
-              </button>
-            </>
-          )}
-          <button
-            onClick={() => {
-              setBulkMode(!bulkMode);
-              setSelectedIds([]);
-            }}
-            className={`p-2 rounded-lg transition-all active:scale-95 ${
-              bulkMode
-                ? "bg-blue-600/20 text-blue-400 border border-blue-600/30"
-                : "bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700"
-            }`}
-            title={bulkMode ? "Cancel Selection" : "Select Multiple"}
-          >
-            <Check className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setShowAnalytics(true)}
-            className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
-            title="Analytics"
-          >
-            <BarChart3 className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setShowExportSheet(true)}
-            className="md:hidden p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
-            title="Export"
-          >
-            <Download className="w-4 h-4" />
-          </button>
-          <div className="hidden md:block relative" ref={exportMenuRef}>
+      <div className="mb-4">
+        {bulkMode && selectedIds.length > 0 && (
+          <div className="mb-3 flex items-center justify-between p-3 bg-slate-700/50 rounded-lg border border-slate-600">
+            <span className="text-sm text-slate-300 font-medium">
+              {selectedIds.length} transaction{selectedIds.length > 1 ? 's' : ''} selected
+            </span>
+            <button
+              onClick={() => setShowBulkDeleteDialog(true)}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg transition-all active:scale-95 font-medium flex items-center gap-2"
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete
+            </button>
+          </div>
+        )}
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold text-white">Transactions</h2>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={() => {
+                setBulkMode(!bulkMode);
+                setSelectedIds([]);
+              }}
+              className={`p-2 rounded-lg transition-all active:scale-95 ${
+                bulkMode
+                  ? "bg-blue-600/20 text-blue-400 border border-blue-600/30"
+                  : "bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700"
+              }`}
+              title={bulkMode ? "Cancel Selection" : "Select Multiple"}
+            >
+              <Check className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setShowAnalytics(true)}
+              className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
+              title="Analytics"
+            >
+              <BarChart3 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setShowExportSheet(true)}
+              className="md:hidden p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
+              title="Export"
+            >
+              <Download className="w-4 h-4" />
+            </button>
+            <div className="hidden md:block relative" ref={exportMenuRef}>
             <button
               onClick={() => setShowExportMenu(!showExportMenu)}
               className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
@@ -366,13 +338,14 @@ const Transactions = () => {
                 </button>
               </div>
             )}
+            </div>
+            <button
+              onClick={() => setShowForm(true)}
+              className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg"
+            >
+              + Add Expense
+            </button>
           </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg"
-          >
-            + Add Expense
-          </button>
         </div>
       </div>
       <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
@@ -397,111 +370,103 @@ const Transactions = () => {
             </button>
           </div>
         ) : (
-          <div>
-            {Object.entries(groupedTransactions).map(([date, items]) => (
-              <div key={date}>
-                <div className="flex justify-center py-3">
-                  <span className="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs font-medium rounded-full">
-                    {date}
-                  </span>
-                </div>
-                <div className="divide-y divide-slate-700">
-                  {items.map((item) => {
-                    const { description, amount, category } = item;
-                    return (
+          <div className="divide-y divide-slate-700">
+            {filteredTransactions.map((item) => {
+              const { description, amount, category } = item;
+              return (
+                <div
+                  key={item._id}
+                  onClick={() => {
+                    if (bulkMode) {
+                      if (selectedIds.includes(item._id)) {
+                        setSelectedIds(
+                          selectedIds.filter((id) => id !== item._id),
+                        );
+                      } else {
+                        setSelectedIds([...selectedIds, item._id]);
+                      }
+                    } else {
+                      setSelectedTransaction(item);
+                    }
+                  }}
+                  className={`p-4 hover:bg-slate-750 transition-colors group cursor-pointer active:bg-slate-750 ${
+                    bulkMode && selectedIds.includes(item._id)
+                      ? "bg-blue-600/10 border-l-4 border-blue-600"
+                      : ""
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    {bulkMode && (
                       <div
-                        key={item._id}
-                        onClick={() => {
-                          if (bulkMode) {
-                            if (selectedIds.includes(item._id)) {
-                              setSelectedIds(
-                                selectedIds.filter((id) => id !== item._id),
-                              );
-                            } else {
-                              setSelectedIds([...selectedIds, item._id]);
-                            }
-                          } else {
-                            setSelectedTransaction(item);
-                          }
-                        }}
-                        className={`p-4 hover:bg-slate-750 transition-colors group cursor-pointer active:bg-slate-750 ${
-                          bulkMode && selectedIds.includes(item._id)
-                            ? "bg-blue-600/10 border-l-4 border-blue-600"
-                            : ""
+                        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+                          selectedIds.includes(item._id)
+                            ? "bg-blue-600 border-blue-600"
+                            : "border-slate-600"
                         }`}
                       >
-                        <div className="flex items-center justify-between gap-3">
-                          {bulkMode && (
-                            <div
-                              className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                                selectedIds.includes(item._id)
-                                  ? "bg-blue-600 border-blue-600"
-                                  : "border-slate-600"
-                              }`}
-                            >
-                              {selectedIds.includes(item._id) && (
-                                <Check className="w-3 h-3 text-white" />
-                              )}
-                            </div>
-                          )}
-                          <div className="flex items-center gap-3 flex-1 min-w-0">
-                            <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center shrink-0">
-                              <span className="text-xl">
-                                {getIcon(category)}
-                              </span>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-white font-medium text-sm truncate">
-                                {description}
-                              </p>
-                              <div className="flex items-center gap-2 mt-1">
-                                <span className="px-2 py-0.5 bg-blue-600/20 text-blue-400 text-xs rounded-full">
-                                  {category}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <div className="flex items-center gap-1">
-                              {item.type === "income" ? (
-                                <TrendingUp className="w-4 h-4 text-green-500" />
-                              ) : (
-                                <TrendingDown className="w-4 h-4 text-red-500" />
-                              )}
-                              <p
-                                className={`text-base font-bold ${item.type === "income" ? "text-green-500" : "text-red-500"}`}
-                              >
-                                ₹{amount}
-                              </p>
-                            </div>
-                            <div className="hidden md:flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setEditTransaction(item);
-                                }}
-                                className="p-2 hover:bg-blue-600/20 rounded-lg transition-all active:scale-90"
-                              >
-                                <Edit2 className="w-4 h-4 text-blue-400" />
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setDeleteItemMetaData(item);
-                                }}
-                                className="p-2 hover:bg-red-600/20 rounded-lg transition-all active:scale-90"
-                              >
-                                <Trash2 className="w-4 h-4 text-red-400" />
-                              </button>
-                            </div>
-                          </div>
+                        {selectedIds.includes(item._id) && (
+                          <Check className="w-3 h-3 text-white" />
+                        )}
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center shrink-0">
+                        <span className="text-xl">
+                          {getIcon(category)}
+                        </span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white font-medium text-sm truncate">
+                          {description}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="px-2 py-0.5 bg-blue-600/20 text-blue-400 text-xs rounded-full">
+                            {category}
+                          </span>
+                          <span className="text-xs text-slate-400">
+                            {formatDate(item.date)}
+                          </span>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex items-center gap-1">
+                        {item.type === "income" ? (
+                          <TrendingUp className="w-4 h-4 text-green-500" />
+                        ) : (
+                          <TrendingDown className="w-4 h-4 text-red-500" />
+                        )}
+                        <p
+                          className={`text-base font-bold ${item.type === "income" ? "text-green-500" : "text-red-500"}`}
+                        >
+                          ₹{amount}
+                        </p>
+                      </div>
+                      <div className="hidden md:flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditTransaction(item);
+                          }}
+                          className="p-2 hover:bg-blue-600/20 rounded-lg transition-all active:scale-90"
+                        >
+                          <Edit2 className="w-4 h-4 text-blue-400" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeleteItemMetaData(item);
+                          }}
+                          className="p-2 hover:bg-red-600/20 rounded-lg transition-all active:scale-90"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-400" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

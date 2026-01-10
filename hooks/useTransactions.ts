@@ -11,7 +11,7 @@ export function useTransactions() {
   const [hasMore, setHasMore] = useState(true);
   const [isPending, startTransition] = useTransition();
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [monthlyStatus, setMonthlyStatus] = useState<Status | null>(null);
+  const [lifetimeStatus, setLifetimeStatus] = useState<Status | null>(null);
   const [filters, setFilters] = useState<any>({
     type: "all",
     dateRange: "all",
@@ -22,7 +22,7 @@ export function useTransactions() {
   });
 
   useEffect(() => {
-    getStats("all").then(setMonthlyStatus);
+    getStats("all").then(setLifetimeStatus);
   }, [isPending]);
 
   const refetch = (page: number = 1, newFilters?: any) => {
@@ -59,7 +59,7 @@ export function useTransactions() {
 
   useEffect(() => {
     refetch(1);
-    getStats("all").then(setMonthlyStatus);
+    getStats("all").then(setLifetimeStatus);
   }, []);
 
   const handlePageChange = (newPage: number) => {
@@ -73,23 +73,23 @@ export function useTransactions() {
 
   const addTransaction = (transaction: Transaction) => {
     setTransactions((prev) => [transaction, ...prev]);
-    getStats("all").then(setMonthlyStatus);
+    getStats("all").then(setLifetimeStatus);
   };
 
   const updateTransaction = (transaction: Transaction) => {
     setTransactions((prev) =>
       prev.map((t) => (t._id === transaction._id ? transaction : t)),
     );
-    getStats("all").then(setMonthlyStatus);
+    getStats("all").then(setLifetimeStatus);
   };
 
   const removeTransaction = (id: string) => {
     setTransactions((prev) => prev.filter((t) => t._id !== id));
-    getStats("all").then(setMonthlyStatus);
+    getStats("all").then(setLifetimeStatus);
   };
 
   return {
-    monthlyStatus,
+    lifetimeStatus,
     transactions,
     currentPage,
     totalPages,

@@ -1,11 +1,25 @@
 "use client";
 import { useTransactionsContext } from "@/contexts/TransactionsContext";
 import { Wallet, TrendingUp, TrendingDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 const StatsCards = () => {
-  const { monthlyStatus } = useTransactionsContext();
+  const { transactions } = useTransactionsContext();
   const [showFull, setShowFull] = useState(false);
+
+  const stats = useMemo(() => {
+    const totalIncome = transactions
+      .filter((t) => t.type === "income")
+      .reduce((sum, t) => sum + t.amount, 0);
+    const totalExpense = transactions
+      .filter((t) => t.type === "expense")
+      .reduce((sum, t) => sum + t.amount, 0);
+    return {
+      balance: totalIncome - totalExpense,
+      totalIncome,
+      totalExpense,
+    };
+  }, [transactions]);
 
   const formatAmount = (amount: number) => {
     if (showFull) return amount.toLocaleString();
@@ -16,11 +30,11 @@ const StatsCards = () => {
   };
 
   return (
-    <div className="overflow-x-auto px-4 md:px-8 pb-4 md:pb-6 scrollbar-hide">
-      <div className="flex md:grid md:grid-cols-3 gap-2 md:gap-3">
+    <div className="px-4 md:px-8 pb-4 md:pb-6">
+      <div className="grid grid-cols-3 gap-2 md:gap-3">
         <div
           onClick={() => setShowFull(!showFull)}
-          className="bg-gradient-to-br from-blue-600/20 to-blue-600/5 rounded-lg p-3 border border-blue-600/30 flex-1 min-w-[calc(33.333%-0.5rem)] cursor-pointer active:scale-95 transition-transform"
+          className="bg-gradient-to-br from-blue-600/20 to-blue-600/5 rounded-lg p-3 border border-blue-600/30 cursor-pointer active:scale-95 transition-transform"
         >
           <div className="flex items-center justify-between mb-1">
             <p className="text-blue-400 text-xs font-medium">Balance</p>
@@ -29,12 +43,12 @@ const StatsCards = () => {
             </div>
           </div>
           <p className="text-xl md:text-2xl font-bold text-white">
-            ₹{formatAmount(monthlyStatus?.balance ?? 0)}
+            ₹{formatAmount(stats.balance)}
           </p>
         </div>
         <div
           onClick={() => setShowFull(!showFull)}
-          className="bg-gradient-to-br from-green-600/20 to-green-600/5 rounded-lg p-3 border border-green-600/30 flex-1 min-w-[calc(33.333%-0.5rem)] cursor-pointer active:scale-95 transition-transform"
+          className="bg-gradient-to-br from-green-600/20 to-green-600/5 rounded-lg p-3 border border-green-600/30 cursor-pointer active:scale-95 transition-transform"
         >
           <div className="flex items-center justify-between mb-1">
             <p className="text-green-400 text-xs font-medium">Income</p>
@@ -43,12 +57,12 @@ const StatsCards = () => {
             </div>
           </div>
           <p className="text-xl md:text-2xl font-bold text-white">
-            ₹{formatAmount(monthlyStatus?.totalIncome ?? 0)}
+            ₹{formatAmount(stats.totalIncome)}
           </p>
         </div>
         <div
           onClick={() => setShowFull(!showFull)}
-          className="bg-gradient-to-br from-red-600/20 to-red-600/5 rounded-lg p-3 border border-red-600/30 flex-1 min-w-[calc(33.333%-0.5rem)] cursor-pointer active:scale-95 transition-transform"
+          className="bg-gradient-to-br from-red-600/20 to-red-600/5 rounded-lg p-3 border border-red-600/30 cursor-pointer active:scale-95 transition-transform"
         >
           <div className="flex items-center justify-between mb-1">
             <p className="text-red-400 text-xs font-medium">Expenses</p>
@@ -57,7 +71,7 @@ const StatsCards = () => {
             </div>
           </div>
           <p className="text-xl md:text-2xl font-bold text-white">
-            ₹{formatAmount(monthlyStatus?.totalExpense ?? 0)}
+            ₹{formatAmount(stats.totalExpense)}
           </p>
         </div>
       </div>

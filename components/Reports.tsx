@@ -308,207 +308,17 @@ const Reports = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div className="bg-gradient-to-br from-green-600/20 to-green-600/5 rounded-xl p-5 border border-green-600/30 shadow-lg shadow-green-600/10">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm text-green-300 font-medium">
-                    Total Income
-                  </span>
-                  <div className="w-10 h-10 rounded-full bg-green-600/20 flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-green-400" />
-                  </div>
-                </div>
-                <p className="text-3xl font-bold text-white mb-1">
-                  ₹{formatAmount(stats?.totalIncome || 0)}
-                </p>
-                <p className="text-xs text-green-400 mb-3">
-                  ₹{(stats?.totalIncome || 0).toLocaleString()}
-                </p>
-                <ResponsiveContainer width="100%" height={80}>
-                  <AreaChart data={trendData}>
-                    <defs>
-                      <linearGradient
-                        id="colorIncome"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="5%"
-                          stopColor="#10b981"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#10b981"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <Area
-                      type="monotone"
-                      dataKey="income"
-                      stroke="#10b981"
-                      strokeWidth={2}
-                      fill="url(#colorIncome)"
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#1e293b",
-                        border: "1px solid #334155",
-                        borderRadius: "8px",
-                      }}
-                      formatter={(value) =>
-                        value ? `₹${value.toLocaleString()}` : "₹0"
-                      }
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="bg-gradient-to-br from-red-600/20 to-red-600/5 rounded-xl p-5 border border-red-600/30 shadow-lg shadow-red-600/10">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm text-red-300 font-medium">
-                    Total Expenses
-                  </span>
-                  <div className="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center">
-                    <TrendingDown className="w-5 h-5 text-red-400" />
-                  </div>
-                </div>
-                <p className="text-3xl font-bold text-white mb-1">
-                  ₹{formatAmount(stats?.totalExpense || 0)}
-                </p>
-                <p className="text-xs text-red-400 mb-3">
-                  ₹{(stats?.totalExpense || 0).toLocaleString()}
-                </p>
-                <ResponsiveContainer width="100%" height={80}>
-                  <AreaChart data={trendData}>
-                    <defs>
-                      <linearGradient
-                        id="colorExpense"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="5%"
-                          stopColor="#ef4444"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#ef4444"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <Area
-                      type="monotone"
-                      dataKey="expense"
-                      stroke="#ef4444"
-                      strokeWidth={2}
-                      fill="url(#colorExpense)"
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#1e293b",
-                        border: "1px solid #334155",
-                        borderRadius: "8px",
-                      }}
-                      formatter={(value) =>
-                        value ? `₹${value.toLocaleString()}` : "₹0"
-                      }
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="bg-gradient-to-br from-blue-600/20 to-blue-600/5 rounded-xl p-5 border border-blue-600/30 shadow-lg shadow-blue-600/10">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm text-blue-300 font-medium">
-                    Net Balance
-                  </span>
-                  <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center">
-                    <Wallet className="w-5 h-5 text-blue-400" />
-                  </div>
-                </div>
-                <p className="text-3xl font-bold text-white mb-1">
-                  ₹{formatAmount(stats?.balance || 0)}
-                </p>
-                <p className="text-xs text-blue-400 mb-3">
-                  ₹{(stats?.balance || 0).toLocaleString()}
-                </p>
-                <ResponsiveContainer width="100%" height={80}>
-                  <LineChart
-                    data={trendData.map((d) => ({
-                      date: d.date,
-                      balance: d.income - d.expense,
-                    }))}
-                  >
-                    <Line
-                      type="monotone"
-                      dataKey="balance"
-                      stroke="#3b82f6"
-                      strokeWidth={3}
-                      dot={{ r: 2 }}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#1e293b",
-                        border: "1px solid #334155",
-                        borderRadius: "8px",
-                      }}
-                      formatter={(value) =>
-                        value ? `₹${value.toLocaleString()}` : "₹0"
-                      }
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
               <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
                 <div className="flex items-center gap-2 mb-3">
                   <Target className="w-4 h-4 text-purple-400" />
                   <h3 className="text-sm font-semibold text-white">
-                    Daily Average Spending
+                    Daily Average
                   </h3>
                 </div>
-                <p className="text-2xl font-bold text-white mb-3">
+                <p className="text-2xl font-bold text-white">
                   ₹{formatAmount(Number(avgDailySpending))}
                 </p>
-                <ResponsiveContainer width="100%" height={80}>
-                  <BarChart
-                    data={trendData.map((d, i) => ({
-                      day: `D${i + 1}`,
-                      amount: d.expense,
-                    }))}
-                  >
-                    <XAxis
-                      dataKey="day"
-                      stroke="#94a3b8"
-                      style={{ fontSize: "10px" }}
-                    />
-                    <Bar
-                      dataKey="amount"
-                      fill="#a855f7"
-                      radius={[4, 4, 0, 0]}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#1e293b",
-                        border: "1px solid #334155",
-                        borderRadius: "8px",
-                      }}
-                      formatter={(value) =>
-                        value ? `₹${value.toLocaleString()}` : "₹0"
-                      }
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
               </div>
 
               <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
@@ -518,66 +328,9 @@ const Reports = () => {
                     Savings Rate
                   </h3>
                 </div>
-                <p className="text-2xl font-bold text-white mb-3">
+                <p className="text-2xl font-bold text-white">
                   {savingsRate}%
                 </p>
-                <ResponsiveContainer width="100%" height={80}>
-                  <PieChart>
-                    <Pie
-                      data={[
-                        { name: "Saved", value: Number(savingsRate) },
-                        { name: "Spent", value: 100 - Number(savingsRate) },
-                      ]}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={25}
-                      outerRadius={40}
-                      dataKey="value"
-                    >
-                      <Cell fill="#10b981" />
-                      <Cell fill="#ef4444" />
-                    </Pie>
-                    <Tooltip
-                      formatter={(value) => value ? `${Number(value).toFixed(1)}%` : "0%"}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-                <h3 className="text-sm font-semibold text-white mb-3">
-                  Income vs Expenses
-                </h3>
-                <ResponsiveContainer width="100%" height={120}>
-                  <BarChart
-                    data={[
-                      { name: "Income", amount: stats?.totalIncome || 0 },
-                      { name: "Expenses", amount: stats?.totalExpense || 0 },
-                    ]}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis
-                      dataKey="name"
-                      stroke="#94a3b8"
-                      style={{ fontSize: "11px" }}
-                    />
-                    <YAxis stroke="#94a3b8" style={{ fontSize: "10px" }} />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#1e293b",
-                        border: "1px solid #334155",
-                        borderRadius: "8px",
-                      }}
-                      formatter={(value) =>
-                        value ? `₹${value.toLocaleString()}` : "₹0"
-                      }
-                    />
-                    <Bar dataKey="amount" radius={[6, 6, 0, 0]} barSize={50}>
-                      <Cell fill="#10b981" />
-                      <Cell fill="#ef4444" />
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
               </div>
             </div>
 
@@ -586,7 +339,7 @@ const Reports = () => {
                 <h3 className="text-sm font-semibold text-white mb-3">
                   Trend Analysis
                 </h3>
-                <ResponsiveContainer width="100%" height={180}>
+                <ResponsiveContainer width="100%" height={200}>
                   <AreaChart data={trendData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                     <XAxis
@@ -628,44 +381,101 @@ const Reports = () => {
               </div>
             )}
 
+            {categoryData.length > 0 && (
+              <div className="bg-slate-800 rounded-lg p-4 border border-slate-700 mb-3">
+                <h3 className="text-sm font-semibold text-white mb-3">
+                  Category Distribution
+                </h3>
+                <ResponsiveContainer width="100%" height={250}>
+                  <PieChart>
+                    <Pie
+                      data={categoryData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="amount"
+                      label={(props: any) =>
+                        props.percent > 0.05
+                          ? `${props.category} ${(props.percent * 100).toFixed(0)}%`
+                          : ""
+                      }
+                    >
+                      {categoryData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "#1e293b",
+                        border: "1px solid #334155",
+                        borderRadius: "8px",
+                      }}
+                      formatter={(value) =>
+                        value ? `₹${value.toLocaleString()}` : "₹0"
+                      }
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+
+            <div className="bg-slate-800 rounded-lg p-4 border border-slate-700 mb-3">
+              <h3 className="text-sm font-semibold text-white mb-3">
+                Income vs Expenses
+              </h3>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart
+                  data={[
+                    { name: "Income", amount: stats?.totalIncome || 0 },
+                    { name: "Expenses", amount: stats?.totalExpense || 0 },
+                  ]}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                  <XAxis
+                    dataKey="name"
+                    stroke="#94a3b8"
+                    style={{ fontSize: "11px" }}
+                  />
+                  <YAxis stroke="#94a3b8" style={{ fontSize: "11px" }} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#1e293b",
+                      border: "1px solid #334155",
+                      borderRadius: "8px",
+                    }}
+                    formatter={(value) =>
+                      value ? `₹${value.toLocaleString()}` : "₹0"
+                    }
+                  />
+                  <Bar dataKey="amount" radius={[6, 6, 0, 0]} barSize={50}>
+                    <Cell fill="#10b981" />
+                    <Cell fill="#ef4444" />
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
               {categoryData.length > 0 && (
-                <div className="bg-slate-800 rounded-lg p-3 border border-slate-700">
-                  <h3 className="text-sm font-semibold text-white mb-2">
-                    Spending by Category
+                <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
+                  <h3 className="text-sm font-semibold text-white mb-3">
+                    Top Categories
                   </h3>
-                  <ResponsiveContainer width="100%" height={140}>
-                    <BarChart data={categoryData.slice(0, 5)} layout="vertical">
-                      <XAxis
-                        type="number"
-                        stroke="#94a3b8"
-                        style={{ fontSize: "10px" }}
-                      />
-                      <YAxis
-                        dataKey="category"
-                        type="category"
-                        stroke="#94a3b8"
-                        width={60}
-                        style={{ fontSize: "10px" }}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#1e293b",
-                          border: "1px solid #334155",
-                          borderRadius: "8px",
-                        }}
-                        labelStyle={{ color: "#fff" }}
-                        formatter={(value) =>
-                          value ? `₹${value.toLocaleString()}` : "₹0"
-                        }
-                      />
-                      <Bar
-                        dataKey="amount"
-                        fill="#3b82f6"
-                        radius={[0, 6, 6, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <div className="space-y-2">
+                    {categoryData.slice(0, 5).map((cat, i) => (
+                      <div key={i} className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }}></div>
+                          <span className="text-sm text-slate-300">{cat.category}</span>
+                        </div>
+                        <span className="text-sm font-bold text-white">₹{formatAmount(cat.amount)}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -710,47 +520,6 @@ const Reports = () => {
               )}
             </div>
 
-            {categoryData.length > 0 && (
-              <div className="bg-slate-800 rounded-lg p-4 border border-slate-700 mb-3">
-                <h3 className="text-sm font-semibold text-white mb-3">
-                  Category Distribution
-                </h3>
-                <ResponsiveContainer width="100%" height={280}>
-                  <PieChart>
-                    <Pie
-                      data={categoryData}
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={90}
-                      fill="#8884d8"
-                      dataKey="amount"
-                      label={(props: any) =>
-                        props.percent > 0.05
-                          ? `${props.category} ${(props.percent * 100).toFixed(0)}%`
-                          : ""
-                      }
-                    >
-                      {categoryData.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#1e293b",
-                        border: "1px solid #334155",
-                        borderRadius: "8px",
-                      }}
-                      formatter={(value) =>
-                        value ? `₹${value.toLocaleString()}` : "₹0"
-                      }
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            )}
           </>
         )}
       </div>

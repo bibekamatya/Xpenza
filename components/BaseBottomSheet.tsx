@@ -39,15 +39,7 @@ const BaseBottomSheet = ({
                 className="w-12 h-1.5 bg-slate-600 rounded-full mx-auto mb-4 cursor-pointer"
                 onClick={onClose}
               />
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-white">{title}</h3>
-                <button
-                  onClick={onClose}
-                  className="text-slate-400 active:scale-90 transition-transform"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
+              <h3 className="text-lg font-bold text-white text-center pb-2">{title}</h3>
             </div>
             <div className="px-6 pb-6 pt-4">{children}</div>
           </motion.div>
