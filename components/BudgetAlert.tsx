@@ -5,7 +5,7 @@ import { getBudget } from "@/app/actions/budgetActions";
 import { useTransactionsContext } from "@/contexts/TransactionsContext";
 
 const BudgetAlert = () => {
-  const { monthlyStatus } = useTransactionsContext();
+  const { lifetimeStatus } = useTransactionsContext();
   const [budget, setBudget] = useState<any>(null);
 
   useEffect(() => {
@@ -19,9 +19,9 @@ const BudgetAlert = () => {
     }
   };
 
-  if (!budget || !monthlyStatus) return null;
+  if (!budget || !lifetimeStatus) return null;
 
-  const percentage = (monthlyStatus.totalExpense / budget.totalBudget) * 100;
+  const percentage = (lifetimeStatus.totalExpense / budget.totalBudget) * 100;
   const isOverBudget = percentage > 100;
   const isNearLimit = percentage > 80 && percentage <= 100;
 
@@ -48,7 +48,7 @@ const BudgetAlert = () => {
           <p
             className={`text-xs ${isOverBudget ? "text-red-400" : "text-yellow-400"}`}
           >
-            You've spent ₹{monthlyStatus.totalExpense.toLocaleString()} of ₹
+            You've spent ₹{lifetimeStatus.totalExpense.toLocaleString()} of ₹
             {budget.totalBudget.toLocaleString()} ({percentage.toFixed(0)}%)
           </p>
           <div className="mt-2 h-2 bg-slate-900 rounded-full overflow-hidden">
