@@ -11,7 +11,7 @@ A modern, full-stack expense tracking application built with Next.js 15, TypeScr
 
 ### Core Functionality
 - 📊 **Transaction Management** - Add, edit, and delete income/expense transactions
-- 🏷️ **Category System** - Organize transactions by customizable categories
+- 🏷️ **Category System** - Organize transactions by predefined categories
 - 📅 **Date Filtering** - Filter by today, week, month, year, or custom date range
 - 🔍 **Search & Filter** - Search transactions and filter by type/category
 - 📱 **Responsive Design** - Optimized for mobile, tablet, and desktop
@@ -28,7 +28,6 @@ A modern, full-stack expense tracking application built with Next.js 15, TypeScr
 - 🔐 **Google OAuth** - Secure authentication with Google Sign-In
 - 💨 **Fast Performance** - Server-side rendering and optimized data fetching
 - 📲 **PWA Ready** - Install as a mobile app
-- ⌨️ **Keyboard Shortcuts** - Quick actions with keyboard navigation
 - 🎨 **Modern UI** - Clean, intuitive interface with smooth animations
 
 ## 🛠️ Tech Stack
