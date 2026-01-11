@@ -391,7 +391,8 @@ const Transactions = () => {
                 onDelete={() => {
                   removeTransaction(item._id);
                   setPendingDelete({ id: item._id, transaction: item });
-                  toast(
+                  
+                  const toastId = toast(
                     (t) => (
                       <div className="flex items-center gap-3">
                         <span>Transaction deleted</span>
@@ -407,16 +408,15 @@ const Transactions = () => {
                         </button>
                       </div>
                     ),
-                    {
-                      duration: 5000,
-                      onAutoClose: async () => {
-                        if (pendingDelete?.id === item._id) {
-                          await deleteTransaction(item._id);
-                          setPendingDelete(null);
-                        }
-                      },
-                    }
+                    { duration: 5000 }
                   );
+                  
+                  setTimeout(async () => {
+                    if (pendingDelete?.id === item._id) {
+                      await deleteTransaction(item._id);
+                      setPendingDelete(null);
+                    }
+                  }, 5000);
                 }}
               />
             ))}
