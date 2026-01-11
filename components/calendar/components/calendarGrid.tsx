@@ -68,7 +68,7 @@ const CalendarGrid = ({
         {days.map(day => (
           <div
             key={day}
-            className="flex h-7 items-center justify-center text-xs font-medium text-gray-600"
+            className="flex h-7 items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-400"
             role="columnheader"
           >
             {day}
@@ -97,7 +97,7 @@ const CalendarGrid = ({
                       : getBSDateFormatted(currentYear, currentMonth, day)
                     : undefined
                 }
-                className={`relative flex h-6 w-6 items-center justify-center rounded-lg text-xs transition-all focus:ring-2 focus:ring-offset-2 focus:outline-none ${
+                className={`relative flex h-6 w-6 items-center justify-center rounded-lg text-xs transition-all focus:outline-none ${
                   dateRangeMode
                     ? // Range mode styling
                       (selectedRange.start &&
@@ -120,20 +120,20 @@ const CalendarGrid = ({
                           )
                         ? `${colors.range} ${colors.rangeHover} font-medium`
                         : focusedDate === day
-                          ? `ring-2 ring-offset-1 ${colors.focus.replace("focus:", "")} bg-gray-100`
+                          ? `ring-2 ${colors.focus.replace("focus:", "")} bg-gray-100 dark:bg-gray-900`
                           : isToday(currentYear, currentMonth, day)
-                            ? `border border-gray-300 bg-gray-100 font-bold ${colors.primary}`
-                            : `font-medium text-gray-700 hover:scale-105 hover:bg-gray-100 ${colors.primary.replace("hover:", "focus:")}`
+                            ? `border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 font-bold ${colors.primary}`
+                            : `font-medium text-gray-700 dark:text-gray-300 hover:scale-105 hover:bg-gray-100 dark:hover:bg-gray-900 ${colors.primary.replace("hover:", "focus:")}`
                     : // Single date mode styling
                       selectedDate?.day === day &&
                         selectedDate?.month === currentMonth &&
                         selectedDate?.year === currentYear
                       ? `${colors.selected} ${colors.selectedHover} scale-105 transform font-bold`
                       : focusedDate === day
-                        ? `shadow-xl ring-2 ring-offset-1 ${colors.focus.replace("focus:", "")} bg-gray-100`
+                        ? `shadow-xl ring-2 ${colors.focus.replace("focus:", "")} bg-gray-100 dark:bg-gray-900`
                         : isToday(currentYear, currentMonth, day)
-                          ? `border border-gray-300 bg-gray-100 font-bold ${colors.primary}`
-                          : `font-medium text-teal-700 hover:bg-teal-100 ${colors.primary.replace("hover:", "focus:")}`
+                          ? `border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-900 font-bold ${colors.primary}`
+                          : `font-medium ${colors.primary}`
                 }`}
                 role="gridcell"
                 aria-label={`${day} ${months[currentMonth]} ${currentYear}`}

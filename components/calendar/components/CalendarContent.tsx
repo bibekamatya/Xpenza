@@ -81,10 +81,10 @@ export const CalendarContent = ({
   isToday,
 }: CalendarContentProps) => {
   return (
-    <div className="flex flex-col rounded-xl border border-gray-100 bg-white shadow-xl md:flex-row">
+    <div className="flex flex-col rounded-xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-xl md:flex-row">
       {showQuickSelect && quickSelectRanges && (
-        <div className="w-full border-b border-gray-100 p-3 md:w-44 md:border-r md:border-b-0">
-          <h4 className="mb-2 text-xs font-medium text-gray-500">
+        <div className="w-full border-b border-gray-100 dark:border-gray-800 p-3 md:w-44 md:border-r md:border-b-0">
+          <h4 className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">
             Quick Select
           </h4>
           <div className="flex gap-2 overflow-x-auto md:flex-col md:space-y-0">
@@ -94,8 +94,8 @@ export const CalendarContent = ({
                 onClick={() => onQuickSelect?.(range.value)}
                 className={`flex-shrink-0 rounded-md px-3 py-0.5 text-[11px] whitespace-nowrap transition-colors md:w-full md:text-left ${
                   activeRange === range.value
-                    ? "bg-teal-50 font-medium text-teal-700"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    ? "bg-teal-50 dark:bg-teal-950 font-medium text-teal-700 dark:text-teal-300"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900 hover:text-gray-900 dark:hover:text-gray-200"
                 }`}
               >
                 {range.label}

@@ -140,7 +140,7 @@ const CalendarInput = forwardRef<HTMLInputElement, CalendarInputProps>(
             onClick={isRangeMode && value ? onClear : onCalendarClick}
             className={
               buttonClassName ||
-              "flex h-full w-10 items-center justify-center text-gray-400 hover:text-gray-600 focus:ring-0 focus:outline-none focus:ring-inset"
+              "flex h-full items-center justify-center text-gray-400 hover:text-gray-600 focus:ring-0 focus:outline-none focus:ring-inset px-3 flex-shrink-0"
             }
             disabled={disabled}
             aria-label={

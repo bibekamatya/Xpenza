@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { Download, FileText } from "lucide-react";
+import CalendarInput from "./calendar/CalendarInput";
 
 interface ExportDropdownProps {
   onExportCSV: (range: string, startDate?: string, endDate?: string) => void;
@@ -83,17 +84,23 @@ export const ExportDropdown = ({
             </div>
             {showCustomDates && (
               <div className="mt-3 space-y-2">
-                <input
-                  type="date"
+                <CalendarInput
                   value={customStartDate}
-                  onChange={(e) => setCustomStartDate(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
+                  onChange={setCustomStartDate}
+                  placeholder="Start date"
+                  containerClassName=""
+                  inputWrapperClassName="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg flex items-center"
+                  inputClassName="flex-1 bg-transparent text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
+                  buttonClassName="text-slate-400 hover:text-slate-300 focus:outline-none"
                 />
-                <input
-                  type="date"
+                <CalendarInput
                   value={customEndDate}
-                  onChange={(e) => setCustomEndDate(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
+                  onChange={setCustomEndDate}
+                  placeholder="End date"
+                  containerClassName=""
+                  inputWrapperClassName="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg flex items-center"
+                  inputClassName="flex-1 bg-transparent text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
+                  buttonClassName="text-slate-400 hover:text-slate-300 focus:outline-none"
                 />
               </div>
             )}

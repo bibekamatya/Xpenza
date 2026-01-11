@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import BaseBottomSheet from "./BaseBottomSheet";
+import CalendarInput from "./calendar/CalendarInput";
 
 interface FiltersSheetProps {
   isOpen: boolean;
@@ -120,20 +121,24 @@ const FiltersSheet = ({
 
         <div className="space-y-2">
           <label className="text-sm text-slate-400">Custom Date Range</label>
-          <div className="grid grid-cols-2 gap-2">
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="w-full h-[42px] px-4 bg-slate-900 border border-slate-700 rounded-lg text-white"
-            />
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="w-full h-[42px] px-4 bg-slate-900 border border-slate-700 rounded-lg text-white"
-            />
-          </div>
+          <CalendarInput
+            value={startDate}
+            onChange={setStartDate}
+            placeholder="Start date"
+            containerClassName=""
+            inputWrapperClassName="w-full h-[42px] bg-slate-900 border border-slate-700 rounded-lg flex items-center"
+            inputClassName="flex-1 bg-transparent px-4 text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
+            buttonClassName="pr-3 text-slate-400 hover:text-slate-300 focus:outline-none"
+          />
+          <CalendarInput
+            value={endDate}
+            onChange={setEndDate}
+            placeholder="End date"
+            containerClassName=""
+            inputWrapperClassName="w-full h-[42px] bg-slate-900 border border-slate-700 rounded-lg flex items-center"
+            inputClassName="flex-1 bg-transparent px-4 text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
+            buttonClassName="pr-3 text-slate-400 hover:text-slate-300 focus:outline-none"
+          />
         </div>
 
         <div className="flex gap-3 pt-2">

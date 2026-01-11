@@ -52,12 +52,12 @@ const MonthYearPicker = ({
       }}
     >
       <div
-        className="w-80 rounded-xl border border-gray-200 bg-white shadow-xl"
+        className="w-80 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-xl"
         onClick={e => e.stopPropagation()}
       >
         {/* Header with close button */}
-        <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
-          <h3 className="text-sm font-semibold text-gray-800">
+        <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 px-4 py-3">
+          <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
             Select Month & Year
           </h3>
           <button
@@ -66,7 +66,7 @@ const MonthYearPicker = ({
               e.stopPropagation();
               onClose();
             }}
-            className="rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            className="rounded-md p-1 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-900 hover:text-gray-600 dark:hover:text-gray-400"
             aria-label="Close month year picker"
           >
             <X className="h-4 w-4" />
@@ -77,7 +77,7 @@ const MonthYearPicker = ({
           {/* Year Selection */}
           <div className="mb-4">
             <div className="mb-2 flex items-center justify-between">
-              <label className="text-sm font-medium text-gray-700">Year</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Year</label>
               <div className="flex items-center gap-1">
                 <button
                   type="button"
@@ -101,7 +101,7 @@ const MonthYearPicker = ({
                 >
                   <ChevronLeft className="h-3 w-3" />
                 </button>
-                <span className="min-w-[60px] text-center text-sm font-medium text-gray-800">
+                <span className="min-w-[60px] text-center text-sm font-medium text-gray-800 dark:text-gray-200">
                   {yearRangeStart} - {yearRangeStart + 11}
                 </span>
                 <button
@@ -157,7 +157,7 @@ const MonthYearPicker = ({
                           ? `ring-2 ring-offset-1 ${colors.focus.replace("focus:", "")}`
                           : isTodayYear && showToday
                             ? `border border-current ${colors.primary}`
-                            : "text-gray-600 hover:bg-gray-100"
+                            : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
                     }`}
                   >
                     {year}
@@ -169,7 +169,7 @@ const MonthYearPicker = ({
 
           {/* Month Selection */}
           <div className="mb-4">
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Month
             </label>
             <div className="grid grid-cols-3 gap-1">
@@ -196,7 +196,7 @@ const MonthYearPicker = ({
                           ? `ring-2 ring-offset-1 ${colors.focus.replace("focus:", "")}`
                           : isTodayMonth && showToday
                             ? `border border-current ${colors.primary}`
-                            : "text-gray-600 hover:bg-gray-100"
+                            : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900"
                     }`}
                   >
                     {month}
@@ -207,7 +207,7 @@ const MonthYearPicker = ({
           </div>
 
           {/* Quick Actions */}
-          <div className="flex gap-2 border-t border-gray-100 pt-3">
+          <div className="flex gap-2 border-t border-gray-100 dark:border-gray-800 pt-3">
             <button
               type="button"
               onClick={e => {
@@ -225,7 +225,7 @@ const MonthYearPicker = ({
                 e.stopPropagation();
                 onClose();
               }}
-              className="flex-1 rounded-md border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50"
+              className="flex-1 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors hover:bg-gray-50 dark:hover:bg-gray-900"
             >
               Cancel
             </button>

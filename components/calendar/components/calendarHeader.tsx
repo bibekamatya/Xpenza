@@ -31,7 +31,7 @@ const CalendarHeader = ({
   showDropdown,
 }: CalendarHeaderProps) => {
   return (
-    <div className="sticky top-0 flex items-center justify-between rounded-t-lg border-b border-gray-50 bg-white px-3 py-2.5">
+    <div className="sticky top-0 flex items-center justify-between rounded-t-lg border-b border-gray-50 dark:border-gray-800 bg-white dark:bg-gray-950 px-3 py-2.5">
       <div className="flex items-center">
         <button
           type="button"
@@ -60,7 +60,7 @@ const CalendarHeader = ({
             e.stopPropagation();
             onToggleDropdown();
           }}
-          className="flex items-center gap-1 rounded-md px-2 py-1 text-sm font-semibold text-gray-800 hover:bg-gray-100"
+          className="flex items-center gap-1 rounded-md px-2 py-1 text-sm font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900"
           aria-expanded={showDropdown}
           aria-haspopup="true"
         >
