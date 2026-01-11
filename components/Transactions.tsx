@@ -439,7 +439,7 @@ const Transactions = () => {
                         <p
                           className={`text-base font-bold ${item.type === "income" ? "text-green-500" : "text-red-500"}`}
                         >
-                          Rs.{amount}
+                          Rs. {amount}
                         </p>
                       </div>
                       <div className="hidden md:flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

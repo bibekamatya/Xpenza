@@ -21,7 +21,10 @@ const StatsCards = () => {
     };
   }, [transactions]);
 
-  const formatAmount = (amount: number) => {
+  const formatAmount = (amount: number, isMobile: boolean) => {
+    // Desktop: always show full
+    if (!isMobile) return amount.toLocaleString();
+    // Mobile: abbreviated or full based on toggle
     if (showFull) return amount.toLocaleString();
     const absAmount = Math.abs(amount);
     const sign = amount < 0 ? "-" : "";
@@ -42,8 +45,11 @@ const StatsCards = () => {
               <Wallet className="w-3.5 h-3.5 text-blue-400" />
             </div>
           </div>
-          <p className="text-xl md:text-2xl font-bold text-white">
-            Rs.{formatAmount(stats.balance)}
+          <p className="text-sm md:hidden font-bold text-white">
+            <span className="text-xs">Rs.</span> {formatAmount(stats.balance, true)}
+          </p>
+          <p className="hidden md:block text-2xl font-bold text-white">
+            <span className="text-lg">Rs.</span> {formatAmount(stats.balance, false)}
           </p>
         </div>
         <div
@@ -56,8 +62,11 @@ const StatsCards = () => {
               <TrendingUp className="w-3.5 h-3.5 text-green-400" />
             </div>
           </div>
-          <p className="text-xl md:text-2xl font-bold text-white">
-            Rs.{formatAmount(stats.totalIncome)}
+          <p className="text-sm md:hidden font-bold text-white">
+            <span className="text-xs">Rs.</span> {formatAmount(stats.totalIncome, true)}
+          </p>
+          <p className="hidden md:block text-2xl font-bold text-white">
+            <span className="text-lg">Rs.</span> {formatAmount(stats.totalIncome, false)}
           </p>
         </div>
         <div
@@ -70,8 +79,11 @@ const StatsCards = () => {
               <TrendingDown className="w-3.5 h-3.5 text-red-400" />
             </div>
           </div>
-          <p className="text-xl md:text-2xl font-bold text-white">
-            Rs.{formatAmount(stats.totalExpense)}
+          <p className="text-sm md:hidden font-bold text-white">
+            <span className="text-xs">Rs.</span> {formatAmount(stats.totalExpense, true)}
+          </p>
+          <p className="hidden md:block text-2xl font-bold text-white">
+            <span className="text-lg">Rs.</span> {formatAmount(stats.totalExpense, false)}
           </p>
         </div>
       </div>

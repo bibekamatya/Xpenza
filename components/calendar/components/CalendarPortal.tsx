@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useBackButton } from "@/hooks/useBackButton";
 
 interface CalendarPortalProps {
   isOpen: boolean;
@@ -26,6 +27,9 @@ export const CalendarPortal = ({
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Handle hardware back button on mobile bottom sheet
+  useBackButton(isOpen && isMobile && showBackdrop, onBackdropClick);
 
   if (!mounted || typeof window === "undefined") return null;
 
