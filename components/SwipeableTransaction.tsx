@@ -27,25 +27,28 @@ export default function SwipeableTransaction({
 }: SwipeableTransactionProps) {
   const x = useMotionValue(0);
   const [isDragging, setIsDragging] = useState(false);
+  const constraintRef = useRef<HTMLDivElement>(null);
   
-  const leftBgOpacity = useTransform(x, [0, 100], [0, 1]);
-  const rightBgOpacity = useTransform(x, [-100, 0], [1, 0]);
+  const leftBgOpacity = useTransform(x, [0, 80], [0, 1]);
+  const rightBgOpacity = useTransform(x, [-80, 0], [1, 0]);
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     setIsDragging(false);
     const threshold = 80;
+    const offset = info.offset.x;
     
-    if (info.offset.x > threshold) {
-      // Swipe right - Edit
-      x.set(0);
-      onEdit();
-    } else if (info.offset.x < -threshold) {
-      // Swipe left - Delete
-      x.set(0);
-      onDelete();
-    } else {
-      x.set(0);
+    if (Math.abs(offset) > threshold) {
+      if (offset > 0) {
+        // Swipe right - Edit
+        onEdit();
+      } else {
+        // Swipe left - Delete
+        onDelete();
+      }
     }
+    
+    // Always reset position
+    x.set(0);
   };
 
   const handleClick = () => {
@@ -59,7 +62,7 @@ export default function SwipeableTransaction({
   };
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden touch-pan-y group">
       {/* Background actions - visible on mobile swipe, on desktop hover */}
       <motion.div
         className="absolute inset-0 flex items-center justify-between px-6 bg-blue-600"
@@ -84,14 +87,16 @@ export default function SwipeableTransaction({
       {/* Transaction card */}
       <motion.div
         drag="x"
-        dragConstraints={{ left: -150, right: 150 }}
         dragElastic={0.2}
+        dragMomentum={false}
+        dragDirectionLock
+        dragConstraints={{ left: -100, right: 100 }}
+        dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
         onDragStart={() => setIsDragging(true)}
         onDragEnd={handleDragEnd}
         style={{ x }}
         onClick={handleClick}
-        whileHover={{ x: 0 }}
-        className={`p-4 bg-slate-800 hover:bg-slate-750 transition-colors group cursor-grab active:cursor-grabbing border-b border-slate-700 ${
+        className={`p-4 bg-slate-800 hover:bg-slate-750 transition-colors cursor-pointer select-none border-b border-slate-700 ${
           bulkMode && isSelected ? "bg-blue-600/10 border-l-4 border-blue-600" : ""
         }`}
       >

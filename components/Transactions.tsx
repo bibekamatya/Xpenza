@@ -58,7 +58,7 @@ const Transactions = () => {
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const [showCustomDates, setShowCustomDates] = useState(false);
-  const [pendingDelete, setPendingDelete] = useState<{id: string, transaction: Transaction} | null>(null);
+  const pendingDeleteRef = useRef<{id: string, transaction: Transaction} | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -390,7 +390,7 @@ const Transactions = () => {
                 onEdit={() => setEditTransaction(item)}
                 onDelete={() => {
                   removeTransaction(item._id);
-                  setPendingDelete({ id: item._id, transaction: item });
+                  pendingDeleteRef.current = { id: item._id, transaction: item };
                   
                   const toastId = toast(
                     (t) => (
@@ -399,7 +399,7 @@ const Transactions = () => {
                         <button
                           onClick={() => {
                             addTransaction(item);
-                            setPendingDelete(null);
+                            pendingDeleteRef.current = null;
                             toast.dismiss(t.id);
                           }}
                           className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded font-medium"
@@ -412,9 +412,9 @@ const Transactions = () => {
                   );
                   
                   setTimeout(async () => {
-                    if (pendingDelete?.id === item._id) {
+                    if (pendingDeleteRef.current?.id === item._id) {
                       await deleteTransaction(item._id);
-                      setPendingDelete(null);
+                      pendingDeleteRef.current = null;
                     }
                   }, 5000);
                 }}
