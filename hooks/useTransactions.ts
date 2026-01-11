@@ -4,10 +4,8 @@ import { getStats, getTransactions } from "@/app/actions/expenseActions";
 import { Status, Transaction } from "@/lib/types";
 import { mockTransactions } from "@/lib/mockData";
 import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
 
 export function useTransactions() {
-  const { data: session } = useSession();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -29,15 +27,6 @@ export function useTransactions() {
   }, [isPending]);
 
   const refetch = (page: number = 1, newFilters?: any) => {
-    // Use mock data only if not authenticated
-    if (!session) {
-      setTransactions(mockTransactions);
-      setCurrentPage(1);
-      setTotalPages(1);
-      setHasMore(false);
-      return;
-    }
-    
     startTransition(async () => {
       try {
         const filterParams = newFilters || filters;
@@ -70,13 +59,9 @@ export function useTransactions() {
   };
 
   useEffect(() => {
-    if (!session) {
-      setTransactions(mockTransactions);
-      return;
-    }
     refetch(1);
     getStats("all").then(setLifetimeStatus);
-  }, [session]);
+  }, []);
 
   const handlePageChange = (newPage: number) => {
     refetch(newPage);
@@ -89,25 +74,19 @@ export function useTransactions() {
 
   const addTransaction = (transaction: Transaction) => {
     setTransactions((prev) => [transaction, ...prev]);
-    if (session) {
-      getStats("all").then(setLifetimeStatus);
-    }
+    getStats("all").then(setLifetimeStatus);
   };
 
   const updateTransaction = (transaction: Transaction) => {
     setTransactions((prev) =>
       prev.map((t) => (t._id === transaction._id ? transaction : t)),
     );
-    if (session) {
-      getStats("all").then(setLifetimeStatus);
-    }
+    getStats("all").then(setLifetimeStatus);
   };
 
   const removeTransaction = (id: string) => {
     setTransactions((prev) => prev.filter((t) => t._id !== id));
-    if (session) {
-      getStats("all").then(setLifetimeStatus);
-    }
+    getStats("all").then(setLifetimeStatus);
   };
 
   return {
