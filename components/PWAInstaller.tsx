@@ -38,7 +38,7 @@ export default function PWAInstaller() {
   if (!showInstallButton) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 z-50 bg-slate-800 border border-slate-700 rounded-xl shadow-xl p-4">
+    <div className="fixed bottom-20 md:bottom-4 left-1/2 -translate-x-1/2 md:left-auto md:right-4 md:translate-x-0 w-[calc(100%-2rem)] md:w-80 z-50 bg-slate-800 border border-slate-700 rounded-xl shadow-xl p-4">
       <button
         onClick={() => setShowInstallButton(false)}
         className="absolute top-2 right-2 p-1 text-slate-400 hover:text-slate-300"
