@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { motion, PanInfo, useMotionValue, useTransform } from "framer-motion";
+import { useState, useRef } from "react";
 import { Edit2, Trash2, TrendingUp, TrendingDown, Check } from "lucide-react";
 import { Transaction } from "@/lib/types";
 import { getIcon, formatDateWithBS } from "@/lib/helper";
@@ -25,75 +24,91 @@ export default function SwipeableTransaction({
   onEdit,
   onDelete,
 }: SwipeableTransactionProps) {
-  const x = useMotionValue(0);
+  const [translateX, setTranslateX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  
-  const leftBgOpacity = useTransform(x, [0, 80], [0, 1]);
-  const rightBgOpacity = useTransform(x, [-80, 0], [1, 0]);
+  const startX = useRef(0);
+  const currentX = useRef(0);
 
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (bulkMode) return;
+    startX.current = e.touches[0].clientX;
+    currentX.current = e.touches[0].clientX;
     setIsDragging(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (bulkMode) return;
+    currentX.current = e.touches[0].clientX;
+    const diff = currentX.current - startX.current;
+    if (Math.abs(diff) > 5) setIsDragging(true);
+    setTranslateX(diff);
+  };
+
+  const handleTouchEnd = () => {
+    if (bulkMode) return;
+    const diff = currentX.current - startX.current;
     const threshold = 80;
-    const offset = info.offset.x;
     
-    if (Math.abs(offset) > threshold) {
-      if (offset > 0) {
-        // Swipe right - Edit
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
         onEdit();
       } else {
-        // Swipe left - Delete
         onDelete();
       }
     }
     
-    // Always reset position
-    x.set(0);
+    setTranslateX(0);
+    startX.current = 0;
+    currentX.current = 0;
+    setTimeout(() => setIsDragging(false), 100);
   };
 
   const handleClick = () => {
-    if (!isDragging) {
-      if (bulkMode) {
-        onSelect();
-      } else {
-        onClick();
-      }
+    if (isDragging) return;
+    if (bulkMode) {
+      onSelect();
+    } else {
+      onClick();
     }
   };
 
+  const opacity = Math.min(Math.abs(translateX) / 80, 1);
+
   return (
-    <div className="relative overflow-hidden group">
-      {/* Background actions - visible on mobile swipe, on desktop hover */}
-      <motion.div
+    <div className="relative overflow-hidden group" style={{ touchAction: 'pan-y' }}>
+      {/* Background actions */}
+      <div
         className="absolute inset-0 flex items-center justify-between px-6 bg-blue-600"
-        style={{ opacity: leftBgOpacity }}
+        style={{ opacity: translateX > 0 ? opacity : 0 }}
       >
         <div className="flex items-center gap-2 text-white">
           <Edit2 className="w-5 h-5" />
           <span className="font-medium">Edit</span>
         </div>
-      </motion.div>
+      </div>
       
-      <motion.div
+      <div
         className="absolute inset-0 flex items-center justify-between px-6 bg-red-600"
-        style={{ opacity: rightBgOpacity }}
+        style={{ opacity: translateX < 0 ? opacity : 0 }}
       >
         <div className="ml-auto flex items-center gap-2 text-white">
           <span className="font-medium">Delete</span>
           <Trash2 className="w-5 h-5" />
         </div>
-      </motion.div>
+      </div>
 
       {/* Transaction card */}
-      <motion.div
-        drag="x"
-        dragElastic={0.7}
-        dragMomentum={false}
-        dragConstraints={{ left: -150, right: 150 }}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={handleDragEnd}
-        style={{ x }}
+      <div
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         onClick={handleClick}
-        className={`p-4 bg-slate-800 hover:bg-slate-750 transition-colors cursor-pointer select-none border-b border-slate-700 ${
+        style={{ 
+          transform: `translateX(${translateX}px)`,
+          transition: isDragging ? 'none' : 'transform 0.3s ease',
+          touchAction: 'none'
+        }}
+        className={`p-4 bg-slate-800 hover:bg-slate-750 transition-colors cursor-pointer border-b border-slate-700 ${
           bulkMode && isSelected ? "bg-blue-600/10 border-l-4 border-blue-600" : ""
         }`}
       >
@@ -162,7 +177,7 @@ export default function SwipeableTransaction({
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

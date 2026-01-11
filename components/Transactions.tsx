@@ -1,32 +1,19 @@
 import { useState, useRef } from "react";
-import AddExpenseDialog from "./AddExpenseDialog";
+import { Check, BarChart3, Download, FileText, Trash2 } from "lucide-react";
 import { Transaction } from "@/lib/types";
-import DeleteDialog from "./DeleteDialog";
-import TransactionActionsSheet from "./TransactionActionsSheet";
-import {
-  Edit2,
-  Trash2,
-  TrendingDown,
-  TrendingUp,
-  Download,
-  BarChart3,
-  FileText,
-  Check,
-} from "lucide-react";
-import Pagination from "./Pagination";
 import { useTransactionsContext } from "@/contexts/TransactionsContext";
-import { getIcon, formatDate, formatDateWithBS } from "@/lib/helper";
 import { deleteTransaction } from "@/app/actions/expenseActions";
 import toast from "react-hot-toast";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { exportTransactionsToCSV, exportTransactionsToPDF } from "@/lib/exportUtils";
+import AddExpenseDialog from "./AddExpenseDialog";
+import DeleteDialog from "./DeleteDialog";
+import TransactionActionsSheet from "./TransactionActionsSheet";
+import Pagination from "./Pagination";
 import TransactionsSkeleton from "./TransactionsSkeleton";
 import AnalyticsModal from "./AnalyticsModal";
 import ExportSheet from "./ExportSheet";
 import SwipeableTransaction from "./SwipeableTransaction";
-import { useClickOutside } from "@/hooks/useClickOutside";
-import {
-  exportTransactionsToCSV,
-  exportTransactionsToPDF,
-} from "@/lib/exportUtils";
 
 const Transactions = () => {
   const {
@@ -43,56 +30,43 @@ const Transactions = () => {
     removeTransaction,
   } = useTransactionsContext();
 
+  const exportMenuRef = useRef<HTMLDivElement>(null);
+
+  // Dialog states
   const [showForm, setShowForm] = useState(false);
   const [editTransaction, setEditTransaction] = useState<Transaction | null>();
-  const [deleteItemMetaData, setDeleteItemMetaData] =
-    useState<Transaction | null>();
-  const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
+  const [deleteItemMetaData, setDeleteItemMetaData] = useState<Transaction | null>();
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [showAnalytics, setShowAnalytics] = useState(false);
+  
+  // Export states
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [showExportSheet, setShowExportSheet] = useState(false);
-  const [exportRange, setExportRange] = useState<
-    "all" | "today" | "week" | "month" | "year"
-  >("all");
-  const exportMenuRef = useRef<HTMLDivElement>(null);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [bulkMode, setBulkMode] = useState(false);
-  const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
+  const [exportRange, setExportRange] = useState<"all" | "today" | "week" | "month" | "year">("all");
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const [showCustomDates, setShowCustomDates] = useState(false);
-  const pendingDeleteRef = useRef<{
-    id: string;
-    transaction: Transaction;
-  } | null>(null);
+  
+  // Bulk selection states
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkMode, setBulkMode] = useState(false);
+  const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
 
-  useClickOutside(
-    exportMenuRef,
-    () => setShowExportMenu(false),
-    showExportMenu
-  );
+  useClickOutside(exportMenuRef, () => setShowExportMenu(false), showExportMenu);
 
   const handleExportFromSheet = (type: "csv" | "pdf") => {
-    if (type === "csv") {
-      exportToCSV();
-    } else {
-      exportToPDF();
-    }
+    type === "csv" ? exportToCSV() : exportToPDF();
   };
 
   const exportToCSV = () => {
-    exportTransactionsToCSV(filteredTransactions);
+    exportTransactionsToCSV(transactions);
     setShowExportMenu(false);
   };
 
   const exportToPDF = async () => {
-    await exportTransactionsToPDF(filteredTransactions);
+    await exportTransactionsToPDF(transactions);
     setShowExportMenu(false);
   };
-
-  // Apply filters
-  const filteredTransactions = transactions;
 
   return (
     <div className="px-4 md:px-8">
@@ -255,7 +229,7 @@ const Transactions = () => {
           </div>
         ) : (
           <div className="divide-y divide-slate-700">
-            {filteredTransactions.map((item) => (
+            {transactions.map((item) => (
               <SwipeableTransaction
                 key={item._id}
                 item={item}
@@ -270,39 +244,7 @@ const Transactions = () => {
                 }}
                 onClick={() => setSelectedTransaction(item)}
                 onEdit={() => setEditTransaction(item)}
-                onDelete={() => {
-                  removeTransaction(item._id);
-                  pendingDeleteRef.current = {
-                    id: item._id,
-                    transaction: item,
-                  };
-
-                  toast(
-                    (t) => (
-                      <div className="flex items-center gap-3">
-                        <span>Transaction deleted</span>
-                        <button
-                          onClick={() => {
-                            addTransaction(item);
-                            pendingDeleteRef.current = null;
-                            toast.dismiss(t.id);
-                          }}
-                          className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded font-medium"
-                        >
-                          Undo
-                        </button>
-                      </div>
-                    ),
-                    { duration: 5000 }
-                  );
-
-                  setTimeout(async () => {
-                    if (pendingDeleteRef.current?.id === item._id) {
-                      await deleteTransaction(item._id);
-                      pendingDeleteRef.current = null;
-                    }
-                  }, 5000);
-                }}
+                onDelete={() => setDeleteItemMetaData(item)}
               />
             ))}
           </div>

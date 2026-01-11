@@ -4,8 +4,10 @@ import { getStats, getTransactions } from "@/app/actions/expenseActions";
 import { Status, Transaction } from "@/lib/types";
 import { mockTransactions } from "@/lib/mockData";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 export function useTransactions() {
+  const { data: session } = useSession();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -22,21 +24,13 @@ export function useTransactions() {
     endDate: "",
   });
 
-  // Mock data for development
-  const mockTransactions: Transaction[] = [
-    { _id: "1", type: "expense", amount: 500, category: "Food", description: "Lunch", date: new Date().toISOString(), userId: "test" },
-    { _id: "2", type: "income", amount: 5000, category: "Salary", description: "Monthly salary", date: new Date().toISOString(), userId: "test" },
-    { _id: "3", type: "expense", amount: 200, category: "Transport", description: "Bus fare", date: new Date().toISOString(), userId: "test" },
-    { _id: "4", type: "expense", amount: 1500, category: "Shopping", description: "Groceries", date: new Date().toISOString(), userId: "test" },
-  ];
-
   useEffect(() => {
     getStats("all").then(setLifetimeStatus);
   }, [isPending]);
 
   const refetch = (page: number = 1, newFilters?: any) => {
-    // Use mock data in development
-    if (process.env.NODE_ENV === "development") {
+    // Use mock data only if not authenticated
+    if (!session) {
       setTransactions(mockTransactions);
       setCurrentPage(1);
       setTotalPages(1);
@@ -76,13 +70,13 @@ export function useTransactions() {
   };
 
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
+    if (!session) {
       setTransactions(mockTransactions);
       return;
     }
     refetch(1);
     getStats("all").then(setLifetimeStatus);
-  }, []);
+  }, [session]);
 
   const handlePageChange = (newPage: number) => {
     refetch(newPage);
@@ -95,7 +89,7 @@ export function useTransactions() {
 
   const addTransaction = (transaction: Transaction) => {
     setTransactions((prev) => [transaction, ...prev]);
-    if (process.env.NODE_ENV !== "development") {
+    if (session) {
       getStats("all").then(setLifetimeStatus);
     }
   };
@@ -104,14 +98,14 @@ export function useTransactions() {
     setTransactions((prev) =>
       prev.map((t) => (t._id === transaction._id ? transaction : t)),
     );
-    if (process.env.NODE_ENV !== "development") {
+    if (session) {
       getStats("all").then(setLifetimeStatus);
     }
   };
 
   const removeTransaction = (id: string) => {
     setTransactions((prev) => prev.filter((t) => t._id !== id));
-    if (process.env.NODE_ENV !== "development") {
+    if (session) {
       getStats("all").then(setLifetimeStatus);
     }
   };

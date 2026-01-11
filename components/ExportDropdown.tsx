@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Download, FileText } from "lucide-react";
 import CalendarInput from "./calendar/CalendarInput";
 import { useClickOutside } from "@/hooks/useClickOutside";
@@ -22,10 +22,6 @@ export const ExportDropdown = ({
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setExportRange(defaultRange);
-  }, [defaultRange]);
 
   useClickOutside(menuRef, () => setShowMenu(false), showMenu);
 

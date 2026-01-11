@@ -2,7 +2,7 @@
 
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import CalendarPicker from "./components/CalendarPicker";
-import { useCalendarType } from "@/hooks/useFY";
+import { useCalendarType } from "@/hooks/useCalendarType";
 
 interface CalendarProps {
   value?: string; // ISO date string (YYYY-MM-DD)
