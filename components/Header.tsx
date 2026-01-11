@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
 import { handleSignOut } from "@/app/actions/authActions";
-import { DollarSign, LogOut, Settings, FileText } from "lucide-react";
+import { DollarSign, LogOut, Settings, FileText, Languages } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import BudgetSettings from "./BudgetSettings";
+import { useLocale } from "@/contexts/LocaleContext";
 
 interface HeaderProps {
   user: { image: string; email: string; name: string };
@@ -14,6 +15,7 @@ interface HeaderProps {
 const Header = ({ user }: HeaderProps) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showBudgetSettings, setShowBudgetSettings] = useState(false);
+  const { language, setLanguage, t } = useLocale();
 
   return (
     <>
@@ -41,12 +43,19 @@ const Header = ({ user }: HeaderProps) => {
                 )}
               </div>
               <div>
-                <h1 className="text-base font-bold text-white">Xpenza</h1>
+                <h1 className="text-base font-bold text-white">{t("appName")}</h1>
                 <p className="text-xs text-slate-400">{user?.name || user?.email}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => setLanguage(language === "en" ? "ne" : "en")}
+                className="p-2 text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
+                title={language === "en" ? "Switch to Nepali" : "Switch to English"}
+              >
+                <Languages className="w-4 h-4" />
+              </button>
               <Link
                 href="/reports"
                 className="p-2 text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"

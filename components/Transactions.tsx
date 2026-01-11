@@ -16,12 +16,13 @@ import {
 } from "lucide-react";
 import Pagination from "./Pagination";
 import { useTransactionsContext } from "@/contexts/TransactionsContext";
-import { getIcon, formatDate, formatDateWithBS } from "@/lib/helper";
+import { getIcon, formatDate, formatDateWithBS, toNepaliNumber } from "@/lib/helper";
 import { deleteTransaction } from "@/app/actions/expenseActions";
 import toast from "react-hot-toast";
 import TransactionsSkeleton from "./TransactionsSkeleton";
 import AnalyticsModal from "./AnalyticsModal";
 import ExportSheet from "./ExportSheet";
+import { useLocale } from "@/contexts/LocaleContext";
 
 const Transactions = () => {
   const {
@@ -37,6 +38,7 @@ const Transactions = () => {
     updateTransaction: updateTransactionInList,
     removeTransaction,
   } = useTransactionsContext();
+  const { t, language } = useLocale();
 
   const [showForm, setShowForm] = useState(false);
   const [editTransaction, setEditTransaction] = useState<Transaction | null>();
@@ -231,7 +233,7 @@ const Transactions = () => {
           </div>
         )}
         <div className="flex items-center justify-between gap-2">
-          <h2 className="text-lg font-semibold text-white">Transactions</h2>
+          <h2 className="text-lg font-semibold text-white">{t("transactions")}</h2>
           <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={() => {
@@ -343,7 +345,7 @@ const Transactions = () => {
               onClick={() => setShowForm(true)}
               className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg"
             >
-              + Add
+              + {t("add")}
             </button>
           </div>
         </div>
@@ -357,16 +359,16 @@ const Transactions = () => {
               <span className="text-3xl">💸</span>
             </div>
             <h3 className="text-lg font-semibold text-white mb-2">
-              No transactions yet
+              {t("noTransactions")}
             </h3>
             <p className="text-slate-400 text-sm text-center mb-6">
-              Start tracking your expenses by adding your first transaction
+              {t("startTracking")}
             </p>
             <button
               onClick={() => setShowForm(true)}
               className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all active:scale-95"
             >
-              Add Transaction
+              {t("addTransaction")}
             </button>
           </div>
         ) : (
@@ -424,7 +426,7 @@ const Transactions = () => {
                             {category}
                           </span>
                           <span className="text-xs text-slate-400">
-                            {formatDateWithBS(item.date)}
+                            {formatDateWithBS(item.date, language === "ne")}
                           </span>
                         </div>
                       </div>
@@ -439,7 +441,7 @@ const Transactions = () => {
                         <p
                           className={`text-base font-bold ${item.type === "income" ? "text-green-500" : "text-red-500"}`}
                         >
-                          Rs.{amount}
+                          {t("currency")}{language === "ne" ? toNepaliNumber(amount) : amount}
                         </p>
                       </div>
                       <div className="hidden md:flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

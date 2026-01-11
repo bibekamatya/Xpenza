@@ -1,4 +1,4 @@
-const CACHE_NAME = 'expense-tracker-v1';
+const CACHE_NAME = 'xpenza-v2';
 const urlsToCache = [
   '/',
   '/manifest.json',

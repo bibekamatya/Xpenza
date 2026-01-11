@@ -5,6 +5,7 @@ import { Transaction } from "@/lib/types";
 import { X } from "lucide-react";
 import { useBackButton } from "@/hooks/useBackButton";
 import { useEffect } from "react";
+import { useLocale } from "@/contexts/LocaleContext";
 
 interface AddExpenseDialogProps {
   editTransaction?: Transaction | null;
@@ -20,6 +21,7 @@ export default function AddExpenseDialog({
   onSuccess,
 }: AddExpenseDialogProps) {
   const isDialogOpen = !!editTransaction || isOpen;
+  const { t } = useLocale();
   useBackButton(isDialogOpen, onClose);
 
   // Hide calendar when dialog closes
@@ -58,7 +60,7 @@ export default function AddExpenseDialog({
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-slate-700">
                 <h2 className="text-xl font-bold text-white">
-                  Add Transaction
+                  {t("addTransaction")}
                 </h2>
                 <button
                   onClick={onClose}
@@ -93,7 +95,7 @@ export default function AddExpenseDialog({
 
             {/* Header */}
             <div className="px-6 pb-4">
-              <h2 className="text-xl font-bold text-white">Add Transaction</h2>
+              <h2 className="text-xl font-bold text-white">{t("addTransaction")}</h2>
             </div>
 
             {/* Form */}

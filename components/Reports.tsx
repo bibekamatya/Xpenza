@@ -12,8 +12,9 @@ import {
   Percent,
   CreditCard,
 } from "lucide-react";
-import { getIcon } from "@/lib/helper";
+import { getIcon, toNepaliNumber } from "@/lib/helper";
 import Link from "next/link";
+import { useLocale } from "@/contexts/LocaleContext";
 import {
   BarChart,
   Bar,
@@ -46,6 +47,7 @@ const COLORS = [
 ];
 
 const Reports = () => {
+  const { t, language } = useLocale();
   const [period, setPeriod] = useState<
     "daily" | "weekly" | "monthly" | "yearly"
   >("monthly");
