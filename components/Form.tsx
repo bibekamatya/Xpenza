@@ -7,7 +7,6 @@ import React, { useState, useTransition } from "react";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import toast from "react-hot-toast";
 import CalendarPicker from "@/components/calendar/components/CalendarPicker";
-import { useLocale } from "@/contexts/LocaleContext";
 
 interface FormProps {
   onClose: () => void;
@@ -27,7 +26,6 @@ const INITIAL_STATE = {
 
 const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
   const [isPending, startTransition] = useTransition();
-  const { t } = useLocale();
   const [formData, setFormData] = useState<TransactionFormValues>(
     editTransaction
       ? {
@@ -124,11 +122,11 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
 
   const buttonLabel = editTransaction
     ? isPending
-      ? t("update") + "..."
-      : t("update")
+      ? "Updating..."
+      : "Update"
     : isPending
-      ? t("add") + "..."
-      : t("add");
+      ? "Adding Transaction"
+      : "Add";
 
   return (
     <form onSubmit={handleSubmit} className="p-6 space-y-4">
@@ -144,7 +142,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
           }`}
         >
           <TrendingDown className="w-4 h-4" />
-          {t("expense")}
+          Expense
         </button>
         <button
           type="button"
@@ -156,14 +154,14 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
           }`}
         >
           <TrendingUp className="w-4 h-4" />
-          {t("income")}
+          Income
         </button>
       </div>
 
       {/* Amount */}
       <div>
         <label className="block text-sm font-medium text-slate-300 mb-2">
-          {t("amount")} <span className="text-red-500">*</span>
+          Amount <span className="text-red-500">*</span>
         </label>
         <input
           name="amount"
@@ -179,7 +177,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
       {/* Category */}
       <div>
         <label className="block text-sm font-medium text-slate-300 mb-2">
-          {t("category")} <span className="text-red-500">*</span>
+          Category <span className="text-red-500">*</span>
         </label>
         <select
           name="category"
@@ -190,7 +188,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
           }
           className="w-full h-10 px-4 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
         >
-          <option value="">{t("selectCategory")}</option>
+          <option value="">Select category</option>
           {(
             categories[formData.type as keyof typeof categories] as string[]
           ).map((cat: string) => (
@@ -204,7 +202,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
       {/* Description */}
       <div>
         <label className="block text-sm font-medium text-slate-300 mb-2">
-          {t("description")} <span className="text-red-500">*</span>
+          Description <span className="text-red-500">*</span>
         </label>
         <input
           required
@@ -212,7 +210,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
           type="text"
           value={formData.description}
           onChange={(e) => handleChange(e)}
-          placeholder={t("enterDescription")}
+          placeholder="Enter description"
           className="w-full h-10 px-4 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
@@ -220,7 +218,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
       {/* Date */}
       <div>
         <label className="block text-sm font-medium text-slate-300 mb-2">
-          {t("date")} <span className="text-red-500">*</span>
+          Date <span className="text-red-500">*</span>
         </label>
         <CalendarPicker
           value={formData.date}
@@ -229,7 +227,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
           dateFormat="YYYY-MM-DD"
           returnFormat="iso"
           required
-          placeholder={t("selectDate")}
+          placeholder="Select date"
           containerClassName=""
           inputWrapperClassName="w-full h-10 bg-slate-900 border border-slate-700 rounded-lg flex items-center"
           inputClassName="flex-1 bg-transparent px-4 text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
@@ -244,7 +242,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
           onClick={onClose}
           className="flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all active:scale-[0.98]"
         >
-          {t("cancel")}
+          Cancel
         </button>
         <button
           disabled={isPending}

@@ -56,7 +56,7 @@ export function formatNepaliDate(date: Date | string): string {
   return nepaliDate.format("YYYY-MM-DD");
 }
 
-export function formatDateWithBS(date: Date | string, useNepali: boolean = false): string {
+export function formatDateWithBS(date: Date | string): string {
   const d = new Date(date);
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -65,22 +65,13 @@ export function formatDateWithBS(date: Date | string, useNepali: boolean = false
   const transactionDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
   const nepaliDate = new NepaliDate(d);
-  const bsFormatted = nepaliDate.format("MMMM DD, YYYY");
+  const bsFormatted = nepaliDate.format("MMMM DD, YYYY"); // e.g., "Poush 15, 2081"
 
   if (transactionDate.getTime() === today.getTime()) {
-    return useNepali ? "आज" : "Today";
+    return "Today";
   } else if (transactionDate.getTime() === yesterday.getTime()) {
-    return useNepali ? "हिजो" : "Yesterday";
+    return "Yesterday";
   } else {
-    if (useNepali) {
-      const nepaliNumerals = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-      return bsFormatted.replace(/\d/g, (digit) => nepaliNumerals[parseInt(digit)]);
-    }
     return bsFormatted;
   }
-}
-
-export function toNepaliNumber(num: number | string): string {
-  const nepaliNumerals = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-  return String(num).replace(/\d/g, (digit) => nepaliNumerals[parseInt(digit)]);
 }
