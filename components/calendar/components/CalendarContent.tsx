@@ -81,7 +81,8 @@ export const CalendarContent = ({
   isToday,
 }: CalendarContentProps) => {
   return (
-    <div className="flex flex-col rounded-xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-xl md:flex-row">
+    <div className="flex flex-col rounded-xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-xl md:flex-row w-full md:w-auto">
+      
       {showQuickSelect && quickSelectRanges && (
         <div className="w-full border-b border-gray-100 dark:border-gray-800 p-3 md:w-44 md:border-r md:border-b-0">
           <h4 className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">

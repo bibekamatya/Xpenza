@@ -62,13 +62,13 @@ const CalendarGrid = ({
   };
 
   return (
-    <div className="p-3">
+    <div className="p-3 md:p-3">
       {/* Day Headers */}
-      <div className="mb-1.5 grid grid-cols-7 gap-0.5">
+      <div className="mb-2 md:mb-1.5 grid grid-cols-7 gap-1 md:gap-0.5">
         {days.map(day => (
           <div
             key={day}
-            className="flex h-7 items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-400"
+            className="flex h-9 md:h-7 items-center justify-center text-sm md:text-xs font-medium text-gray-600 dark:text-gray-400"
             role="columnheader"
           >
             {day}
@@ -78,13 +78,13 @@ const CalendarGrid = ({
 
       {/* Date Grid */}
       <div
-        className="grid grid-cols-7 gap-0.5"
+        className="grid grid-cols-7 gap-1 md:gap-0.5"
         role="grid"
         tabIndex={0}
         aria-label="Calendar grid. Use arrow keys to navigate, Enter to select, T for today, PageUp/PageDown for month navigation"
       >
         {calendarDays.map((day, index) => (
-          <div key={index} className="flex h-8 items-center justify-center">
+          <div key={index} className="flex h-11 md:h-8 items-center justify-center">
             {day ? (
               <button
                 type="button"
@@ -97,7 +97,7 @@ const CalendarGrid = ({
                       : getBSDateFormatted(currentYear, currentMonth, day)
                     : undefined
                 }
-                className={`relative flex h-6 w-6 items-center justify-center rounded-lg text-xs transition-all focus:outline-none ${
+                className={`relative flex h-10 w-10 md:h-6 md:w-6 items-center justify-center rounded-lg text-sm md:text-xs transition-all focus:outline-none ${
                   dateRangeMode
                     ? // Range mode styling
                       (selectedRange.start &&

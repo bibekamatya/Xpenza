@@ -29,12 +29,9 @@ export const useCalendarPosition = ({
       const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
       const isForm = !referenceElement;
 
-      // Mobile form: centered
+      // Mobile form: bottom sheet (position doesn't matter, handled by portal)
       if (isMobile && isForm) {
         setPosition({
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
           zIndex: 9999,
           opacity: 1,
           transition: 'opacity 0.15s ease-in',
