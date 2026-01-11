@@ -22,6 +22,7 @@ import toast from "react-hot-toast";
 import TransactionsSkeleton from "./TransactionsSkeleton";
 import AnalyticsModal from "./AnalyticsModal";
 import ExportSheet from "./ExportSheet";
+import SwipeableTransaction from "./SwipeableTransaction";
 
 const Transactions = () => {
   const {
@@ -57,6 +58,7 @@ const Transactions = () => {
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const [showCustomDates, setShowCustomDates] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<{id: string, transaction: Transaction} | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -371,102 +373,53 @@ const Transactions = () => {
           </div>
         ) : (
           <div className="divide-y divide-slate-700">
-            {filteredTransactions.map((item) => {
-              const { description, amount, category } = item;
-              return (
-                <div
-                  key={item._id}
-                  onClick={() => {
-                    if (bulkMode) {
-                      if (selectedIds.includes(item._id)) {
-                        setSelectedIds(
-                          selectedIds.filter((id) => id !== item._id),
-                        );
-                      } else {
-                        setSelectedIds([...selectedIds, item._id]);
-                      }
-                    } else {
-                      setSelectedTransaction(item);
+            {filteredTransactions.map((item) => (
+              <SwipeableTransaction
+                key={item._id}
+                item={item}
+                bulkMode={bulkMode}
+                isSelected={selectedIds.includes(item._id)}
+                onSelect={() => {
+                  if (selectedIds.includes(item._id)) {
+                    setSelectedIds(selectedIds.filter((id) => id !== item._id));
+                  } else {
+                    setSelectedIds([...selectedIds, item._id]);
+                  }
+                }}
+                onClick={() => setSelectedTransaction(item)}
+                onEdit={() => setEditTransaction(item)}
+                onDelete={() => {
+                  removeTransaction(item._id);
+                  setPendingDelete({ id: item._id, transaction: item });
+                  toast(
+                    (t) => (
+                      <div className="flex items-center gap-3">
+                        <span>Transaction deleted</span>
+                        <button
+                          onClick={() => {
+                            addTransaction(item);
+                            setPendingDelete(null);
+                            toast.dismiss(t.id);
+                          }}
+                          className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded font-medium"
+                        >
+                          Undo
+                        </button>
+                      </div>
+                    ),
+                    {
+                      duration: 5000,
+                      onAutoClose: async () => {
+                        if (pendingDelete?.id === item._id) {
+                          await deleteTransaction(item._id);
+                          setPendingDelete(null);
+                        }
+                      },
                     }
-                  }}
-                  className={`p-4 hover:bg-slate-750 transition-colors group cursor-pointer active:bg-slate-750 ${
-                    bulkMode && selectedIds.includes(item._id)
-                      ? "bg-blue-600/10 border-l-4 border-blue-600"
-                      : ""
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    {bulkMode && (
-                      <div
-                        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                          selectedIds.includes(item._id)
-                            ? "bg-blue-600 border-blue-600"
-                            : "border-slate-600"
-                        }`}
-                      >
-                        {selectedIds.includes(item._id) && (
-                          <Check className="w-3 h-3 text-white" />
-                        )}
-                      </div>
-                    )}
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center shrink-0">
-                        <span className="text-xl">
-                          {getIcon(category)}
-                        </span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-white font-medium text-sm truncate">
-                          {description}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="px-2 py-0.5 bg-blue-600/20 text-blue-400 text-xs rounded-full">
-                            {category}
-                          </span>
-                          <span className="text-xs text-slate-400">
-                            {formatDateWithBS(item.date)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <div className="flex items-center gap-1">
-                        {item.type === "income" ? (
-                          <TrendingUp className="w-4 h-4 text-green-500" />
-                        ) : (
-                          <TrendingDown className="w-4 h-4 text-red-500" />
-                        )}
-                        <p
-                          className={`text-base font-bold ${item.type === "income" ? "text-green-500" : "text-red-500"}`}
-                        >
-                          Rs. {amount}
-                        </p>
-                      </div>
-                      <div className="hidden md:flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setEditTransaction(item);
-                          }}
-                          className="p-2 hover:bg-blue-600/20 rounded-lg transition-all active:scale-90"
-                        >
-                          <Edit2 className="w-4 h-4 text-blue-400" />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setDeleteItemMetaData(item);
-                          }}
-                          className="p-2 hover:bg-red-600/20 rounded-lg transition-all active:scale-90"
-                        >
-                          <Trash2 className="w-4 h-4 text-red-400" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                }}
+              />
+            ))}
           </div>
         )}
       </div>
