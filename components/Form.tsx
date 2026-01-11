@@ -125,7 +125,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
       ? "Updating..."
       : "Update"
     : isPending
-      ? "Adding Transaction"
+      ? "Adding..."
       : "Add";
 
   return (
