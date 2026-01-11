@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import PWAInstaller from "@/components/PWAInstaller";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -63,25 +64,12 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Xpenza" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                  navigator.serviceWorker.register('/sw.js').then(
-                    (registration) => console.log('SW registered:', registration),
-                    (error) => console.log('SW registration failed:', error)
-                  );
-                });
-              }
-            `,
-          }}
-        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ErrorBoundary>{children}</ErrorBoundary>
+        <PWAInstaller />
         <Toaster
           position="bottom-right"
           toastOptions={{

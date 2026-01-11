@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { handleSignOut } from "@/app/actions/authActions";
-import { DollarSign, LogOut, Settings, FileText, Download } from "lucide-react";
+import { DollarSign, LogOut, Settings, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,28 +14,6 @@ interface HeaderProps {
 const Header = ({ user }: HeaderProps) => {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showBudgetSettings, setShowBudgetSettings] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [showInstall, setShowInstall] = useState(false);
-
-  useEffect(() => {
-    const handler = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShowInstall(true);
-    };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
-
-  const handleInstall = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setShowInstall(false);
-    }
-    setDeferredPrompt(null);
-  };
 
   return (
     <>
@@ -69,15 +47,6 @@ const Header = ({ user }: HeaderProps) => {
             </div>
 
             <div className="flex items-center gap-2">
-              {showInstall && (
-                <button
-                  onClick={handleInstall}
-                  className="p-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all active:scale-95 border border-blue-500"
-                  title="Install App"
-                >
-                  <Download className="w-4 h-4" />
-                </button>
-              )}
               <Link
                 href="/reports"
                 className="p-2 text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
