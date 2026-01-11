@@ -6,6 +6,7 @@ import { Transaction, TransactionFormValues } from "@/lib/types";
 import React, { useState, useTransition } from "react";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import toast from "react-hot-toast";
+import CalendarPicker from "@/components/calendar/components/CalendarPicker";
 
 interface FormProps {
   onClose: () => void;
@@ -169,7 +170,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
           value={formData.amount}
           onChange={(e) => handleChange(e)}
           placeholder="0"
-          className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full h-10 px-4 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
@@ -185,7 +186,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, category: e.target.value }))
           }
-          className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+          className="w-full h-10 px-4 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
         >
           <option value="">Select category</option>
           {(
@@ -210,7 +211,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
           value={formData.description}
           onChange={(e) => handleChange(e)}
           placeholder="Enter description"
-          className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full h-10 px-4 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
@@ -219,13 +220,18 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
         <label className="block text-sm font-medium text-slate-300 mb-2">
           Date <span className="text-red-500">*</span>
         </label>
-        <input
-          name="date"
-          type="date"
-          required
+        <CalendarPicker
           value={formData.date}
-          onChange={handleChange}
-          className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={(value) => setFormData((prev) => ({ ...prev, date: value }))}
+          calendarType="BS"
+          dateFormat="YYYY-MM-DD"
+          returnFormat="iso"
+          required
+          placeholder="Select date"
+          containerClassName=""
+          inputWrapperClassName="w-full h-10 bg-slate-900 border border-slate-700 rounded-lg flex items-center"
+          inputClassName="flex-1 bg-transparent px-4 text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
+          buttonClassName="pr-3 text-slate-400 hover:text-slate-300 focus:outline-none"
         />
       </div>
 

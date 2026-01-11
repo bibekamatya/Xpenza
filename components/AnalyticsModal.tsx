@@ -96,7 +96,7 @@ const AnalyticsModal = ({
                       Total Income
                     </p>
                     <p className="text-2xl font-bold text-white">
-                      ₹{totalIncome.toLocaleString()}
+                      Rs.{totalIncome.toLocaleString()}
                     </p>
                   </div>
                   <div className="bg-gradient-to-br from-red-600/20 to-red-600/5 rounded-lg p-4 border border-red-600/30">
@@ -104,7 +104,7 @@ const AnalyticsModal = ({
                       Total Expenses
                     </p>
                     <p className="text-2xl font-bold text-white">
-                      ₹{totalExpense.toLocaleString()}
+                      Rs.{totalExpense.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -124,7 +124,7 @@ const AnalyticsModal = ({
                               {category}
                             </span>
                             <span className="text-sm font-semibold text-white">
-                              ₹{amount.toLocaleString()} (
+                              Rs.{amount.toLocaleString()} (
                               {percentage.toFixed(1)}%)
                             </span>
                           </div>

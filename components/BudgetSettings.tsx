@@ -159,7 +159,7 @@ const BudgetSettings = ({ isOpen, onClose }: BudgetSettingsProps) => {
                           isOverBudget ? "text-red-400" : "text-slate-300"
                         }
                       >
-                        Allocated: ₹{totalCategoryBudget.toLocaleString()}
+                        Allocated: Rs.{totalCategoryBudget.toLocaleString()}
                       </span>
                       <span
                         className={`font-semibold ${
@@ -170,7 +170,7 @@ const BudgetSettings = ({ isOpen, onClose }: BudgetSettingsProps) => {
                               : "text-blue-400"
                         }`}
                       >
-                        Remaining: ₹{remaining.toLocaleString()}
+                        Remaining: Rs.{remaining.toLocaleString()}
                       </span>
                     </div>
                     {isOverBudget && (

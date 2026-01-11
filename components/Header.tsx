@@ -33,7 +33,7 @@ const Header = ({ user }: HeaderProps) => {
                 ) : (
                   <Image
                     src="/logo.png"
-                    alt="Expense Tracker"
+                    alt="Xpenza"
                     height={32}
                     width={32}
                     className="rounded-lg object-cover"
@@ -41,12 +41,8 @@ const Header = ({ user }: HeaderProps) => {
                 )}
               </div>
               <div>
-                <h1 className="text-base font-bold text-white">
-                  Expense Tracker
-                </h1>
-                <p className="text-xs text-slate-400">
-                  {user?.name || user?.email}
-                </p>
+                <h1 className="text-base font-bold text-white">Xpenza</h1>
+                <p className="text-xs text-slate-400">{user?.name || user?.email}</p>
               </div>
             </div>
 

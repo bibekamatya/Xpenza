@@ -1,6 +1,6 @@
 {
-  "name": "Expense Tracker - Personal Finance Manager",
-  "short_name": "Expense Tracker",
+  "name": "Xpenza - Personal Finance Manager",
+  "short_name": "Xpenza",
   "description": "Track your income and expenses, manage your budget, and visualize your spending with our easy-to-use expense tracker app.",
   "start_url": "/",
   "display": "standalone",

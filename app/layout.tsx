@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Expense Tracker - Personal Finance Manager",
+  title: "Xpenza - Personal Finance Manager",
   description:
     "Track your income and expenses, manage your budget, and visualize your spending. Free personal finance tracker with beautiful UI and powerful features.",
   keywords: [
@@ -26,19 +26,19 @@ export const metadata: Metadata = {
     "spending tracker",
     "personal finance",
   ],
-  authors: [{ name: "Expense Tracker" }],
+  authors: [{ name: "Xpenza" }],
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Expense Tracker",
+    title: "Xpenza",
   },
   openGraph: {
     type: "website",
-    title: "Expense Tracker - Personal Finance Manager",
+    title: "Xpenza - Personal Finance Manager",
     description:
       "Track your income and expenses, manage your budget, and visualize your spending.",
-    siteName: "Expense Tracker",
+    siteName: "Xpenza",
   },
 };
 

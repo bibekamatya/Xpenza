@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import Pagination from "./Pagination";
 import { useTransactionsContext } from "@/contexts/TransactionsContext";
-import { getIcon, formatDate } from "@/lib/helper";
+import { getIcon, formatDate, formatDateWithBS } from "@/lib/helper";
 import { deleteTransaction } from "@/app/actions/expenseActions";
 import toast from "react-hot-toast";
 import TransactionsSkeleton from "./TransactionsSkeleton";
@@ -163,7 +163,7 @@ const Transactions = () => {
     doc.rect(0, 0, 210, 40, "F");
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(24);
-    doc.text("Expense Tracker", 20, 20);
+    doc.text("Xpenza", 20, 20);
     doc.setFontSize(12);
     doc.text(`Generated on ${new Date().toLocaleDateString()}`, 20, 30);
 
@@ -343,7 +343,7 @@ const Transactions = () => {
               onClick={() => setShowForm(true)}
               className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg"
             >
-              + Add Expense
+              + Add
             </button>
           </div>
         </div>
@@ -424,7 +424,7 @@ const Transactions = () => {
                             {category}
                           </span>
                           <span className="text-xs text-slate-400">
-                            {formatDate(item.date)}
+                            {formatDateWithBS(item.date)}
                           </span>
                         </div>
                       </div>
@@ -439,7 +439,7 @@ const Transactions = () => {
                         <p
                           className={`text-base font-bold ${item.type === "income" ? "text-green-500" : "text-red-500"}`}
                         >
-                          ₹{amount}
+                          Rs.{amount}
                         </p>
                       </div>
                       <div className="hidden md:flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

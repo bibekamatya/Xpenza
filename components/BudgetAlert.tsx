@@ -48,7 +48,7 @@ const BudgetAlert = () => {
           <p
             className={`text-xs ${isOverBudget ? "text-red-400" : "text-yellow-400"}`}
           >
-            You've spent ₹{lifetimeStatus.totalExpense.toLocaleString()} of ₹
+            You've spent Rs.{lifetimeStatus.totalExpense.toLocaleString()} of Rs.
             {budget.totalBudget.toLocaleString()} ({percentage.toFixed(0)}%)
           </p>
           <div className="mt-2 h-2 bg-slate-900 rounded-full overflow-hidden">

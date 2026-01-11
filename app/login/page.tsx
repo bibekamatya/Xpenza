@@ -21,7 +21,7 @@ export default async function LoginPage() {
               <div className="w-44 h-44 md:w-36 md:h-36 mx-auto mb-2 md:mb-1 relative">
                 <Image
                   src="/logo.png"
-                  alt="Expense Tracker"
+                  alt="Xpenza"
                   width={176}
                   height={176}
                   className="object-contain drop-shadow-2xl"
@@ -104,7 +104,7 @@ export default async function LoginPage() {
         {/* Footer */}
         <div className="text-center mt-8">
           <p className="text-xs text-slate-600">
-            © 2024 Expense Tracker. All rights reserved.
+            © {new Date().getFullYear()} Xpenza. All rights reserved.
           </p>
         </div>
       </div>

@@ -317,7 +317,7 @@ const Reports = () => {
                   </h3>
                 </div>
                 <p className="text-2xl font-bold text-white">
-                  ₹{formatAmount(Number(avgDailySpending))}
+                  Rs.{formatAmount(Number(avgDailySpending))}
                 </p>
               </div>
 
@@ -356,7 +356,7 @@ const Reports = () => {
                       }}
                       labelStyle={{ color: "#fff" }}
                       formatter={(value) =>
-                        value ? `₹${value.toLocaleString()}` : "₹0"
+                        value ? `Rs.${value.toLocaleString()}` : "Rs.0"
                       }
                     />
                     <Legend />
@@ -415,7 +415,7 @@ const Reports = () => {
                         borderRadius: "8px",
                       }}
                       formatter={(value) =>
-                        value ? `₹${value.toLocaleString()}` : "₹0"
+                        value ? `Rs.${value.toLocaleString()}` : "Rs.0"
                       }
                     />
                   </PieChart>
@@ -448,7 +448,7 @@ const Reports = () => {
                       borderRadius: "8px",
                     }}
                     formatter={(value) =>
-                      value ? `₹${value.toLocaleString()}` : "₹0"
+                      value ? `Rs.${value.toLocaleString()}` : "Rs.0"
                     }
                   />
                   <Bar dataKey="amount" radius={[6, 6, 0, 0]} barSize={50}>
@@ -472,7 +472,7 @@ const Reports = () => {
                           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }}></div>
                           <span className="text-sm text-slate-300">{cat.category}</span>
                         </div>
-                        <span className="text-sm font-bold text-white">₹{formatAmount(cat.amount)}</span>
+                        <span className="text-sm font-bold text-white">Rs.{formatAmount(cat.amount)}</span>
                       </div>
                     ))}
                   </div>
@@ -511,7 +511,7 @@ const Reports = () => {
                         <span
                           className={`text-sm font-bold ml-3 ${tx.type === "income" ? "text-green-400" : "text-red-400"}`}
                         >
-                          ₹{tx.amount.toLocaleString()}
+                          Rs.{tx.amount.toLocaleString()}
                         </span>
                       </div>
                     ))}

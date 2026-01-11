@@ -1,6 +1,7 @@
 "use client";
 import { FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useBackButton } from "@/hooks/useBackButton";
 
 interface ExportSheetProps {
   isOpen: boolean;
@@ -9,6 +10,8 @@ interface ExportSheetProps {
 }
 
 const ExportSheet = ({ isOpen, onClose, onExport }: ExportSheetProps) => {
+  useBackButton(isOpen, onClose);
+
   const handleExport = (type: "csv" | "pdf") => {
     onExport(type);
     onClose();

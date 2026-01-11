@@ -2,6 +2,7 @@
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ReactNode } from "react";
+import { useBackButton } from "@/hooks/useBackButton";
 
 interface BaseBottomSheetProps {
   isOpen: boolean;
@@ -16,6 +17,8 @@ const BaseBottomSheet = ({
   title,
   children,
 }: BaseBottomSheetProps) => {
+  useBackButton(isOpen, onClose);
+
   return (
     <AnimatePresence>
       {isOpen && (

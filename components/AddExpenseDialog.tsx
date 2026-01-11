@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Form from "./Form";
 import { Transaction } from "@/lib/types";
 import { X } from "lucide-react";
+import { useBackButton } from "@/hooks/useBackButton";
+import { useEffect } from "react";
 
 interface AddExpenseDialogProps {
   editTransaction?: Transaction | null;
@@ -18,6 +20,19 @@ export default function AddExpenseDialog({
   onSuccess,
 }: AddExpenseDialogProps) {
   const isDialogOpen = !!editTransaction || isOpen;
+  useBackButton(isDialogOpen, onClose);
+
+  // Hide calendar when dialog closes
+  useEffect(() => {
+    if (!isDialogOpen) {
+      const calendars = document.querySelectorAll('[role="dialog"][aria-label="Calendar"]');
+      calendars.forEach(cal => {
+        const element = cal as HTMLElement;
+        element.style.display = 'none';
+      });
+    }
+  }, [isDialogOpen]);
+
   return (
     <AnimatePresence>
       {isDialogOpen && (
@@ -55,6 +70,7 @@ export default function AddExpenseDialog({
 
               {/* Form */}
               <Form
+                key={isDialogOpen ? 'open' : 'closed'}
                 onClose={onClose}
                 editTransaction={editTransaction}
                 onSuccess={onSuccess}
@@ -82,6 +98,7 @@ export default function AddExpenseDialog({
 
             {/* Form */}
             <Form
+              key={isDialogOpen ? 'open' : 'closed'}
               onClose={onClose}
               editTransaction={editTransaction}
               onSuccess={onSuccess}

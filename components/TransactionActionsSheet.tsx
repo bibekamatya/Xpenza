@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Transaction } from "@/lib/types";
 import { Edit2, Trash2 } from "lucide-react";
+import { useBackButton } from "@/hooks/useBackButton";
 
 interface TransactionActionsSheetProps {
   isOpen: boolean;
@@ -18,6 +19,8 @@ const TransactionActionsSheet = ({
   onEdit,
   onDelete,
 }: TransactionActionsSheetProps) => {
+  useBackButton(isOpen, onClose);
+
   return (
     <AnimatePresence>
       {isOpen && transaction && (

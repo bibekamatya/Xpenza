@@ -43,7 +43,7 @@ const StatsCards = () => {
             </div>
           </div>
           <p className="text-xl md:text-2xl font-bold text-white">
-            ₹{formatAmount(stats.balance)}
+            Rs.{formatAmount(stats.balance)}
           </p>
         </div>
         <div
@@ -57,7 +57,7 @@ const StatsCards = () => {
             </div>
           </div>
           <p className="text-xl md:text-2xl font-bold text-white">
-            ₹{formatAmount(stats.totalIncome)}
+            Rs.{formatAmount(stats.totalIncome)}
           </p>
         </div>
         <div
@@ -71,7 +71,7 @@ const StatsCards = () => {
             </div>
           </div>
           <p className="text-xl md:text-2xl font-bold text-white">
-            ₹{formatAmount(stats.totalExpense)}
+            Rs.{formatAmount(stats.totalExpense)}
           </p>
         </div>
       </div>
