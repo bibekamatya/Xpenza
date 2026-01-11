@@ -1,5 +1,4 @@
-"use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import AddExpenseDialog from "./AddExpenseDialog";
 import { Transaction } from "@/lib/types";
 import DeleteDialog from "./DeleteDialog";
@@ -23,6 +22,11 @@ import TransactionsSkeleton from "./TransactionsSkeleton";
 import AnalyticsModal from "./AnalyticsModal";
 import ExportSheet from "./ExportSheet";
 import SwipeableTransaction from "./SwipeableTransaction";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import {
+  exportTransactionsToCSV,
+  exportTransactionsToPDF,
+} from "@/lib/exportUtils";
 
 const Transactions = () => {
   const {
@@ -58,26 +62,16 @@ const Transactions = () => {
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const [showCustomDates, setShowCustomDates] = useState(false);
-  const pendingDeleteRef = useRef<{id: string, transaction: Transaction} | null>(null);
+  const pendingDeleteRef = useRef<{
+    id: string;
+    transaction: Transaction;
+  } | null>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        exportMenuRef.current &&
-        !exportMenuRef.current.contains(event.target as Node)
-      ) {
-        setShowExportMenu(false);
-      }
-    };
-
-    if (showExportMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showExportMenu]);
+  useClickOutside(
+    exportMenuRef,
+    () => setShowExportMenu(false),
+    showExportMenu
+  );
 
   const handleExportFromSheet = (type: "csv" | "pdf") => {
     if (type === "csv") {
@@ -87,129 +81,14 @@ const Transactions = () => {
     }
   };
 
-  const getFilteredTransactions = (
-    range?: string,
-    customStart?: string,
-    customEnd?: string,
-  ) => {
-    const selectedRange = range || exportRange;
-
-    if (selectedRange === "all") return transactions;
-
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-    return transactions.filter((t) => {
-      const tDate = new Date(t.date);
-
-      if (selectedRange === "custom" && (customStart || customEnd)) {
-        const start = customStart ? new Date(customStart) : null;
-        const end = customEnd ? new Date(customEnd) : null;
-        if (start && tDate < start) return false;
-        if (end && tDate > end) return false;
-        return true;
-      }
-
-      switch (selectedRange) {
-        case "today":
-          return tDate >= today;
-        case "week":
-          const weekAgo = new Date(today);
-          weekAgo.setDate(weekAgo.getDate() - 7);
-          return tDate >= weekAgo;
-        case "month":
-          const monthAgo = new Date(today);
-          monthAgo.setMonth(monthAgo.getMonth() - 1);
-          return tDate >= monthAgo;
-        case "year":
-          const yearAgo = new Date(today);
-          yearAgo.setFullYear(yearAgo.getFullYear() - 1);
-          return tDate >= yearAgo;
-        default:
-          return true;
-      }
-    });
-  };
-
   const exportToCSV = () => {
-    const data = filteredTransactions;
-    const headers = ["Date", "Type", "Category", "Description", "Amount"];
-    const rows = data.map((t) => [
-      new Date(t.date).toLocaleDateString(),
-      t.type,
-      t.category,
-      t.description,
-      t.amount,
-    ]);
-
-    const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `transactions-${new Date().toISOString().split("T")[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    exportTransactionsToCSV(filteredTransactions);
     setShowExportMenu(false);
-    toast.success("CSV exported successfully");
   };
 
   const exportToPDF = async () => {
-    const data = filteredTransactions;
-    const { jsPDF } = await import("jspdf");
-    const autoTable = (await import("jspdf-autotable")).default;
-    const doc = new jsPDF();
-
-    // Header with branding
-    doc.setFillColor(30, 41, 59);
-    doc.rect(0, 0, 210, 40, "F");
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(24);
-    doc.text("Xpenza", 20, 20);
-    doc.setFontSize(12);
-    doc.text(`Generated on ${new Date().toLocaleDateString()}`, 20, 30);
-
-    // Summary
-    const totalIncome = data
-      .filter((t) => t.type === "income")
-      .reduce((sum, t) => sum + t.amount, 0);
-    const totalExpense = data
-      .filter((t) => t.type === "expense")
-      .reduce((sum, t) => sum + t.amount, 0);
-
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(14);
-    doc.text("Summary", 20, 55);
-    doc.setFontSize(11);
-    doc.text(`Total Income: Rs.${totalIncome.toLocaleString()}`, 20, 65);
-    doc.text(`Total Expenses: Rs.${totalExpense.toLocaleString()}`, 20, 72);
-    doc.text(
-      `Balance: Rs.${(totalIncome - totalExpense).toLocaleString()}`,
-      20,
-      79,
-    );
-
-    // Transactions table
-    const tableData = data.map((t) => [
-      new Date(t.date).toLocaleDateString(),
-      t.type,
-      t.category,
-      t.description,
-      `Rs.${t.amount}`,
-    ]);
-
-    autoTable(doc, {
-      startY: 90,
-      head: [["Date", "Type", "Category", "Description", "Amount"]],
-      body: tableData,
-      theme: "grid",
-      headStyles: { fillColor: [30, 41, 59] },
-      styles: { fontSize: 9 },
-    });
-
-    doc.save(`transactions-${new Date().toISOString().split("T")[0]}.pdf`);
+    await exportTransactionsToPDF(filteredTransactions);
     setShowExportMenu(false);
-    toast.success("PDF exported successfully");
   };
 
   // Apply filters
@@ -221,7 +100,8 @@ const Transactions = () => {
         {bulkMode && selectedIds.length > 0 && (
           <div className="mb-3 flex items-center justify-between p-3 bg-slate-700/50 rounded-lg border border-slate-600">
             <span className="text-sm text-slate-300 font-medium">
-              {selectedIds.length} transaction{selectedIds.length > 1 ? 's' : ''} selected
+              {selectedIds.length} transaction
+              {selectedIds.length > 1 ? "s" : ""} selected
             </span>
             <button
               onClick={() => setShowBulkDeleteDialog(true)}
@@ -264,82 +144,84 @@ const Transactions = () => {
               <Download className="w-4 h-4" />
             </button>
             <div className="hidden md:block relative" ref={exportMenuRef}>
-            <button
-              onClick={() => setShowExportMenu(!showExportMenu)}
-              className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
-              title="Export"
-            >
-              <Download className="w-4 h-4" />
-            </button>
-            {showExportMenu && (
-              <div className="absolute right-0 mt-2 w-80 bg-slate-800 border border-slate-700 rounded-xl shadow-xl overflow-hidden z-10">
-                <div className="p-4 border-b border-slate-700">
-                  <p className="text-sm font-semibold text-white mb-3">
-                    Select Range
-                  </p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {["all", "today", "week", "month", "year"].map((range) => (
+              <button
+                onClick={() => setShowExportMenu(!showExportMenu)}
+                className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all active:scale-95 border border-slate-700"
+                title="Export"
+              >
+                <Download className="w-4 h-4" />
+              </button>
+              {showExportMenu && (
+                <div className="absolute right-0 mt-2 w-80 bg-slate-800 border border-slate-700 rounded-xl shadow-xl overflow-hidden z-10">
+                  <div className="p-4 border-b border-slate-700">
+                    <p className="text-sm font-semibold text-white mb-3">
+                      Select Range
+                    </p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {["all", "today", "week", "month", "year"].map(
+                        (range) => (
+                          <button
+                            key={range}
+                            onClick={() => {
+                              setExportRange(range as any);
+                              setShowCustomDates(false);
+                            }}
+                            className={`px-3 py-2 text-xs rounded-lg transition-all font-medium ${
+                              exportRange === range && !showCustomDates
+                                ? "bg-blue-600 text-white"
+                                : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                            }`}
+                          >
+                            {range.charAt(0).toUpperCase() + range.slice(1)}
+                          </button>
+                        )
+                      )}
                       <button
-                        key={range}
-                        onClick={() => {
-                          setExportRange(range as any);
-                          setShowCustomDates(false);
-                        }}
+                        onClick={() => setShowCustomDates(!showCustomDates)}
                         className={`px-3 py-2 text-xs rounded-lg transition-all font-medium ${
-                          exportRange === range && !showCustomDates
+                          showCustomDates
                             ? "bg-blue-600 text-white"
                             : "bg-slate-700 text-slate-300 hover:bg-slate-600"
                         }`}
                       >
-                        {range.charAt(0).toUpperCase() + range.slice(1)}
+                        Custom
                       </button>
-                    ))}
-                    <button
-                      onClick={() => setShowCustomDates(!showCustomDates)}
-                      className={`px-3 py-2 text-xs rounded-lg transition-all font-medium ${
-                        showCustomDates
-                          ? "bg-blue-600 text-white"
-                          : "bg-slate-700 text-slate-300 hover:bg-slate-600"
-                      }`}
-                    >
-                      Custom
-                    </button>
-                  </div>
-                  {showCustomDates && (
-                    <div className="mt-3 space-y-2">
-                      <input
-                        type="date"
-                        value={customStartDate}
-                        onChange={(e) => setCustomStartDate(e.target.value)}
-                        className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
-                        placeholder="Start Date"
-                      />
-                      <input
-                        type="date"
-                        value={customEndDate}
-                        onChange={(e) => setCustomEndDate(e.target.value)}
-                        className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
-                        placeholder="End Date"
-                      />
                     </div>
-                  )}
+                    {showCustomDates && (
+                      <div className="mt-3 space-y-2">
+                        <input
+                          type="date"
+                          value={customStartDate}
+                          onChange={(e) => setCustomStartDate(e.target.value)}
+                          className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
+                          placeholder="Start Date"
+                        />
+                        <input
+                          type="date"
+                          value={customEndDate}
+                          onChange={(e) => setCustomEndDate(e.target.value)}
+                          className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
+                          placeholder="End Date"
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => exportToCSV()}
+                    className="w-full px-4 py-3 text-left text-sm text-slate-300 hover:bg-slate-700 transition-colors flex items-center gap-3"
+                  >
+                    <FileText className="w-4 h-4" />
+                    Export as CSV
+                  </button>
+                  <button
+                    onClick={() => exportToPDF()}
+                    className="w-full px-4 py-3 text-left text-sm text-slate-300 hover:bg-slate-700 transition-colors flex items-center gap-3"
+                  >
+                    <FileText className="w-4 h-4" />
+                    Export as PDF
+                  </button>
                 </div>
-                <button
-                  onClick={() => exportToCSV()}
-                  className="w-full px-4 py-3 text-left text-sm text-slate-300 hover:bg-slate-700 transition-colors flex items-center gap-3"
-                >
-                  <FileText className="w-4 h-4" />
-                  Export as CSV
-                </button>
-                <button
-                  onClick={() => exportToPDF()}
-                  className="w-full px-4 py-3 text-left text-sm text-slate-300 hover:bg-slate-700 transition-colors flex items-center gap-3"
-                >
-                  <FileText className="w-4 h-4" />
-                  Export as PDF
-                </button>
-              </div>
-            )}
+              )}
             </div>
             <button
               onClick={() => setShowForm(true)}
@@ -390,9 +272,12 @@ const Transactions = () => {
                 onEdit={() => setEditTransaction(item)}
                 onDelete={() => {
                   removeTransaction(item._id);
-                  pendingDeleteRef.current = { id: item._id, transaction: item };
-                  
-                  const toastId = toast(
+                  pendingDeleteRef.current = {
+                    id: item._id,
+                    transaction: item,
+                  };
+
+                  toast(
                     (t) => (
                       <div className="flex items-center gap-3">
                         <span>Transaction deleted</span>
@@ -410,7 +295,7 @@ const Transactions = () => {
                     ),
                     { duration: 5000 }
                   );
-                  
+
                   setTimeout(async () => {
                     if (pendingDeleteRef.current?.id === item._id) {
                       await deleteTransaction(item._id);

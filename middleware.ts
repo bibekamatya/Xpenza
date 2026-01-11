@@ -5,6 +5,11 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
   const isOnLogin = req.nextUrl.pathname === "/login";
 
+  // Skip auth in development
+  if (process.env.NODE_ENV === "development") {
+    return NextResponse.next();
+  }
+
   if (!isLoggedIn && !isOnLogin) {
     return NextResponse.redirect(new URL("/login", req.url));
   }

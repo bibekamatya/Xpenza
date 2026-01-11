@@ -2,6 +2,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { getStats, getTransactions } from "@/app/actions/expenseActions";
 import { Status, Transaction } from "@/lib/types";
+import { mockTransactions } from "@/lib/mockData";
 import toast from "react-hot-toast";
 
 export function useTransactions() {
@@ -21,11 +22,28 @@ export function useTransactions() {
     endDate: "",
   });
 
+  // Mock data for development
+  const mockTransactions: Transaction[] = [
+    { _id: "1", type: "expense", amount: 500, category: "Food", description: "Lunch", date: new Date().toISOString(), userId: "test" },
+    { _id: "2", type: "income", amount: 5000, category: "Salary", description: "Monthly salary", date: new Date().toISOString(), userId: "test" },
+    { _id: "3", type: "expense", amount: 200, category: "Transport", description: "Bus fare", date: new Date().toISOString(), userId: "test" },
+    { _id: "4", type: "expense", amount: 1500, category: "Shopping", description: "Groceries", date: new Date().toISOString(), userId: "test" },
+  ];
+
   useEffect(() => {
     getStats("all").then(setLifetimeStatus);
   }, [isPending]);
 
   const refetch = (page: number = 1, newFilters?: any) => {
+    // Use mock data in development
+    if (process.env.NODE_ENV === "development") {
+      setTransactions(mockTransactions);
+      setCurrentPage(1);
+      setTotalPages(1);
+      setHasMore(false);
+      return;
+    }
+    
     startTransition(async () => {
       try {
         const filterParams = newFilters || filters;
@@ -58,6 +76,10 @@ export function useTransactions() {
   };
 
   useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      setTransactions(mockTransactions);
+      return;
+    }
     refetch(1);
     getStats("all").then(setLifetimeStatus);
   }, []);
@@ -73,19 +95,25 @@ export function useTransactions() {
 
   const addTransaction = (transaction: Transaction) => {
     setTransactions((prev) => [transaction, ...prev]);
-    getStats("all").then(setLifetimeStatus);
+    if (process.env.NODE_ENV !== "development") {
+      getStats("all").then(setLifetimeStatus);
+    }
   };
 
   const updateTransaction = (transaction: Transaction) => {
     setTransactions((prev) =>
       prev.map((t) => (t._id === transaction._id ? transaction : t)),
     );
-    getStats("all").then(setLifetimeStatus);
+    if (process.env.NODE_ENV !== "development") {
+      getStats("all").then(setLifetimeStatus);
+    }
   };
 
   const removeTransaction = (id: string) => {
     setTransactions((prev) => prev.filter((t) => t._id !== id));
-    getStats("all").then(setLifetimeStatus);
+    if (process.env.NODE_ENV !== "development") {
+      getStats("all").then(setLifetimeStatus);
+    }
   };
 
   return {

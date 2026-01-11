@@ -2,7 +2,7 @@
 
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import CalendarPicker from "./components/CalendarPicker";
-import { useFY } from "@/hooks/useFY";
+import { useCalendarType } from "@/hooks/useFY";
 
 interface CalendarProps {
   value?: string; // ISO date string (YYYY-MM-DD)
@@ -42,7 +42,7 @@ export interface CalendarRef {
 }
 
 const CalendarInput = forwardRef<CalendarRef, CalendarProps>((props, ref) => {
-  const { isBS } = useFY();
+  const { isBS } = useCalendarType();
   const { error } = props;
 
   const handleChange = (value: string) => {

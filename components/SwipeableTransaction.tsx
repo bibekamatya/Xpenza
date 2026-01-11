@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { motion, PanInfo, useMotionValue, useTransform } from "framer-motion";
 import { Edit2, Trash2, TrendingUp, TrendingDown, Check } from "lucide-react";
 import { Transaction } from "@/lib/types";
@@ -27,7 +27,6 @@ export default function SwipeableTransaction({
 }: SwipeableTransactionProps) {
   const x = useMotionValue(0);
   const [isDragging, setIsDragging] = useState(false);
-  const constraintRef = useRef<HTMLDivElement>(null);
   
   const leftBgOpacity = useTransform(x, [0, 80], [0, 1]);
   const rightBgOpacity = useTransform(x, [-80, 0], [1, 0]);
@@ -62,7 +61,7 @@ export default function SwipeableTransaction({
   };
 
   return (
-    <div className="relative overflow-hidden touch-pan-y group">
+    <div className="relative overflow-hidden group">
       {/* Background actions - visible on mobile swipe, on desktop hover */}
       <motion.div
         className="absolute inset-0 flex items-center justify-between px-6 bg-blue-600"
@@ -87,11 +86,9 @@ export default function SwipeableTransaction({
       {/* Transaction card */}
       <motion.div
         drag="x"
-        dragElastic={0.2}
+        dragElastic={0.7}
         dragMomentum={false}
-        dragDirectionLock
-        dragConstraints={{ left: -100, right: 100 }}
-        dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+        dragConstraints={{ left: -150, right: 150 }}
         onDragStart={() => setIsDragging(true)}
         onDragEnd={handleDragEnd}
         style={{ x }}

@@ -1,7 +1,7 @@
-"use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Download, FileText } from "lucide-react";
 import CalendarInput from "./calendar/CalendarInput";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 interface ExportDropdownProps {
   onExportCSV: (range: string, startDate?: string, endDate?: string) => void;
@@ -27,17 +27,7 @@ export const ExportDropdown = ({
     setExportRange(defaultRange);
   }, [defaultRange]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowMenu(false);
-      }
-    };
-    if (showMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showMenu]);
+  useClickOutside(menuRef, () => setShowMenu(false), showMenu);
 
   return (
     <div className="relative" ref={menuRef}>

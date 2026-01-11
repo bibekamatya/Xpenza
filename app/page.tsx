@@ -8,16 +8,26 @@ import { Suspense } from "react";
 
 export default async function Home() {
   const session = await auth();
-  if (!session?.user) redirect("/login");
+  
+  // In development, allow access without auth
+  if (!session?.user && process.env.NODE_ENV !== "development") {
+    redirect("/login");
+  }
+
+  const mockUser = {
+    name: "Test User",
+    email: "test@example.com",
+    image: "",
+  };
 
   return (
     <>
       <Header
-        user={{
+        user={session?.user ? {
           name: session.user.name || "",
           email: session.user.email || "",
           image: session.user.image || "",
-        }}
+        } : mockUser}
       />
       <Suspense fallback={<TransactionsSkeleton />}>
         <Expense />

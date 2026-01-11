@@ -1,0 +1,58 @@
+import { Transaction } from "./types";
+
+export const mockTransactions: Transaction[] = [
+  {
+    _id: "1",
+    type: "expense",
+    amount: 500,
+    category: "Food",
+    description: "Lunch at restaurant",
+    date: new Date().toISOString(),
+    userId: "test",
+  },
+  {
+    _id: "2",
+    type: "income",
+    amount: 50000,
+    category: "Salary",
+    description: "Monthly salary",
+    date: new Date(Date.now() - 86400000).toISOString(),
+    userId: "test",
+  },
+  {
+    _id: "3",
+    type: "expense",
+    amount: 200,
+    category: "Transport",
+    description: "Bus fare",
+    date: new Date(Date.now() - 172800000).toISOString(),
+    userId: "test",
+  },
+  {
+    _id: "4",
+    type: "expense",
+    amount: 1500,
+    category: "Shopping",
+    description: "Groceries",
+    date: new Date(Date.now() - 259200000).toISOString(),
+    userId: "test",
+  },
+  {
+    _id: "5",
+    type: "expense",
+    amount: 300,
+    category: "Entertainment",
+    description: "Movie tickets",
+    date: new Date(Date.now() - 345600000).toISOString(),
+    userId: "test",
+  },
+  {
+    _id: "6",
+    type: "income",
+    amount: 5000,
+    category: "Freelance",
+    description: "Web design project",
+    date: new Date(Date.now() - 432000000).toISOString(),
+    userId: "test",
+  },
+];

@@ -1,6 +1,7 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Filter, X } from "lucide-react";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 interface FiltersProps {
   onApplyFilters: (filters: {
@@ -24,19 +25,7 @@ const Filters = ({ onApplyFilters }: FiltersProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setShowDropdown(false);
-      }
-    };
-    if (showDropdown)
-      document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showDropdown]);
+  useClickOutside(dropdownRef, () => setShowDropdown(false), showDropdown);
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
