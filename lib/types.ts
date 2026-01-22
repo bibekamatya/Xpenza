@@ -7,6 +7,12 @@ export interface Transaction {
   description: string;
   date: Date;
   createdAt: Date;
+  splits?: TransactionSplit[];
+}
+
+export interface TransactionSplit {
+  category: string;
+  amount: number;
 }
 
 export interface TransactionInput {
@@ -17,6 +23,7 @@ export interface TransactionInput {
   description: string;
   date: Date;
   createdAt: Date;
+  splits?: TransactionSplit[];
 }
 
 export interface Category {

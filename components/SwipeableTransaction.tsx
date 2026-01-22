@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Edit2, Trash2, TrendingUp, TrendingDown, Check } from "lucide-react";
+import { Edit2, Trash2, TrendingUp, TrendingDown, Check, Split } from "lucide-react";
 import { Transaction } from "@/lib/types";
 import { getIcon, formatDateWithBS } from "@/lib/helper";
+import SplitDetailsDialog from "./SplitDetailsDialog";
 
 interface SwipeableTransactionProps {
   item: Transaction;
@@ -26,12 +27,15 @@ export default function SwipeableTransaction({
 }: SwipeableTransactionProps) {
   const [translateX, setTranslateX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [showSplitDetails, setShowSplitDetails] = useState(false);
   const startX = useRef(0);
+  const startY = useRef(0);
   const currentX = useRef(0);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (bulkMode) return;
     startX.current = e.touches[0].clientX;
+    startY.current = e.touches[0].clientY;
     currentX.current = e.touches[0].clientX;
     setIsDragging(false);
   };
@@ -40,8 +44,16 @@ export default function SwipeableTransaction({
     if (bulkMode) return;
     currentX.current = e.touches[0].clientX;
     const diff = currentX.current - startX.current;
-    if (Math.abs(diff) > 5) setIsDragging(true);
-    setTranslateX(diff);
+    
+    // Only start horizontal swipe if movement is more horizontal than vertical
+    const diffY = Math.abs(e.touches[0].clientY - startY.current);
+    const diffX = Math.abs(diff);
+    
+    if (diffX > diffY && diffX > 10) {
+      e.preventDefault();
+      setIsDragging(true);
+      setTranslateX(diff);
+    }
   };
 
   const handleTouchEnd = () => {
@@ -67,6 +79,8 @@ export default function SwipeableTransaction({
     if (isDragging) return;
     if (bulkMode) {
       onSelect();
+    } else if (item.splits) {
+      setShowSplitDetails(true);
     } else {
       onClick();
     }
@@ -105,8 +119,7 @@ export default function SwipeableTransaction({
         onClick={handleClick}
         style={{ 
           transform: `translateX(${translateX}px)`,
-          transition: isDragging ? 'none' : 'transform 0.3s ease',
-          touchAction: 'none'
+          transition: isDragging ? 'none' : 'transform 0.3s ease'
         }}
         className={`p-4 bg-slate-800 hover:bg-slate-750 transition-colors cursor-pointer border-b border-slate-700 ${
           bulkMode && isSelected ? "bg-blue-600/10 border-l-4 border-blue-600" : ""
@@ -123,17 +136,33 @@ export default function SwipeableTransaction({
             </div>
           )}
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center shrink-0">
-              <span className="text-xl">{getIcon(item.category)}</span>
+            <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center shrink-0 relative">
+              {item.splits ? (
+                <>
+                  <Split className="w-5 h-5 text-purple-400" />
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-purple-600 rounded-full flex items-center justify-center">
+                    <span className="text-xs text-white font-bold">{item.splits.length}</span>
+                  </div>
+                </>
+              ) : (
+                <span className="text-xl">{getIcon(item.category)}</span>
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-white font-medium text-sm truncate">
                 {item.description}
               </p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="px-2 py-0.5 bg-blue-600/20 text-blue-400 text-xs rounded-full">
+                <span className="px-2 py-0.5 bg-blue-600/20 text-blue-400 text-xs rounded-full md:inline hidden">
                   {item.category}
                 </span>
+                {item.splits && (
+                  <span className="px-2 py-0.5 bg-purple-600/20 text-purple-400 text-xs rounded-full flex items-center gap-1">
+                    <Split className="w-3 h-3 md:inline hidden" />
+                    <span className="md:hidden">{item.splits.length}</span>
+                    <span className="hidden md:inline">{item.splits.length} splits</span>
+                  </span>
+                )}
                 <span className="text-xs text-slate-400">
                   {formatDateWithBS(item.date)}
                 </span>
@@ -178,6 +207,14 @@ export default function SwipeableTransaction({
           </div>
         </div>
       </div>
+      
+      <SplitDetailsDialog
+        isOpen={showSplitDetails}
+        onClose={() => setShowSplitDetails(false)}
+        transaction={item}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
     </div>
   );
 }

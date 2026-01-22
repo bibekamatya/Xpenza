@@ -1,9 +1,11 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { Transaction } from "@/lib/types";
-import { Edit2, Trash2, Calendar, Tag, TrendingUp, TrendingDown } from "lucide-react";
+import { Edit2, Trash2, Calendar, Tag, TrendingUp, TrendingDown, Split, Eye } from "lucide-react";
 import { useBackButton } from "@/hooks/useBackButton";
 import { getIcon, formatDateWithBS } from "@/lib/helper";
+import { useState } from "react";
+import SplitDetailsDialog from "./SplitDetailsDialog";
 
 interface TransactionActionsSheetProps {
   isOpen: boolean;
@@ -20,6 +22,7 @@ const TransactionActionsSheet = ({
   onEdit,
   onDelete,
 }: TransactionActionsSheetProps) => {
+  const [showSplitDetails, setShowSplitDetails] = useState(false);
   useBackButton(isOpen, onClose);
 
   return (
@@ -83,7 +86,15 @@ const TransactionActionsSheet = ({
                   <div className="flex items-center gap-3 text-sm">
                     <Tag className="w-4 h-4 text-slate-400" />
                     <span className="text-slate-400">Category:</span>
-                    <span className="text-white font-medium ml-auto">{transaction.category}</span>
+                    <span className="text-white font-medium ml-auto flex items-center gap-2">
+                      {transaction.category}
+                      {transaction.splits && (
+                        <span className="px-2 py-0.5 bg-purple-600/20 text-purple-400 text-xs rounded-full flex items-center gap-1">
+                          <Split className="w-3 h-3" />
+                          {transaction.splits.length}
+                        </span>
+                      )}
+                    </span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
                     <Calendar className="w-4 h-4 text-slate-400" />
@@ -95,6 +106,18 @@ const TransactionActionsSheet = ({
 
               {/* Action Buttons */}
               <div className="space-y-3">
+                {transaction.splits && (
+                  <button
+                    onClick={() => setShowSplitDetails(true)}
+                    className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-purple-600/20 hover:bg-purple-600/30 rounded-xl transition-all active:scale-[0.98] border border-purple-600/30"
+                  >
+                    <Eye className="w-5 h-5 text-purple-400" />
+                    <span className="text-purple-400 font-semibold">
+                      View Split Details
+                    </span>
+                  </button>
+                )}
+                
                 <button
                   onClick={onEdit}
                   className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-blue-600 hover:bg-blue-700 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20"
@@ -117,6 +140,12 @@ const TransactionActionsSheet = ({
               </div>
             </div>
           </motion.div>
+          
+          <SplitDetailsDialog
+            isOpen={showSplitDetails}
+            onClose={() => setShowSplitDetails(false)}
+            transaction={transaction}
+          />
         </>
       )}
     </AnimatePresence>
