@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import PWAInstaller from "@/components/PWAInstaller";
 import "./globals.css";
@@ -70,6 +72,8 @@ export default function RootLayout({
       >
         <ErrorBoundary>{children}</ErrorBoundary>
         <PWAInstaller />
+        <Analytics />
+        <SpeedInsights />
         <Toaster
           position="bottom-right"
           toastOptions={{
