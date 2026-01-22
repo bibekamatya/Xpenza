@@ -124,6 +124,7 @@ export async function createTransaction(data: {
   category: string;
   description: string;
   date: Date;
+  splits?: { category: string; amount: number }[];
 }) {
   try {
     const session = await auth();
@@ -150,6 +151,7 @@ export async function createTransaction(data: {
       description: data.description,
       date: new Date(data.date),
       createdAt: new Date(),
+      ...(data.splits && { splits: data.splits }),
     };
 
     const result = await db
@@ -179,6 +181,7 @@ export async function updateTransaction(
     category: string;
     description: string;
     date: Date;
+    splits?: { category: string; amount: number }[];
   },
 ) {
   try {
@@ -200,6 +203,7 @@ export async function updateTransaction(
       category: data.category,
       description: data.description,
       date: new Date(data.date),
+      ...(data.splits && { splits: data.splits }),
     };
 
     await db

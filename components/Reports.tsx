@@ -65,27 +65,50 @@ const Reports = () => {
     const result = await getStats(period, new Date());
     setStats(result);
 
-    // Get transactions for category breakdown
+    // Get proper date range for the selected period
+    const getDateRange = () => {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      
+      switch (period) {
+        case "daily":
+          return { startDate: today.toISOString(), endDate: new Date(today.getTime() + 24 * 60 * 60 * 1000 - 1).toISOString() };
+        case "weekly":
+          const weekStart = new Date(today);
+          weekStart.setDate(today.getDate() - today.getDay());
+          const weekEnd = new Date(weekStart);
+          weekEnd.setDate(weekStart.getDate() + 6);
+          return { startDate: weekStart.toISOString(), endDate: weekEnd.toISOString() };
+        case "monthly":
+          const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+          const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+          return { startDate: monthStart.toISOString(), endDate: monthEnd.toISOString() };
+        case "yearly":
+          const yearStart = new Date(now.getFullYear(), 0, 1);
+          const yearEnd = new Date(now.getFullYear(), 11, 31);
+          return { startDate: yearStart.toISOString(), endDate: yearEnd.toISOString() };
+        default:
+          return {};
+      }
+    };
+
+    const dateRange = getDateRange();
+    
+    // Get transactions for the selected period
     const txResult = await getTransactions(1, 1000, {
-      type: "expense",
-      dateRange:
-        period === "monthly"
-          ? "month"
-          : period === "weekly"
-            ? "week"
-            : period === "yearly"
-              ? "year"
-              : "today",
+      ...dateRange,
     });
 
     setAllTransactions(txResult.transactions);
 
-    // Calculate category totals
+    // Calculate category totals for expenses only in the selected period
     const categoryTotals: Record<string, number> = {};
-    txResult.transactions.forEach((tx: any) => {
-      categoryTotals[tx.category] =
-        (categoryTotals[tx.category] || 0) + tx.amount;
-    });
+    txResult.transactions
+      .filter((tx: any) => tx.type === "expense")
+      .forEach((tx: any) => {
+        categoryTotals[tx.category] =
+          (categoryTotals[tx.category] || 0) + tx.amount;
+      });
 
     const categoryArray = Object.entries(categoryTotals)
       .map(([category, amount]) => ({ category, amount }))
@@ -93,28 +116,41 @@ const Reports = () => {
 
     setCategoryData(categoryArray);
 
-    // Calculate trend data (last 7 days/weeks/months)
+    // Calculate trend data based on selected period
     const trendMap: Record<string, { income: number; expense: number }> = {};
     txResult.transactions.forEach((tx: any) => {
       const date = new Date(tx.date);
-      const key =
-        period === "daily"
-          ? date.toLocaleDateString()
-          : period === "weekly"
-            ? `Week ${Math.ceil(date.getDate() / 7)}`
-            : period === "monthly"
-              ? date.toLocaleDateString("default", { month: "short" })
-              : date.getFullYear().toString();
+      let key: string;
+      
+      switch (period) {
+        case "daily":
+          key = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+          break;
+        case "weekly":
+          const weekNum = Math.ceil(date.getDate() / 7);
+          key = `Week ${weekNum}`;
+          break;
+        case "monthly":
+          key = date.toLocaleDateString("en-US", { month: "short" });
+          break;
+        case "yearly":
+          key = date.getFullYear().toString();
+          break;
+        default:
+          key = date.toLocaleDateString();
+      }
 
       if (!trendMap[key]) trendMap[key] = { income: 0, expense: 0 };
       if (tx.type === "income") trendMap[key].income += tx.amount;
       else trendMap[key].expense += tx.amount;
     });
 
-    const trendArray = Object.entries(trendMap).map(([date, data]) => ({
-      date,
-      ...data,
-    }));
+    const trendArray = Object.entries(trendMap)
+      .map(([date, data]) => ({ date, ...data }))
+      .sort((a, b) => {
+        if (period === "yearly") return parseInt(a.date) - parseInt(b.date);
+        return a.date.localeCompare(b.date);
+      });
     setTrendData(trendArray);
 
     // Top 5 transactions

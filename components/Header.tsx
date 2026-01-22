@@ -1,7 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { handleSignOut } from "@/app/actions/authActions";
-import { DollarSign, LogOut, Settings, FileText } from "lucide-react";
+import { LogOut, Settings, FileText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -95,14 +95,14 @@ const Header = ({ user }: HeaderProps) => {
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowLogoutDialog(false)}
-                  className="flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all active:scale-[0.98]"
+                  className="flex-1 px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all active:scale-[0.98] text-sm"
                 >
                   Cancel
                 </button>
                 <form action={handleSignOut} className="flex-1">
                   <button
                     type="submit"
-                    className="w-full px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all active:scale-[0.98]"
+                    className="w-full px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all active:scale-[0.98] text-sm"
                   >
                     Sign Out
                   </button>

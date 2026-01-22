@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Check, BarChart3, Download, FileText, Trash2 } from "lucide-react";
+import { Check, BarChart3, Download, FileText, Trash2, TrendingUp, TrendingDown } from "lucide-react";
 import { Transaction } from "@/lib/types";
 import { useTransactionsContext } from "@/contexts/TransactionsContext";
 import { deleteTransaction } from "@/app/actions/expenseActions";
@@ -86,9 +86,11 @@ const Transactions = () => {
             </button>
           </div>
         )}
-        <div className="flex items-center justify-between gap-2">
-          <h2 className="text-lg font-semibold text-white">Transactions</h2>
-          <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <h2 className="text-lg font-semibold text-white min-w-0">
+            Transactions
+          </h2>
+          <div className="flex items-center gap-2 flex-wrap min-w-0 ml-auto">
             <button
               onClick={() => {
                 setBulkMode(!bulkMode);
@@ -198,12 +200,44 @@ const Transactions = () => {
               )}
             </div>
             <button
-              onClick={() => setShowForm(true)}
-              className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg"
+              onClick={() => {
+                setEditTransaction({ type: "income" } as Transaction);
+              }}
+              className="hidden md:flex px-3 py-2 text-sm bg-green-600 hover:bg-green-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg items-center gap-2"
             >
-              + Add
+              <TrendingUp className="w-4 h-4" />
+              Income
+            </button>
+            <button
+              onClick={() => {
+                setEditTransaction({ type: "expense" } as Transaction);
+              }}
+              className="hidden md:flex px-3 py-2 text-sm bg-red-600 hover:bg-red-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg items-center gap-2"
+            >
+              <TrendingDown className="w-4 h-4" />
+              Expense
             </button>
           </div>
+        </div>
+        <div className="flex gap-2 mt-3 md:hidden">
+          <button
+            onClick={() => {
+              setEditTransaction({ type: "income" } as Transaction);
+            }}
+            className="flex-1 px-3 py-2 text-sm bg-green-600 hover:bg-green-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg flex items-center justify-center gap-2"
+          >
+            <TrendingUp className="w-4 h-4" />
+            Income
+          </button>
+          <button
+            onClick={() => {
+              setEditTransaction({ type: "expense" } as Transaction);
+            }}
+            className="flex-1 px-3 py-2 text-sm bg-red-600 hover:bg-red-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg flex items-center justify-center gap-2"
+          >
+            <TrendingDown className="w-4 h-4" />
+            Expense
+          </button>
         </div>
       </div>
       <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
@@ -320,11 +354,13 @@ const Transactions = () => {
           setEditTransaction(null);
         }}
         onSuccess={(transaction) => {
-          if (editTransaction) {
+          if (editTransaction?._id) {
             updateTransactionInList(transaction);
           } else {
             addTransaction(transaction);
           }
+          setEditTransaction(null);
+          setShowForm(false);
         }}
       />
       <AnalyticsModal
