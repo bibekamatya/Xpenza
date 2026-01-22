@@ -1,4 +1,4 @@
-# 💰 Expense Tracker
+# 💰 Xpenza (Expense Tracker)
 
 A modern, full-stack expense tracking application built with Next.js 15, TypeScript, and MongoDB. Track your income and expenses, visualize spending patterns, and manage your budget effectively.
 

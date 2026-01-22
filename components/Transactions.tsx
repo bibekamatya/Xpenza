@@ -24,6 +24,7 @@ const Transactions = () => {
     isPending,
     hasMore,
     isLoadingMore,
+    isInitialLoading,
     loadMore,
     addTransaction,
     updateTransaction: updateTransactionInList,
@@ -241,7 +242,7 @@ const Transactions = () => {
         </div>
       </div>
       <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
-        {isPending ? (
+        {isInitialLoading ? (
           <TransactionsSkeleton />
         ) : transactions.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">

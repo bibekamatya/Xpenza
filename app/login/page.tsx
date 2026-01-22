@@ -8,15 +8,15 @@ export default async function LoginPage() {
   if (session?.user) redirect("/");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-slate-950 via-blue-950/20 to-slate-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="bg-gradient-to-b from-slate-800/90 to-slate-900/90 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-blue-500/20 ring-1 ring-blue-400/10">
+        <div className="bg-linear-to-b from-slate-800/90 to-slate-900/90 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-blue-500/20 ring-1 ring-blue-400/10">
           {/* Header */}
           <div className="px-8 py-6 md:py-3 text-center relative overflow-hidden">
-            {/* Animated background gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/15 via-purple-600/10 to-transparent"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-500/15 via-transparent to-transparent"></div>
-            
+            {/* Animated background linear */}
+            <div className="absolute inset-0 bg-linear-to-br from-blue-600/15 via-purple-600/10 to-transparent"></div>
+            <div className="absolute inset-0 bg-[radial-linear(circle_at_top_right,_var(--tw-linear-stops))] from-blue-500/15 via-transparent to-transparent"></div>
+
             <div className="relative">
               <div className="w-44 h-44 md:w-36 md:h-36 mx-auto mb-2 md:mb-1 relative">
                 <Image
@@ -34,7 +34,7 @@ export default async function LoginPage() {
           {/* Content */}
           <div className="p-6 md:p-5">
             <div className="text-center mb-6 md:mb-5">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent mb-2">
+              <h2 className="text-2xl font-bold bg-linear-to-r from-white to-blue-200 bg-clip-text text-transparent mb-2">
                 Welcome Back
               </h2>
               <p className="text-slate-300 text-sm">Sign in to continue</p>
@@ -43,19 +43,19 @@ export default async function LoginPage() {
             {/* Features */}
             <div className="space-y-2.5 mb-6 md:mb-5">
               <div className="flex items-center gap-3 text-slate-200">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600/20 to-blue-700/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-blue-500/20">
+                <div className="w-10 h-10 bg-linear-to-br from-blue-600/20 to-blue-700/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-blue-500/20">
                   <BarChart3 className="w-5 h-5 text-blue-400" />
                 </div>
                 <span className="text-sm">Track income and expenses</span>
               </div>
               <div className="flex items-center gap-3 text-slate-200">
-                <div className="w-10 h-10 bg-gradient-to-br from-green-600/20 to-green-700/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-green-500/20">
+                <div className="w-10 h-10 bg-linear-to-br from-green-600/20 to-green-700/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-green-500/20">
                   <TrendingUp className="w-5 h-5 text-green-400" />
                 </div>
                 <span className="text-sm">Visualize your spending</span>
               </div>
               <div className="flex items-center gap-3 text-slate-200">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-600/20 to-purple-700/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-purple-500/20">
+                <div className="w-10 h-10 bg-linear-to-br from-purple-600/20 to-purple-700/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-purple-500/20">
                   <Clock className="w-5 h-5 text-purple-400" />
                 </div>
                 <span className="text-sm">Stay on budget</span>
@@ -71,7 +71,7 @@ export default async function LoginPage() {
             >
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3.5 md:py-2.5 rounded-xl font-semibold transition-all duration-200 active:scale-[0.98] shadow-lg shadow-blue-900/60 hover:shadow-xl hover:shadow-blue-800/70 flex items-center justify-center gap-3 border border-blue-400/30"
+                className="w-full bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3.5 md:py-2.5 rounded-xl font-semibold transition-all duration-200 active:scale-[0.98] shadow-lg shadow-blue-900/60 hover:shadow-xl hover:shadow-blue-800/70 flex items-center justify-center gap-3 border border-blue-400/30"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path

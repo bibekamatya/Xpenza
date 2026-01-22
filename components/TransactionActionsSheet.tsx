@@ -53,7 +53,7 @@ const TransactionActionsSheet = ({
               {/* Transaction Header */}
               <div className="mb-6">
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600/30 to-blue-600/10 flex items-center justify-center shrink-0 border border-blue-600/20">
+                  <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-600/30 to-blue-600/10 flex items-center justify-center shrink-0 border border-blue-600/20">
                     <span className="text-3xl">{getIcon(transaction.category)}</span>
                   </div>
                   <div className="flex-1 min-w-0">
@@ -66,18 +66,16 @@ const TransactionActionsSheet = ({
                       ) : (
                         <TrendingDown className="w-4 h-4 text-red-500" />
                       )}
-                      <span className={`text-sm font-medium ${
-                        transaction.type === "income" ? "text-green-500" : "text-red-500"
-                      }`}>
+                      <span className={`text-sm font-medium ${transaction.type === "income" ? "text-green-500" : "text-red-500"
+                        }`}>
                         {transaction.type === "income" ? "Income" : "Expense"}
                       </span>
                     </div>
                   </div>
                 </div>
-                
-                <div className={`text-3xl font-bold mb-4 ${
-                  transaction.type === "income" ? "text-green-500" : "text-red-500"
-                }`}>
+
+                <div className={`text-3xl font-bold mb-4 ${transaction.type === "income" ? "text-green-500" : "text-red-500"
+                  }`}>
                   Rs. {transaction.amount.toLocaleString()}
                 </div>
 
@@ -112,35 +110,38 @@ const TransactionActionsSheet = ({
                     className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-purple-600/20 hover:bg-purple-600/30 rounded-xl transition-all active:scale-[0.98] border border-purple-600/30"
                   >
                     <Eye className="w-5 h-5 text-purple-400" />
-                    <span className="text-purple-400 font-semibold">
+                    <span
+                      className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-purple-600/20 hover:bg-purple-600/30 rounded-xl transition-all active:scale-[0.98] border border-purple-600/30"
+                    >
+
                       View Split Details
                     </span>
                   </button>
                 )}
-                
+
                 <button
                   onClick={onEdit}
-                  className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-blue-600 hover:bg-blue-700 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20"
+                  className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20"
                 >
-                  <Edit2 className="w-5 h-5 text-white" />
-                  <span className="text-white font-semibold">
+                  <Edit2 className="w-4 h-4 text-white" />
+                  <span className="text-white font-medium">
                     Edit Transaction
                   </span>
                 </button>
 
                 <button
                   onClick={onDelete}
-                  className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-red-600/20 hover:bg-red-600/30 rounded-xl transition-all active:scale-[0.98] border border-red-600/30"
+                  className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-red-600/20 hover:bg-red-600/30 rounded-xl transition-all active:scale-[0.98] border border-red-600/30"
                 >
-                  <Trash2 className="w-5 h-5 text-red-400" />
-                  <span className="text-red-400 font-semibold">
+                  <Trash2 className="w-4 h-4 text-red-400" />
+                  <span className="text-red-400 font-medium">
                     Delete Transaction
                   </span>
                 </button>
               </div>
             </div>
           </motion.div>
-          
+
           <SplitDetailsDialog
             isOpen={showSplitDetails}
             onClose={() => setShowSplitDetails(false)}

@@ -13,6 +13,7 @@ export function useTransactions() {
   const [isPending, startTransition] = useTransition();
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [lifetimeStatus, setLifetimeStatus] = useState<Status | null>(null);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [filters, setFilters] = useState<any>({
     type: "all",
     dateRange: "all",
@@ -59,8 +60,25 @@ export function useTransactions() {
   };
 
   useEffect(() => {
-    refetch(1);
-    getStats("all").then(setLifetimeStatus);
+    const loadInitialData = async () => {
+      try {
+        const [transactionsResult, statsResult] = await Promise.all([
+          getTransactions(1, 20, filters),
+          getStats("all")
+        ]);
+        setTransactions(transactionsResult.transactions);
+        setCurrentPage(transactionsResult.page);
+        setTotalPages(transactionsResult.totalPages);
+        setHasMore(transactionsResult.hasMore ?? false);
+        setLifetimeStatus(statsResult);
+      } catch (error) {
+        toast.error("Failed to load transactions");
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
+    
+    loadInitialData();
   }, []);
 
   const handlePageChange = (newPage: number) => {
@@ -97,6 +115,7 @@ export function useTransactions() {
     hasMore,
     isPending,
     isLoadingMore,
+    isInitialLoading,
     refetch,
     handlePageChange,
     loadMore,

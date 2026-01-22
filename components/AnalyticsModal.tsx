@@ -91,7 +91,7 @@ const AnalyticsModal = ({
               <div className="p-6 space-y-6">
                 {/* Summary Cards */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gradient-to-br from-green-600/20 to-green-600/5 rounded-lg p-4 border border-green-600/30">
+                  <div className="bg-linear-to-br from-green-600/20 to-green-600/5 rounded-lg p-4 border border-green-600/30">
                     <p className="text-green-400 text-xs font-medium mb-1">
                       Total Income
                     </p>
@@ -99,7 +99,7 @@ const AnalyticsModal = ({
                       Rs.{totalIncome.toLocaleString()}
                     </p>
                   </div>
-                  <div className="bg-gradient-to-br from-red-600/20 to-red-600/5 rounded-lg p-4 border border-red-600/30">
+                  <div className="bg-linear-to-br from-red-600/20 to-red-600/5 rounded-lg p-4 border border-red-600/30">
                     <p className="text-red-400 text-xs font-medium mb-1">
                       Total Expenses
                     </p>
