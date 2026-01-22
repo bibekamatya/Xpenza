@@ -109,10 +109,10 @@ const TransactionActionsSheet = ({
                 {transaction.splits && (
                   <button
                     onClick={() => setShowSplitDetails(true)}
-                    className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-purple-600/20 hover:bg-purple-600/30 rounded-xl transition-all active:scale-[0.98] border border-purple-600/30"
+                    className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-purple-600/20 hover:bg-purple-600/30 rounded-xl transition-all active:scale-[0.98] border border-purple-600/30"
                   >
-                    <Eye className="w-5 h-5 text-purple-400" />
-                    <span className="text-purple-400 font-semibold">
+                    <Eye className="w-4 h-4 text-purple-400" />
+                    <span className="text-purple-400 font-medium">
                       View Split Details
                     </span>
                   </button>
@@ -120,20 +120,20 @@ const TransactionActionsSheet = ({
                 
                 <button
                   onClick={onEdit}
-                  className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-blue-600 hover:bg-blue-700 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20"
+                  className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20"
                 >
-                  <Edit2 className="w-5 h-5 text-white" />
-                  <span className="text-white font-semibold">
+                  <Edit2 className="w-4 h-4 text-white" />
+                  <span className="text-white font-medium">
                     Edit Transaction
                   </span>
                 </button>
 
                 <button
                   onClick={onDelete}
-                  className="w-full flex items-center justify-center gap-3 px-4 py-4 bg-red-600/20 hover:bg-red-600/30 rounded-xl transition-all active:scale-[0.98] border border-red-600/30"
+                  className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-red-600/20 hover:bg-red-600/30 rounded-xl transition-all active:scale-[0.98] border border-red-600/30"
                 >
-                  <Trash2 className="w-5 h-5 text-red-400" />
-                  <span className="text-red-400 font-semibold">
+                  <Trash2 className="w-4 h-4 text-red-400" />
+                  <span className="text-red-400 font-medium">
                     Delete Transaction
                   </span>
                 </button>
