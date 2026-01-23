@@ -7,12 +7,14 @@ interface ExportDropdownProps {
   onExportCSV: (range: string, startDate?: string, endDate?: string) => void;
   onExportPDF: (range: string, startDate?: string, endDate?: string) => void;
   defaultRange?: "all" | "today" | "week" | "month" | "year";
+  iconOnly?: boolean;
 }
 
 export const ExportDropdown = ({
   onExportCSV,
   onExportPDF,
   defaultRange = "all",
+  iconOnly = false,
 }: ExportDropdownProps) => {
   const [showMenu, setShowMenu] = useState(false);
   const [exportRange, setExportRange] = useState<
@@ -29,10 +31,10 @@ export const ExportDropdown = ({
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setShowMenu(!showMenu)}
-        className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 rounded-lg transition-all active:scale-95 text-sm"
+        className="flex items-center gap-2 p-2 sm:px-4 sm:py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 rounded-lg transition-all active:scale-95 text-sm"
       >
         <Download className="w-4 h-4" />
-        <span>Export</span>
+        <span className="hidden sm:inline">Export</span>
       </button>
       {showMenu && (
         <div className="absolute right-0 mt-2 w-80 bg-slate-800 border border-slate-700 rounded-xl shadow-xl overflow-hidden z-10">

@@ -1,6 +1,8 @@
 import { auth } from "@/lib/auth";
 import { getStats } from "@/app/actions/expenseActions";
 import { Wallet, TrendingUp, TrendingDown } from "lucide-react";
+import { getBSDateRange } from "@/lib/bsDateUtils";
+import clientPromise from "@/lib/mongodb";
 
 export default async function StatsCards() {
   const session = await auth();
@@ -23,8 +25,36 @@ export default async function StatsCards() {
     );
   }
 
+  const bsMonth = getBSDateRange("monthly");
+  
+  // Get stats with custom date range for BS month
+  const getMonthlyStats = async () => {
+    const session = await auth();
+    if (!session?.user?.email) return { totalExpense: 0 };
+    
+    const client = await clientPromise;
+    const db = client.db("expensetracker");
+    
+    const transactions = await db
+      .collection("transactions")
+      .find({
+        userId: session.user.email,
+        date: { $gte: bsMonth.start, $lte: bsMonth.end }
+      })
+      .toArray();
+    
+    const totalExpense = transactions
+      .filter(t => t.type === "expense")
+      .reduce((sum, t) => sum + t.amount, 0);
+    
+    return { totalExpense };
+  };
+  
   // Get initial stats from server
-  const initialStats = await getStats("all");
+  const [initialStats, monthlyStats] = await Promise.all([
+    getStats("all"),
+    getMonthlyStats()
+  ]);
 
   const formatAmount = (amount: number, isMobile: boolean) => {
     if (!isMobile) return amount.toLocaleString();
@@ -73,7 +103,7 @@ export default async function StatsCards() {
             <p className="text-slate-400 text-sm">This Month</p>
           </div>
           <p className="text-2xl font-bold text-orange-400">
-            Rs. {formatAmount(initialStats.totalExpense, false)}
+            Rs. {formatAmount(monthlyStats.totalExpense, false)}
           </p>
         </div>
       </div>

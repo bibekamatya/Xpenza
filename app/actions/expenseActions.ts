@@ -6,6 +6,7 @@ import clientPromise from "@/lib/mongodb";
 import { Transaction, MonthlyStats } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
+import { getBSDateRange } from "@/lib/bsDateUtils";
 
 const DB_NAME = "expensetracker";
 const TRANSACTIONS_COLLECTION = "transactions";
@@ -273,45 +274,8 @@ export async function getStats(
   let query: any = { userId: session.user.email };
 
   if (period && period !== "all" && date) {
-    const targetDate = new Date(date);
-    let startDate: Date;
-    let endDate: Date;
-
-    switch (period) {
-      case "daily":
-        startDate = new Date(targetDate.setHours(0, 0, 0, 0));
-        endDate = new Date(targetDate.setHours(23, 59, 59, 999));
-        break;
-      case "weekly":
-        const day = targetDate.getDay();
-        startDate = new Date(targetDate);
-        startDate.setDate(targetDate.getDate() - day);
-        startDate.setHours(0, 0, 0, 0);
-        endDate = new Date(startDate);
-        endDate.setDate(startDate.getDate() + 6);
-        endDate.setHours(23, 59, 59, 999);
-        break;
-      case "monthly":
-        startDate = new Date(
-          targetDate.getFullYear(),
-          targetDate.getMonth(),
-          1,
-        );
-        endDate = new Date(
-          targetDate.getFullYear(),
-          targetDate.getMonth() + 1,
-          0,
-          23,
-          59,
-          59,
-        );
-        break;
-      case "yearly":
-        startDate = new Date(targetDate.getFullYear(), 0, 1);
-        endDate = new Date(targetDate.getFullYear(), 11, 31, 23, 59, 59);
-        break;
-    }
-    query.date = { $gte: startDate, $lte: endDate };
+    const bsRange = getBSDateRange(period, date);
+    query.date = { $gte: bsRange.start, $lte: bsRange.end };
   }
 
   const transactions = await db
