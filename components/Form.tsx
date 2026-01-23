@@ -4,7 +4,7 @@ import {
 } from "@/app/actions/expenseActions";
 import { Transaction, TransactionFormValues, TransactionSplit } from "@/lib/types";
 import React, { useState, useTransition } from "react";
-import { TrendingDown, TrendingUp, Split } from "lucide-react";
+import { Split } from "lucide-react";
 import toast from "react-hot-toast";
 import CalendarPicker from "@/components/calendar/components/CalendarPicker";
 import SplitDialog from "./SplitDialog";
@@ -133,34 +133,6 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-      {/* Type Toggle */}
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => setFormData((prev) => ({ ...prev, type: "expense" }))}
-          className={`flex-1 h-10 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm ${
-            formData.type === "expense"
-              ? "bg-red-600 text-white"
-              : "bg-slate-700 text-slate-300 hover:bg-slate-600"
-          }`}
-        >
-          <TrendingDown className="w-3.5 h-3.5" />
-          Expense
-        </button>
-        <button
-          type="button"
-          onClick={() => setFormData((prev) => ({ ...prev, type: "income" }))}
-          className={`flex-1 h-10 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm ${
-            formData.type === "income"
-              ? "bg-green-600 text-white"
-              : "bg-slate-700 text-slate-300 hover:bg-slate-600"
-          }`}
-        >
-          <TrendingUp className="w-3.5 h-3.5" />
-          Income
-        </button>
-      </div>
-
       {/* Amount */}
       <div>
         <label className="block text-sm font-medium text-slate-300 mb-2">

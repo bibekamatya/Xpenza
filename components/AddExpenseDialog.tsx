@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Form from "./Form";
 import { Transaction } from "@/lib/types";
-import { X } from "lucide-react";
+import { X, TrendingUp, TrendingDown, Edit, Plus } from "lucide-react";
 import { useBackButton } from "@/hooks/useBackButton";
 import { useEffect } from "react";
 
@@ -81,7 +81,13 @@ export default function AddExpenseDialog({
               {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700 shrink-0">
                 <h2 className="text-lg font-bold text-white">
-                  {editTransaction?._id ? "Edit Transaction" : "Add Transaction"}
+                  {editTransaction?._id ? (
+                    <>Edit {editTransaction.type === 'income' ? 'Income' : 'Expense'}</>
+                  ) : editTransaction?.type ? (
+                    <>Add {editTransaction.type === 'income' ? 'Income' : 'Expense'}</>
+                  ) : (
+                    <>Add Transaction</>
+                  )}
                 </h2>
                 <button
                   onClick={onClose}
@@ -120,7 +126,13 @@ export default function AddExpenseDialog({
             {/* Header */}
             <div className="px-4 pb-2" style={{ touchAction: 'none' }}>
               <h2 className="text-lg font-bold text-white">
-                {editTransaction?._id ? "Edit Transaction" : "Add Transaction"}
+                {editTransaction?._id ? (
+                  <>Edit {editTransaction.type === 'income' ? 'Income' : 'Expense'}</>
+                ) : editTransaction?.type ? (
+                  <>Add {editTransaction.type === 'income' ? 'Income' : 'Expense'}</>
+                ) : (
+                  <>Add Transaction</>
+                )}
               </h2>
             </div>
 
