@@ -204,7 +204,7 @@ const Transactions = () => {
               onClick={() => {
                 setEditTransaction({ type: "income" } as Transaction);
               }}
-              className="hidden md:flex px-3 py-2 text-sm bg-green-600 hover:bg-green-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg items-center gap-2"
+              className="hidden md:flex px-3 py-2 text-sm bg-green-600/30 hover:bg-green-600/40 active:scale-95 text-green-400 rounded-lg font-medium transition-all border border-green-600/40 items-center gap-2"
             >
               <TrendingUp className="w-4 h-4" />
               Income
@@ -213,7 +213,7 @@ const Transactions = () => {
               onClick={() => {
                 setEditTransaction({ type: "expense" } as Transaction);
               }}
-              className="hidden md:flex px-3 py-2 text-sm bg-red-600 hover:bg-red-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg items-center gap-2"
+              className="hidden md:flex px-3 py-2 text-sm bg-red-600/30 hover:bg-red-600/40 active:scale-95 text-red-400 rounded-lg font-medium transition-all border border-red-600/40 items-center gap-2"
             >
               <TrendingDown className="w-4 h-4" />
               Expense
@@ -225,7 +225,7 @@ const Transactions = () => {
             onClick={() => {
               setEditTransaction({ type: "income" } as Transaction);
             }}
-            className="flex-1 px-3 py-2 text-sm bg-green-600 hover:bg-green-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg flex items-center justify-center gap-2"
+            className="flex-1 px-3 py-2 text-sm bg-green-600/30 hover:bg-green-600/40 active:scale-95 text-green-400 rounded-lg font-medium transition-all border border-green-600/40 flex items-center justify-center gap-2"
           >
             <TrendingUp className="w-4 h-4" />
             Income
@@ -234,7 +234,7 @@ const Transactions = () => {
             onClick={() => {
               setEditTransaction({ type: "expense" } as Transaction);
             }}
-            className="flex-1 px-3 py-2 text-sm bg-red-600 hover:bg-red-700 active:scale-95 text-white rounded-lg font-medium transition-all shadow-lg flex items-center justify-center gap-2"
+            className="flex-1 px-3 py-2 text-sm bg-red-600/30 hover:bg-red-600/40 active:scale-95 text-red-400 rounded-lg font-medium transition-all border border-red-600/40 flex items-center justify-center gap-2"
           >
             <TrendingDown className="w-4 h-4" />
             Expense

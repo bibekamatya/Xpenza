@@ -8,10 +8,13 @@ export default async function StatsCards() {
   if (!session?.user) {
     return (
       <div className="px-4 md:px-8 pb-4 md:pb-6">
-        <div className="grid grid-cols-3 gap-2 md:gap-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-slate-800 rounded-lg p-3 border border-slate-700 animate-pulse">
-              <div className="h-4 bg-slate-700 rounded w-16 mb-2"></div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-slate-800/50 rounded-xl p-4 border border-slate-700 animate-pulse">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-4 h-4 bg-slate-700 rounded"></div>
+                <div className="h-4 bg-slate-700 rounded w-16"></div>
+              </div>
               <div className="h-6 bg-slate-700 rounded w-20"></div>
             </div>
           ))}
@@ -33,49 +36,44 @@ export default async function StatsCards() {
 
   return (
     <div className="px-4 md:px-8 pb-4 md:pb-6">
-      <div className="grid grid-cols-3 gap-2 md:gap-3">
-        <div className="bg-linear-to-br from-blue-600/20 to-blue-600/5 rounded-lg p-3 border border-blue-600/30">
-          <div className="flex items-center justify-between mb-1">
-            <p className="text-blue-400 text-xs font-medium">Balance</p>
-            <div className="w-7 h-7 rounded-lg bg-blue-600/30 flex items-center justify-center max-[360px]:hidden">
-              <Wallet className="w-3.5 h-3.5 text-blue-400" />
-            </div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+          <div className="flex items-center gap-2 mb-2">
+            <Wallet className="w-4 h-4 text-slate-400" />
+            <p className="text-slate-400 text-sm">Balance</p>
           </div>
-          <p className="text-sm md:hidden font-bold text-white">
-            <span className="text-xs">Rs.</span> {formatAmount(initialStats.balance, true)}
-          </p>
-          <p className="hidden md:block text-2xl font-bold text-white">
-            <span className="text-lg">Rs.</span> {formatAmount(initialStats.balance, false)}
+          <p className="text-2xl font-bold text-white">
+            Rs. {formatAmount(initialStats.balance, false)}
           </p>
         </div>
 
-        <div className="bg-linear-to-br from-green-600/20 to-green-600/5 rounded-lg p-3 border border-green-600/30">
-          <div className="flex items-center justify-between mb-1">
-            <p className="text-green-400 text-xs font-medium">Income</p>
-            <div className="w-7 h-7 rounded-lg bg-green-600/30 flex items-center justify-center max-[360px]:hidden">
-              <TrendingUp className="w-3.5 h-3.5 text-green-400" />
-            </div>
+        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingUp className="w-4 h-4 text-slate-400" />
+            <p className="text-slate-400 text-sm">Income</p>
           </div>
-          <p className="text-sm md:hidden font-bold text-white">
-            <span className="text-xs">Rs.</span> {formatAmount(initialStats.totalIncome, true)}
-          </p>
-          <p className="hidden md:block text-2xl font-bold text-white">
-            <span className="text-lg">Rs.</span> {formatAmount(initialStats.totalIncome, false)}
+          <p className="text-2xl font-bold text-green-500">
+            Rs. {formatAmount(initialStats.totalIncome, false)}
           </p>
         </div>
 
-        <div className="bg-linear-to-br from-red-600/20 to-red-600/5 rounded-lg p-3 border border-red-600/30">
-          <div className="flex items-center justify-between mb-1">
-            <p className="text-red-400 text-xs font-medium">Expenses</p>
-            <div className="w-7 h-7 rounded-lg bg-red-600/30 flex items-center justify-center max-[360px]:hidden">
-              <TrendingDown className="w-3.5 h-3.5 text-red-400" />
-            </div>
+        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingDown className="w-4 h-4 text-slate-400" />
+            <p className="text-slate-400 text-sm">Expenses</p>
           </div>
-          <p className="text-sm md:hidden font-bold text-white">
-            <span className="text-xs">Rs.</span> {formatAmount(initialStats.totalExpense, true)}
+          <p className="text-2xl font-bold text-red-500">
+            Rs. {formatAmount(initialStats.totalExpense, false)}
           </p>
-          <p className="hidden md:block text-2xl font-bold text-white">
-            <span className="text-lg">Rs.</span> {formatAmount(initialStats.totalExpense, false)}
+        </div>
+
+        <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingDown className="w-4 h-4 text-slate-400" />
+            <p className="text-slate-400 text-sm">This Month</p>
+          </div>
+          <p className="text-2xl font-bold text-orange-400">
+            Rs. {formatAmount(initialStats.totalExpense, false)}
           </p>
         </div>
       </div>

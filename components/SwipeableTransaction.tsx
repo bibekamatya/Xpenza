@@ -172,13 +172,13 @@ export default function SwipeableTransaction({
           <div className="flex items-center gap-2 shrink-0">
             <div className="flex items-center gap-1">
               {item.type === "income" ? (
-                <TrendingUp className="w-4 h-4 text-green-500" />
+                <TrendingUp className="w-4 h-4 text-green-400" />
               ) : (
-                <TrendingDown className="w-4 h-4 text-red-500" />
+                <TrendingDown className="w-4 h-4 text-red-400" />
               )}
               <p
                 className={`text-base font-bold ${
-                  item.type === "income" ? "text-green-500" : "text-red-500"
+                  item.type === "income" ? "text-green-400" : "text-red-400"
                 }`}
               >
                 Rs. {item.amount}
