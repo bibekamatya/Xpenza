@@ -7,33 +7,33 @@ A modern, full-stack expense tracking application built with Next.js 15, TypeScr
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=flat-square&logo=mongodb)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=flat-square&logo=tailwind-css)
 
-## ✨ Features
+## Features
 
 ### Core Functionality
-- 📊 **Transaction Management** - Add, edit, and delete income/expense transactions
-- 🏷️ **Category System** - Organize transactions by predefined categories (Food, Transport, Shopping, Bills, etc.)
-- 📅 **Date Filtering** - Filter by today, week, month, year, or custom date range
-- 🔍 **Search** - Real-time search with debouncing
-- 📱 **Responsive Design** - Optimized for mobile, tablet, and desktop
-- 📄 **Pagination** - Efficient data loading with pagination
+- **Transaction Management** - Add, edit, and delete income/expense transactions
+- **Category System** - Organize transactions by predefined categories (Food, Transport, Shopping, Bills, etc.)
+- **Date Filtering** - Filter by today, week, month, year, or custom date range
+- **Search** - Real-time search with debouncing
+- **Responsive Design** - Optimized for mobile, tablet, and desktop
+- **Pagination** - Efficient data loading with pagination
 
 ### Advanced Features
-- 📈 **Reports & Analytics** - Visual insights with charts (trend analysis, category distribution, income vs expenses)
-- 💾 **Export Data** - Export filtered transactions as CSV or PDF
-- 🎯 **Budget Tracking** - Set budgets and get alerts when approaching limits
-- ⚡ **Bulk Delete** - Select and delete multiple transactions at once
-- 🔄 **Real-time Updates** - Instant UI updates with optimistic rendering
-- 🌙 **Dark Theme** - Beautiful dark theme throughout
+- **Reports & Analytics** - Visual insights with charts (trend analysis, category distribution, income vs expenses)
+- **Export Data** - Export filtered transactions as CSV or PDF
+- **Budget Tracking** - Set budgets and get alerts when approaching limits
+- **Bulk Delete** - Select and delete multiple transactions at once
+- **Real-time Updates** - Instant UI updates with optimistic rendering
+- **Dark Theme** - Beautiful dark theme throughout
 
 ### User Experience
-- 🔐 **Google OAuth** - Secure authentication with Google Sign-In
-- 💨 **Fast Performance** - Server-side rendering and optimized data fetching
-- 📲 **PWA Ready** - Install as a mobile app with offline support
-- 🎨 **Modern UI** - Clean interface with smooth animations
-- ⚡ **Loading States** - Skeleton loaders for better UX
-- 🎯 **Empty States** - Helpful messages when no data
+- **Google OAuth** - Secure authentication with Google Sign-In
+- **Fast Performance** - Server-side rendering and optimized data fetching
+- **PWA Ready** - Install as a mobile app with offline support
+- **Modern UI** - Clean interface with smooth animations
+- **Loading States** - Skeleton loaders for better UX
+- **Empty States** - Helpful messages when no data
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Next.js 15** - React framework with App Router
@@ -55,7 +55,7 @@ A modern, full-stack expense tracking application built with Next.js 15, TypeScr
 - **jsPDF** - PDF generation
 - **date-fns** - Date utilities
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+ installed
@@ -101,7 +101,7 @@ npm run dev
 
 Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 expence-tracker/
@@ -128,7 +128,7 @@ expence-tracker/
 └── public/               # Static assets
 ```
 
-## 🎯 Key Features Explained
+## Key Features Explained
 
 ### Smart Filtering
 - Real-time search with debouncing
@@ -152,7 +152,7 @@ expence-tracker/
 - Alerts when approaching or exceeding budget
 - Real-time budget tracking
 
-## 🔒 Security
+## Security
 
 - Secure authentication with NextAuth.js
 - Environment variables for sensitive data
@@ -160,7 +160,7 @@ expence-tracker/
 - Protected API routes
 - CSRF protection
 
-## 📱 Mobile Experience
+## Mobile Experience
 
 - Touch-optimized interface
 - Swipeable bottom sheets
@@ -168,14 +168,14 @@ expence-tracker/
 - Responsive charts and tables
 - PWA support for offline access
 
-## 🎨 Design Highlights
+## Design Highlights
 
 - Consistent dark theme
 - Smooth animations and transitions
 - Loading states with skeletons
 - Empty states with helpful messages
 
-## 🚢 Deployment
+## Deployment
 
 ### Deploy to Vercel
 
@@ -191,7 +191,7 @@ expence-tracker/
 **Bibek Amatya**
 - GitHub: [@bibekamatya](https://github.com/bibekamatya)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Next.js team for the amazing framework
 - Vercel for hosting
@@ -200,4 +200,4 @@ expence-tracker/
 
 ---
 
-Made with ❤️ by Bibek Amatya
+Made with love by Bibek Amatya
