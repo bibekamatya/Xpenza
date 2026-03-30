@@ -1,8 +1,32 @@
 @import "tailwindcss";
+@import "../node_modules/bs-ad-calendar-react/dist/bs-ad-calendar.css";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --datepicker-background: #0f172a;
+  --datepicker-text: #ffffff;
+  --datepicker-border: #334155;
+  --datepicker-border-hover: #475569;
+  --datepicker-border-focus: #3b82f6;
+  --datepicker-icon: #94a3b8;
+  --datepicker-icon-hover: #3b82f6;
+  --datepicker-focus-ring: rgba(59, 130, 246, 0.1);
+  --calendar-background: #1e293b;
+  --calendar-text: #f1f5f9;
+  --calendar-border: #334155;
+  --calendar-hover: #334155;
+  --calendar-selected: #3b82f6;
+  --calendar-today: #1e40af;
+  --calendar-primary: #60a5fa;
+  --calendar-disabled: #475569;
+  --presets-background: #1e293b;
+  --presets-border: #334155;
+  --preset-btn-background: #0f172a;
+  --preset-btn-text: #94a3b8;
+  --preset-btn-border: #334155;
+  --preset-btn-active-background: #3b82f6;
+  --preset-btn-active-text: #ffffff;
 }
 
 @theme inline {

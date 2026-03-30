@@ -2,6 +2,8 @@
 import { useState, useRef } from "react";
 import { Filter, X } from "lucide-react";
 import { useClickOutside } from "@/hooks/useClickOutside";
+import { DatePicker } from "bs-ad-calendar-react";
+import type { DateOutput } from "bs-ad-calendar-react";
 
 interface FiltersProps {
   onApplyFilters: (filters: {
@@ -192,17 +194,17 @@ const Filters = ({ onApplyFilters }: FiltersProps) => {
                     Custom Date Range
                   </label>
                   <div className="grid grid-cols-2 gap-3">
-                    <input
-                      type="date"
-                      value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      className="w-full h-[42px] px-3 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm"
+                    <DatePicker
+                      calendarType="BS"
+                      placeholder="Start date"
+                      inputClassName="w-full h-[42px] px-4 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 text-sm"
+                      onDateSelect={(date: DateOutput) => setStartDate(date.ad)}
                     />
-                    <input
-                      type="date"
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      className="w-full h-[42px] px-3 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm"
+                    <DatePicker
+                      calendarType="BS"
+                      placeholder="End date"
+                      inputClassName="w-full h-[42px] px-4 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 text-sm"
+                      onDateSelect={(date: DateOutput) => setEndDate(date.ad)}
                     />
                   </div>
                 </div>

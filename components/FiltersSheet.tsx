@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import BaseBottomSheet from "./BaseBottomSheet";
-import CalendarInput from "./calendar/CalendarInput";
+import { DatePicker } from "bs-ad-calendar-react";
+import type { DateOutput } from "bs-ad-calendar-react";
 
 interface FiltersSheetProps {
   isOpen: boolean;
@@ -121,23 +122,17 @@ const FiltersSheet = ({
 
         <div className="space-y-2">
           <label className="text-sm text-slate-400">Custom Date Range</label>
-          <CalendarInput
-            value={startDate}
-            onChange={setStartDate}
+          <DatePicker
+            calendarType="BS"
             placeholder="Start date"
-            containerClassName=""
-            inputWrapperClassName="w-full h-[42px] bg-slate-900 border border-slate-700 rounded-lg flex items-center"
-            inputClassName="flex-1 bg-transparent px-4 text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
-            buttonClassName="pr-3 text-slate-400 hover:text-slate-300 focus:outline-none"
+            inputClassName="w-full h-[42px] px-4 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 text-sm"
+            onDateSelect={(date: DateOutput) => setStartDate(date.ad)}
           />
-          <CalendarInput
-            value={endDate}
-            onChange={setEndDate}
+          <DatePicker
+            calendarType="BS"
             placeholder="End date"
-            containerClassName=""
-            inputWrapperClassName="w-full h-[42px] bg-slate-900 border border-slate-700 rounded-lg flex items-center"
-            inputClassName="flex-1 bg-transparent px-4 text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
-            buttonClassName="pr-3 text-slate-400 hover:text-slate-300 focus:outline-none"
+            inputClassName="w-full h-[42px] px-4 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 text-sm"
+            onDateSelect={(date: DateOutput) => setEndDate(date.ad)}
           />
         </div>
 

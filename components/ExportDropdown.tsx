@@ -1,6 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Download, FileText } from "lucide-react";
 import CalendarInput from "./calendar/CalendarInput";
+import { Calendar, PRESET_KEYS } from "bs-ad-calendar-react";
+import type { DateRangeOutput } from "bs-ad-calendar-react";
 import { useClickOutside } from "@/hooks/useClickOutside";
 
 interface ExportDropdownProps {
@@ -89,6 +91,25 @@ export const ExportDropdown = ({
                   inputWrapperClassName="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg flex items-center"
                   inputClassName="flex-1 bg-transparent text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
                   buttonClassName="text-slate-400 hover:text-slate-300 focus:outline-none"
+                />
+                <Calendar
+                  calendarType="BS"
+                  mode="range"
+                  showRangePresets
+                  rangePresetsPosition="top"
+                  presetKeys={[
+                    PRESET_KEYS.THIS_MONTH,
+                    PRESET_KEYS.LAST_MONTH,
+                    PRESET_KEYS.LAST_7_DAYS,
+                    PRESET_KEYS.LAST_30_DAYS,
+                    PRESET_KEYS.LAST_3_MONTHS,
+                    PRESET_KEYS.LAST_6_MONTHS,
+                    PRESET_KEYS.LAST_YEAR,
+                  ]}
+                  onRangeSelect={(range: DateRangeOutput) => {
+                    setCustomStartDate(range.start.ad)
+                    setCustomEndDate(range.end.ad)
+                  }}
                 />
               </div>
             )}

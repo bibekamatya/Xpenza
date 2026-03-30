@@ -6,7 +6,8 @@ import { Transaction, TransactionFormValues, TransactionSplit } from "@/lib/type
 import React, { useState, useTransition } from "react";
 import { Split } from "lucide-react";
 import toast from "react-hot-toast";
-import CalendarPicker from "@/components/calendar/components/CalendarPicker";
+import { DatePicker } from "bs-ad-calendar-react";
+import type { DateOutput } from "bs-ad-calendar-react";
 import SplitDialog from "./SplitDialog";
 
 interface FormProps {
@@ -229,18 +230,13 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
         <label className="block text-sm font-medium text-slate-300 mb-2">
           Date <span className="text-red-500">*</span>
         </label>
-        <CalendarPicker
-          value={formData.date}
-          onChange={(value) => setFormData((prev) => ({ ...prev, date: value }))}
+        <DatePicker
           calendarType="BS"
-          dateFormat="YYYY-MM-DD"
-          returnFormat="iso"
-          required
           placeholder="Select date"
-          containerClassName=""
-          inputWrapperClassName="w-full h-10 bg-slate-900 border border-slate-700 rounded-lg flex items-center"
-          inputClassName="flex-1 bg-transparent px-4 text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
-          buttonClassName="pr-3 text-slate-400 hover:text-slate-300 focus:outline-none"
+          inputClassName="w-full h-10 px-4 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          onDateSelect={(date: DateOutput) =>
+            setFormData((prev) => ({ ...prev, date: date.ad + "T12:00:00" }))
+          }
         />
       </div>
 
