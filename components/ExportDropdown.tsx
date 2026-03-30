@@ -1,8 +1,7 @@
 import { useState, useRef } from "react";
 import { Download, FileText } from "lucide-react";
-import CalendarInput from "./calendar/CalendarInput";
-import { Calendar, PRESET_KEYS } from "bs-ad-calendar-react";
-import type { DateRangeOutput } from "bs-ad-calendar-react";
+import { Calendar, DatePicker, PRESET_KEYS } from "bs-ad-calendar-react";
+import type { DateRangeOutput, DateOutput } from "bs-ad-calendar-react";
 import { useClickOutside } from "@/hooks/useClickOutside";
 
 interface ExportDropdownProps {
@@ -74,23 +73,17 @@ export const ExportDropdown = ({
             </div>
             {showCustomDates && (
               <div className="mt-3 space-y-2">
-                <CalendarInput
-                  value={customStartDate}
-                  onChange={setCustomStartDate}
+                <DatePicker
+                  calendarType="BS"
                   placeholder="Start date"
-                  containerClassName=""
-                  inputWrapperClassName="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg flex items-center"
-                  inputClassName="flex-1 bg-transparent text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
-                  buttonClassName="text-slate-400 hover:text-slate-300 focus:outline-none"
+                  inputClassName="w-full h-[38px] px-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 text-sm"
+                  onDateSelect={(date: DateOutput) => setCustomStartDate(date.ad)}
                 />
-                <CalendarInput
-                  value={customEndDate}
-                  onChange={setCustomEndDate}
+                <DatePicker
+                  calendarType="BS"
                   placeholder="End date"
-                  containerClassName=""
-                  inputWrapperClassName="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg flex items-center"
-                  inputClassName="flex-1 bg-transparent text-sm text-white placeholder-slate-500 outline-none cursor-pointer select-none border-0 focus:ring-0"
-                  buttonClassName="text-slate-400 hover:text-slate-300 focus:outline-none"
+                  inputClassName="w-full h-[38px] px-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 text-sm"
+                  onDateSelect={(date: DateOutput) => setCustomEndDate(date.ad)}
                 />
                 <Calendar
                   calendarType="BS"

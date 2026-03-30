@@ -233,6 +233,7 @@ const Form = ({ onClose, editTransaction, onSuccess }: FormProps) => {
         <DatePicker
           calendarType="BS"
           placeholder="Select date"
+          defaultValue={formData.date.split('T')[0]}
           inputClassName="w-full h-10 px-4 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           onDateSelect={(date: DateOutput) =>
             setFormData((prev) => ({ ...prev, date: date.ad + "T12:00:00" }))
